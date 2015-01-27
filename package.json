@@ -1,14 +1,15 @@
 {
-  "name": "Atlas",
-  "version": "2.3.1",
-  "homepage": "https://github.com/agrc/AGRCJavaScriptProjectBoilerPlate",
+  "name": "crash.web",
+  "version": "0.1.0",
+  "homepage": "https://github.com/agrc/crash.web",
   "repository": {
     "type": "git",
-    "url": "https://github.com/agrc/AGRCJavaScriptProjectBoilerPlate.git"
+    "url": "https://github.com/agrc/crash.web.git"
   },
   "devDependencies": {
     "dojo": "^1.10",
     "grunt": "^0.4",
+    "grunt-amdcheck": "^1.2.5",
     "grunt-bump": "^0",
     "grunt-contrib-clean": "^0",
     "grunt-contrib-compress": "^0.8.0",

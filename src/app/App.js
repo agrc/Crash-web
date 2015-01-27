@@ -4,25 +4,16 @@ define([
     'dojo/_base/declare',
     'dojo/_base/array',
 
-    'dojo/dom',
-    'dojo/dom-style',
-
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
-    'dijit/registry',
 
     'agrc/widgets/map/BaseMap',
     'agrc/widgets/map/BaseMapSelector',
-    'agrc/widgets/locate/FindAddress',
-    'agrc/widgets/locate/MagicZoom',
 
     'ijit/widgets/layout/SideBarToggler',
 
-    'esri/dijit/Print',
-
-    './config',
-    './Identify',
+    'app/config',
 
 
     'dijit/layout/BorderContainer',
@@ -33,25 +24,16 @@ define([
     declare,
     array,
 
-    dom,
-    domStyle,
-
     _WidgetBase,
     _TemplatedMixin,
     _WidgetsInTemplateMixin,
-    registry,
 
     BaseMap,
     BaseMapSelector,
-    FindAddress,
-    MagicZoom,
 
     SideBarToggler,
 
-    Print,
-
-    config,
-    Identify
+    config
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
@@ -93,47 +75,7 @@ define([
                     sidebar: this.sideBar,
                     map: this.map,
                     centerContainer: this.centerContainer
-                }, this.sidebarToggle),
-                new FindAddress({
-                    map: this.map,
-                    apiKey: config.apiKey
-                }, this.geocodeNode),
-                new MagicZoom({
-                    map: this.map,
-                    mapServiceURL: config.urls.vector,
-                    searchLayerIndex: 4,
-                    searchField: 'NAME',
-                    placeHolder: 'place name...',
-                    maxResultsToDisplay: 10,
-                    'class': 'first'
-                }, this.gnisNode),
-                new MagicZoom({
-                    map: this.map,
-                    mapServiceURL: config.urls.vector,
-                    searchLayerIndex: 1,
-                    searchField: 'NAME',
-                    placeHolder: 'city name...',
-                    maxResultsToDisplay: 10
-                }, this.cityNode),
-                this.printer = new Print({
-                    map: this.map,
-                    url: config.exportWebMapUrl,
-                    templates: [{
-                        label: 'Portrait (PDF)',
-                        format: 'PDF',
-                        layout: 'Letter ANSI A Portrait',
-                        options: {
-                            legendLayers: []
-                        }
-                    }, {
-                        label: 'Landscape (PDF)',
-                        format: 'PDF',
-                        layout: 'Letter ANSI A Landscape',
-                        options: {
-                            legendLayers: []
-                        }
-                    }]
-                }, this.printDiv)
+                }, this.sidebarToggle)
             );
 
             this.inherited(arguments);
@@ -148,10 +90,6 @@ define([
                 console.log(widget.declaredClass);
                 that.own(widget);
                 widget.startup();
-            });
-
-            this.printer.on('print-complete', function() {
-                domStyle.set(that.popupBlurb, 'display', 'block');
             });
 
             this.inherited(arguments);
@@ -171,8 +109,7 @@ define([
                     map: this.map,
                     id: 'claro',
                     position: 'TR'
-                }),
-                new Identify({map: this.map})
+                })
             );
         }
     });

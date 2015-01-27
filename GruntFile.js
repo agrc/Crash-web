@@ -2,60 +2,9 @@
 var osx = 'OS X 10.10';
 var windows = 'Windows 8.1';
 var browsers = [{
-
-    // OSX
-
-//     browserName: 'firefox',
-//     // no version = latest
-//     platform: osx
-// }, {
-//     browserName: 'chrome',
-//     platform: osx
-// }, {
     browserName: 'safari',
     platform: osx
 }, {
-
-//     // iOS
-
-//     browserName: 'iPad',
-//     platform: osx,
-//     version: '8.1'
-// }, {
-//     browserName: 'iPad',
-//     platform: osx,
-//     version: '8.0'
-// }, {
-//     browserName: 'iPad',
-//     platform: osx,
-//     version: '7.1'
-// },{
-
-    // Android
-
-//     browserName: 'android',
-//     platform: 'Linux',
-//     version: 4.4
-// },{
-//     browserName: 'android',
-//     platform: 'Linux',
-//     version: 4.3
-// },{
-//     browserName: 'android',
-//     platform: 'Linux',
-//     version: 4.2
-// },{
-//     browserName: 'android',
-//     platform: 'Linux',
-//     version: 4.0
-// },{
-//     browserName: 'android',
-//     platform: 'Linux',
-//     version: 2.3
-// },{
-
-    // Windows
-
     browserName: 'firefox',
     platform: windows
 }, {
@@ -112,14 +61,14 @@ module.exports = function(grunt) {
             '!stubmodule/**',
             '!util/**'
         ],
-        deployDir = 'wwwroot/SGID',
+        deployDir = 'wwwroot/crash',
         secrets,
         sauceConfig = {
             urls: ['http://127.0.0.1:8000/_SpecRunner.html'],
             tunnelTimeout: 20,
             build: process.env.TRAVIS_JOB_ID,
             browsers: browsers,
-            testname: 'atlas',
+            testname: 'crash.web',
             maxRetries: 10,
             maxPollRetries: 10,
             'public': 'public',
@@ -145,6 +94,18 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        amdcheck: {
+            main: {
+                options: {
+                    removeUnusedDependencies: false
+                },
+                files: [{
+                    src: [
+                        'src/app/**/*.js'
+                    ]
+                }]
+            }
+        },
         bump: {
             options: {
                 files: bumpFiles,
@@ -174,7 +135,12 @@ module.exports = function(grunt) {
         },
         copy: {
             main: {
-                files: [{expand: true, cwd: 'src/', src: ['*.html'], dest: 'dist/'}]
+                files: [{
+                    expand: true,
+                    cwd: 'src/',
+                    src: ['*.html'],
+                    dest: 'dist/'
+                }]
             }
         },
         dojo: {
@@ -201,7 +167,7 @@ module.exports = function(grunt) {
         },
         esri_slurp: {
             options: {
-                version: '3.11'
+                version: '3.12'
             },
             dev: {
                 options: {
@@ -315,7 +281,7 @@ module.exports = function(grunt) {
         watch: {
             jshint: {
                 files: jshintFiles,
-                tasks: ['newer:jshint:main', 'jasmine:main:build']
+                tasks: ['jshint:main', 'amdcheck:main', 'jasmine:main:build']
             },
             src: {
                 files: jshintFiles.concat(otherFiles),
@@ -336,7 +302,8 @@ module.exports = function(grunt) {
     // Default task.
     grunt.registerTask('default', [
         'jasmine:main:build',
-        'newer:jshint:main',
+        'jshint:main',
+        'amdcheck:main',
         'if-missing:esri_slurp:dev',
         'connect',
         'watch'
