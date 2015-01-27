@@ -14,6 +14,7 @@ define([
     'ijit/widgets/layout/SideBarToggler',
 
     'app/config',
+    'app/MapController',
 
 
     'dijit/layout/BorderContainer',
@@ -33,7 +34,8 @@ define([
 
     SideBarToggler,
 
-    config
+    config,
+    MapController
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
@@ -68,9 +70,12 @@ define([
             // set version number
             this.version.innerHTML = config.version;
 
-            this.initMap();
+            MapController.init({
+                mapDiv: this.mapDiv
+            });
 
             this.childWidgets.push(
+                MapController,
                 new SideBarToggler({
                     sidebar: this.sideBar,
                     map: this.map,
@@ -78,7 +83,24 @@ define([
                 }, this.sidebarToggle)
             );
 
+            this.subscriptions();
+
             this.inherited(arguments);
+        },
+        subscriptions: function() {
+            // summary:
+            //      description
+            //
+            console.log('app.App::subscriptions', arguments);
+
+            this.own(MapController.map.on('load', function() {
+                MapController.addLayerAndMakeVisible({
+                    id: 'CrashPoints',
+                    url: config.urls.service,
+                    serviceType: 'feature'
+                });
+                MapController.updateOpacity(0.5);
+            }));
         },
         startup: function() {
             // summary:
@@ -86,31 +108,13 @@ define([
             console.log('app.App::startup', arguments);
 
             var that = this;
-            array.forEach(this.childWidgets, function (widget) {
+            array.forEach(this.childWidgets, function(widget) {
                 console.log(widget.declaredClass);
                 that.own(widget);
                 widget.startup();
             });
 
             this.inherited(arguments);
-        },
-        initMap: function() {
-            // summary:
-            //      Sets up the map
-            console.info('app.App::initMap', arguments);
-
-            this.map = new BaseMap(this.mapDiv, {
-                useDefaultBaseMap: false,
-                showAttribution: false
-            });
-
-            this.childWidgets.push(
-                new BaseMapSelector({
-                    map: this.map,
-                    id: 'claro',
-                    position: 'TR'
-                })
-            );
         }
     });
 });
