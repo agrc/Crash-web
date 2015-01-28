@@ -278,6 +278,14 @@ module.exports = function(grunt) {
                 }
             }
         },
+        shell: {
+            bootstrapMapServices: {
+                options: {
+                    stdout: true
+                },
+                command: 'python scripts/publish_mxd.py'
+            }
+        },
         watch: {
             jshint: {
                 files: jshintFiles,
@@ -301,6 +309,7 @@ module.exports = function(grunt) {
 
     // Default task.
     grunt.registerTask('default', [
+        'shell:bootstrapMapServices',
         'jasmine:main:build',
         'jshint:main',
         'amdcheck:main',

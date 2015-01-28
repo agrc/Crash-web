@@ -30,3 +30,4 @@ src/spinjs/
 src/stubmodule/
 src/util/
 src/xstyle/
+*.ags

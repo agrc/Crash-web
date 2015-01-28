@@ -7,12 +7,12 @@
     "url": "https://github.com/agrc/crash.web.git"
   },
   "devDependencies": {
-    "dojo": "^1.10",
+    "dojo": "^1",
     "grunt": "^0.4",
-    "grunt-amdcheck": "^1.2.5",
+    "grunt-amdcheck": "^1",
     "grunt-bump": "^0",
     "grunt-contrib-clean": "^0",
-    "grunt-contrib-compress": "^0.8.0",
+    "grunt-contrib-compress": "^0",
     "grunt-contrib-connect": "^0",
     "grunt-contrib-copy": "^0",
     "grunt-contrib-imagemin": "^0",
@@ -25,6 +25,7 @@
     "grunt-newer": "^0",
     "grunt-processhtml": "^0",
     "grunt-saucelabs": "^8",
+    "grunt-shell": "^1",
     "grunt-ssh": "^0",
     "uglify-js": "^2"
   },

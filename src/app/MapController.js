@@ -112,6 +112,7 @@ define([
                             Renderer = new HeatmapRenderer({
                                 colors: [
                                     'rgba(0,0,0,0)',
+                                    'rgba(0,116,217,1)',
                                     'rgba(255,220,0,1)',
                                     'rgba(255,133,27,1)',
                                     'rgba(255,133,27,1)',

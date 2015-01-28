@@ -8,9 +8,6 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
 
-    'agrc/widgets/map/BaseMap',
-    'agrc/widgets/map/BaseMapSelector',
-
     'ijit/widgets/layout/SideBarToggler',
 
     'app/config',
@@ -28,9 +25,6 @@ define([
     _WidgetBase,
     _TemplatedMixin,
     _WidgetsInTemplateMixin,
-
-    BaseMap,
-    BaseMapSelector,
 
     SideBarToggler,
 
