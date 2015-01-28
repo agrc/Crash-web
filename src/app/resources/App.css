@@ -7,18 +7,15 @@
 @import '../../agrc/resources/map/BaseMapSelector.css';
 @import '../../agrc/resources/locate/FindAddress.css';
 @import '../../agrc/resources/locate/MagicZoom.css';
+@import '../resources/FilterFactors.css';
+@import '../resources/FilterSeverity.css';
+@import '../resources/FilterDateTime.css';
 
 @font-face {
   font-family: 'Ubuntu';
   font-style: normal;
   font-weight: 700;
   src: local('Ubuntu'), url(http://fonts.gstatic.com/s/ubuntu/v7/zvCUQcxqeoKhyOlbifSAaevvDin1pK8aKteLpeZ5c0A.woff2) format('woff2');
-}
-
-@media (min-width: 900px) {
-  body {
-    font-family: 'Ubuntu' !important;
-  }
 }
 
 body, html, .app {
@@ -28,6 +25,7 @@ body, html, .app {
     padding: 0;
     overflow: hidden;
     color: #444;
+    font-family: 'Ubuntu' !important;
 }
 .app .container-with-border {
     border: 1px solid #b5bcc7;

@@ -1,0 +1,36 @@
+.filter-factors input[type=checkbox] {
+    position: absolute;
+    opacity: 0;
+}
+.filter-factors label {
+    width: 100%;
+    text-align: center;
+    font-weight: inherit;
+    display: table-cell;
+    vertical-align: middle;
+}
+.filter-factors .row {
+    width: 100%;
+    margin: 0;
+}
+.filter-factors .col {
+    float: left;
+    width: 32%;
+    height: 55px;
+    padding: 5px;
+    margin-bottom: 2px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: table;
+    table-layout: fixed;
+    overflow: hidden;
+}
+.filter-factors .col.empty {
+    border: 0;
+}
+.filter-factors .col:first-child {
+    margin-right: 1%;
+}
+.filter-factors .col:last-child {
+    margin-left: 1%;
+}

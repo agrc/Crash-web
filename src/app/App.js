@@ -1,6 +1,7 @@
 define([
     'app/config',
     'app/FilterDateTime',
+    'app/FilterFactors',
     'app/FilterSeverity',
     'app/MapController',
 
@@ -19,6 +20,7 @@ define([
 ], function(
     config,
     FilterDateTime,
+    FilterFactors,
     FilterSeverity,
     MapController,
 
@@ -77,7 +79,8 @@ define([
                     centerContainer: this.centerContainer
                 }, this.sidebarToggle),
                 new FilterDateTime({}, this.filterDateNode),
-                new FilterSeverity({}, this.filterSeverityNode)
+                new FilterSeverity({}, this.filterSeverityNode),
+                new FilterFactors({}, this.filterFactorsNode)
             );
 
             this.subscriptions();
