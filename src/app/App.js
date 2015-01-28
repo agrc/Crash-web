@@ -1,37 +1,36 @@
 define([
-    'dojo/text!app/templates/App.html',
+    'app/config',
+    'app/FilterDateTime',
+    'app/FilterSeverity',
+    'app/MapController',
 
-    'dojo/_base/declare',
-    'dojo/_base/array',
-
-    'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
     'dijit/_WidgetsInTemplateMixin',
 
+    'dojo/_base/array',
+    'dojo/_base/declare',
+    'dojo/text!app/templates/App.html',
+
     'ijit/widgets/layout/SideBarToggler',
-
-    'app/config',
-    'app/MapController',
-    'app/FilterDateTime',
-
 
     'dijit/layout/BorderContainer',
     'dijit/layout/ContentPane'
 ], function(
-    template,
+    config,
+    FilterDateTime,
+    FilterSeverity,
+    MapController,
 
-    declare,
-    array,
-
-    _WidgetBase,
     _TemplatedMixin,
+    _WidgetBase,
     _WidgetsInTemplateMixin,
 
-    SideBarToggler,
+    array,
+    declare,
+    template,
 
-    config,
-    MapController,
-    FilterDateTime
+    SideBarToggler
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
@@ -77,7 +76,8 @@ define([
                     map: MapController.map,
                     centerContainer: this.centerContainer
                 }, this.sidebarToggle),
-                new FilterDateTime({}, this.filterDateNode)
+                new FilterDateTime({}, this.filterDateNode),
+                new FilterSeverity({}, this.filterSeverityNode)
             );
 
             this.subscriptions();
