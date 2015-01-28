@@ -13,8 +13,7 @@ define([
 
     'esri/symbols/SimpleLineSymbol',
 
-    'agrc/widgets/map/BaseMap',
-    'agrc/widgets/map/BaseMapSelector'
+    'agrc/widgets/map/BaseMap'
 ], function(
     lang,
     array,
@@ -30,8 +29,7 @@ define([
 
     LineSymbol,
 
-    BaseMap,
-    BaseMapSelector
+    BaseMap
 ) {
     return {
         // description:
@@ -60,20 +58,11 @@ define([
             this.childWidgets = [];
 
             this.map = new BaseMap(this.mapDiv, {
-                useDefaultBaseMap: false,
                 showAttribution: false,
                 defaultBaseMap: 'Lite'
             });
 
             this.symbol = new LineSymbol(LineSymbol.STYLE_SOLID, new Color('#F012BE'), 3);
-
-            this.childWidgets.push(
-                new BaseMapSelector({
-                    map: this.map,
-                    id: 'claro',
-                    position: 'TR',
-                    defaultThemeLabel: 'Lite'
-                }));
 
             this.layers = [];
 
