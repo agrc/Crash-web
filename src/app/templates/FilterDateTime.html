@@ -1,3 +1,43 @@
 <div>
-   
+    <h3 class="text-center">Date & Time</h3>
+    <h4><span class="label label-primary">Predefined</span></h4>
+    <div class="well well-sm form-group">
+        <select id="${id}_dr" class="form-control" placeholder="Select Range">
+            <option>Prior 7 Days</option>
+            <option>Prior 30 days</option>
+            <option>etc</option>
+        </select>
+    </div>
+    <h4><span class="label label-primary">Custom Range</span></h4>
+    <div class="well well-sm form-group">
+        <label for="${id}_from">From Date</label>
+        <input type="date" class="form-control" id="${id}_from" placeholder="Select Range">
+        <label for="${id}_to">To Date</label>
+        <input type="date" class="form-control" id="${id}_to" placeholder="Select Range">
+    </div>
+    <h4><span class="label label-primary">Days of the Week</span></h4>
+    <div class="well well-sm form-group">
+        <select id="${id}_dr" multiple class="form-control" placeholder="Select Days">
+            <option>Monday</option>
+            <option>Tuesday</option>
+            <option>Wednesday</option>
+            <option>Thursday</option>
+            <option>Friday</option>
+            <option>Saturday</option>
+            <option>Sunday</option>
+        </select>
+    </div>
+    <h4><span class="label label-primary">Time of Day</span></h4>
+    <div class="well well-sm form-group">
+        <label for="${id}_from">From Time</label>
+        <input type="time" class="form-control" id="${id}_from" placeholder="Select Range">
+        <label for="${id}_to">To Time</label>
+        <input type="time" class="form-control" id="${id}_to" placeholder="Select Range">
+    </div>
+    <div class="form-group text-center">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-primary">Filter</button>
+            <button type="button" class="btn btn-danger">Reset</button>
+        </div>
+    </div>
 </div>

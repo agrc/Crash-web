@@ -144,6 +144,8 @@ define([
                     id: props.id,
                     layer: lyr
                 });
+
+                this.activeLayer = lyr;
             }
         },
         updateOpacity: function(opacity) {

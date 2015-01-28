@@ -12,6 +12,7 @@ define([
 
     'app/config',
     'app/MapController',
+    'app/FilterDateTime',
 
 
     'dijit/layout/BorderContainer',
@@ -29,7 +30,8 @@ define([
     SideBarToggler,
 
     config,
-    MapController
+    MapController,
+    FilterDateTime
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
@@ -72,9 +74,10 @@ define([
                 MapController,
                 new SideBarToggler({
                     sidebar: this.sideBar,
-                    map: this.map,
+                    map: MapController.map,
                     centerContainer: this.centerContainer
-                }, this.sidebarToggle)
+                }, this.sidebarToggle),
+                new FilterDateTime({}, this.filterDateNode)
             );
 
             this.subscriptions();
@@ -87,14 +90,15 @@ define([
             //
             console.log('app.App::subscriptions', arguments);
 
-            this.own(MapController.map.on('load', function() {
-                MapController.addLayerAndMakeVisible({
-                    id: 'CrashPoints',
-                    url: config.urls.service,
-                    serviceType: 'feature'
-                });
-                MapController.updateOpacity(0.5);
-            }));
+            this.own(
+                MapController.map.on('load', function() {
+                    MapController.addLayerAndMakeVisible({
+                        id: 'CrashPoints',
+                        url: config.urls.service,
+                        serviceType: 'feature'
+                    });
+                })
+            );
         },
         startup: function() {
             // summary:
