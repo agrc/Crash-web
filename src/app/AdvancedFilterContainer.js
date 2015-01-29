@@ -1,19 +1,25 @@
 define([
-    'dojo/text!app/templates/AdvancedFilterContainer.html',
+    'app/FilterSeverity',
+
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
+    'dijit/_WidgetsInTemplateMixin',
 
     'dojo/_base/declare',
-
-    'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin'
+    'dojo/dom-class',
+    'dojo/text!app/templates/AdvancedFilterContainer.html'
 ], function(
-    template,
+    FilterSeverity,
+
+    _TemplatedMixin,
+    _WidgetBase,
+    _WidgetsInTemplateMixin,
 
     declare,
-
-    _WidgetBase,
-    _TemplatedMixin
+    domClass,
+    template
 ) {
-    return declare([_WidgetBase, _TemplatedMixin], {
+    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // description:
         //      Contains the other useful but not required crash filters
 
@@ -39,6 +45,13 @@ define([
             //
             console.log('app.AdvancedFilterContainer::setupConnections', arguments);
 
+        },
+        toggle: function() {
+            // summary:
+            //      toggle advanced filters
+            console.log('app.AdvancedFilterContainer::toggle', arguments);
+
+            domClass.toggle(this.extraFiltersNode, 'hidden');
         }
     });
 });
