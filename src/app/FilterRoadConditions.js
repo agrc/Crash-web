@@ -1,24 +1,20 @@
 define([
-    'dojo/text!app/templates/FilterRoadConditions.html',
+    'app/FilterFactors',
 
     'dojo/_base/declare',
-
-    'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin'
+    'dojo/text!app/templates/FilterRoadConditions.html'
 ], function(
-    template,
+    FilterFactors,
 
     declare,
-
-    _WidgetBase,
-    _TemplatedMixin
+    template
 ) {
-    return declare([_WidgetBase, _TemplatedMixin], {
+    return declare([FilterFactors], {
         // description:
         //      Filter the crashes by the conditions of the road at the time
 
         templateString: template,
-        baseClass: 'filter-road-conditions',
+        baseClass: 'filter-factors',
 
         // Properties to be sent into constructor
 
@@ -29,16 +25,7 @@ define([
             //      private
             console.log('app.FilterRoadConditions::postCreate', arguments);
 
-            this.setupConnections();
-
             this.inherited(arguments);
-        },
-        setupConnections: function() {
-            // summary:
-            //      wire events, and such
-            //
-            console.log('app.FilterRoadConditions::setupConnections', arguments);
-
         }
     });
 });
