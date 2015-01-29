@@ -1,6 +1,7 @@
 .filter-factors input[type=checkbox] {
     position: absolute;
     opacity: 0;
+    display: none;
 }
 .filter-factors label {
     width: 100%;

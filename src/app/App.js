@@ -1,8 +1,8 @@
 define([
+    'app/AdvancedFilterContainer',
     'app/config',
     'app/FilterDateTime',
     'app/FilterFactors',
-    'app/FilterSeverity',
     'app/MapController',
 
     'dijit/_TemplatedMixin',
@@ -18,10 +18,10 @@ define([
     'dijit/layout/BorderContainer',
     'dijit/layout/ContentPane'
 ], function(
+    AdvancedFilterContainer,
     config,
     FilterDateTime,
     FilterFactors,
-    FilterSeverity,
     MapController,
 
     _TemplatedMixin,
@@ -79,8 +79,8 @@ define([
                     centerContainer: this.centerContainer
                 }, this.sidebarToggle),
                 new FilterDateTime({}, this.filterDateNode),
-                new FilterSeverity({}, this.filterSeverityNode),
-                new FilterFactors({}, this.filterFactorsNode)
+                new FilterFactors({}, this.filterFactorsNode),
+                new AdvancedFilterContainer({}, this.advancedFilterContainerNode)
             );
 
             this.subscriptions();
