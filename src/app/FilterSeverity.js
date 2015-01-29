@@ -4,7 +4,6 @@ define([
 
     'dojo/_base/declare',
     'dojo/dom-class',
-    'dojo/NodeList-dom',
     'dojo/on',
     'dojo/query',
     'dojo/text!app/templates/FilterSeverity.html'
@@ -14,7 +13,6 @@ define([
 
     declare,
     domClass,
-    NodeListDom,
     on,
     query,
     template
