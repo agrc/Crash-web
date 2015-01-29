@@ -1,4 +1,5 @@
 define([
+    'app/FilterRoadConditions',
     'app/FilterSeverity',
 
     'dijit/_TemplatedMixin',
@@ -9,6 +10,7 @@ define([
     'dojo/dom-class',
     'dojo/text!app/templates/AdvancedFilterContainer.html'
 ], function(
+    FilterRoadConditions,
     FilterSeverity,
 
     _TemplatedMixin,
