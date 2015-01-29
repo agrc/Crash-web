@@ -1,17 +1,17 @@
 define([
-    'dojo/text!app/templates/FilterDateTime.html',
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
 
     'dojo/_base/declare',
-
-    'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin'
+    'dojo/dom-class',
+    'dojo/text!app/templates/FilterDateTime.html'
 ], function(
-    template,
+    _TemplatedMixin,
+    _WidgetBase,
 
     declare,
-
-    _WidgetBase,
-    _TemplatedMixin
+    domClass,
+    template
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -39,6 +39,14 @@ define([
             //
             console.log('app.FilterDateTime::setupConnections', arguments);
 
+        },
+        toggle: function() {
+            // summary:
+            //      show and hide the extra date filters
+            //
+            console.log('app.FilterDateTime::toggle', arguments);
+
+            domClass.toggle(this.extraFiltersNode, 'hidden');
         }
     });
 });
