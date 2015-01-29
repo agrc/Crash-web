@@ -1,35 +1,35 @@
 define([
-    'dojo/_base/lang',
+    'agrc/widgets/map/BaseMap',
+
+    'app/config',
+
     'dojo/_base/array',
     'dojo/_base/Color',
+    'dojo/_base/lang',
+    'dojo/topic',
 
     'esri/graphic',
-
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/ArcGISTiledMapServiceLayer',
     'esri/layers/FeatureLayer',
-
     'esri/renderers/HeatmapRenderer',
-
-    'esri/symbols/SimpleLineSymbol',
-
-    'agrc/widgets/map/BaseMap'
+    'esri/symbols/SimpleLineSymbol'
 ], function(
-    lang,
+    BaseMap,
+
+    config,
+
     array,
     Color,
+    lang,
+    topic,
 
     Graphic,
-
     DynamicLayer,
     TiledLayer,
     FeatureLayer,
-
     HeatmapRenderer,
-
-    LineSymbol,
-
-    BaseMap
+    LineSymbol
 ) {
     return {
         // description:
@@ -66,14 +66,33 @@ define([
 
             this.layers = [];
 
-            this.setUpSubscribes();
+            this.subscriptions();
         },
-        setUpSubscribes: function() {
+        subscriptions: function() {
             // summary:
             //      subscribes to topics
-            console.log('app.MapController::setUpSubscribes', arguments);
+            console.log('app.MapController::subscriptions', arguments);
 
-            this.handles.push();
+            this.handles.push(
+                topic.subscribe(config.topics.search.filter, lang.hitch(this, 'setQueryFilter'))
+            );
+        },
+        startup: function() {
+            // summary:
+            //      startup once app is attached to dom
+            console.log('app.MapController::startup', arguments);
+
+            array.forEach(this.childWidgets, function(widget) {
+                widget.startup();
+            }, this);
+        },
+        setQueryFilter: function(filterCriteria) {
+            // summary:
+            //      formats and sets the query filter
+            // filterCriteria
+            console.log('app.MapController::setQueryFilter', arguments);
+
+            this.activeLayer.setDefinitionExpression(filterCriteria);
         },
         addLayerAndMakeVisible: function(props) {
             // summary:
@@ -153,15 +172,6 @@ define([
             }
 
             this.activeLayer.layer.setOpacity(this.currentOpacity);
-        },
-        startup: function() {
-            // summary:
-            //      startup once app is attached to dom
-            console.log('app.MapController::startup', arguments);
-
-            array.forEach(this.childWidgets, function(widget) {
-                widget.startup();
-            }, this);
         },
         highlight: function(evt) {
             // summary:

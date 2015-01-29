@@ -1,17 +1,21 @@
 define([
-    'dojo/text!app/templates/FilterControls.html',
+    'app/config',
+
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
 
     'dojo/_base/declare',
-
-    'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin'
+    'dojo/text!app/templates/FilterControls.html',
+    'dojo/topic'
 ], function(
-    template,
+    config,
+
+    _TemplatedMixin,
+    _WidgetBase,
 
     declare,
-
-    _WidgetBase,
-    _TemplatedMixin
+    template,
+    topic
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -39,6 +43,25 @@ define([
             //
             console.log('app.FilterControls::setupConnections', arguments);
 
+        },
+        filter: function() {
+            // summary:
+            //      handles gathering the filter criteria and sending the request
+            //
+            console.log('app.FilterControls::filter', arguments);
+
+            //TODO: get all params to pass to filter
+            topic.publish(config.topics.search.filter, 'crash_id in (select id from rollup where dui = 1) AND date > \'2014-09-01 07:49:00\'');
+        },
+        reset: function() {
+            // summary:
+            //      handles invoking the reset code for all of the filters
+            //      and reseting the definition expression on the feature layer
+            //
+            console.log('app.FilterControls::reset', arguments);
+
+            topic.publish(config.topics.search.filter, '');
+            topic.publish(config.topics.search.reset, {});
         }
     });
 });

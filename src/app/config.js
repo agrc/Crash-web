@@ -1,5 +1,5 @@
 /* jshint maxlen:false */
-define(['dojo/has', 'esri/config'], function (has, esriConfig) {
+define(['dojo/has', 'esri/config'], function(has, esriConfig) {
     // force api to use CORS on mapserv thus removing the test request on app load
     // e.g. http://mapserv.utah.gov/ArcGIS/rest/info?f=json
     esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
@@ -22,6 +22,13 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
 
         urls: {
             service: 'http://localhost/arcgis/rest/services/Crash/Crashes/MapServer/0'
+        },
+
+        topics: {
+            search: {
+                filter: 'f',
+                reset: 'r'
+            }
         }
     };
 

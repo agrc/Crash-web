@@ -10,6 +10,7 @@
 @import '../resources/FilterFactors.css';
 @import '../resources/FilterSeverity.css';
 @import '../resources/FilterDateTime.css';
+@import '../resources/FilterControls.css';
 
 @font-face {
   font-family: 'Ubuntu';

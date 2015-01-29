@@ -1,6 +1,7 @@
 define([
     'app/AdvancedFilterContainer',
     'app/config',
+    'app/FilterControls',
     'app/FilterDateTime',
     'app/FilterFactors',
     'app/MapController',
@@ -20,6 +21,7 @@ define([
 ], function(
     AdvancedFilterContainer,
     config,
+    FilterControls,
     FilterDateTime,
     FilterFactors,
     MapController,
@@ -80,6 +82,7 @@ define([
                 }, this.sidebarToggle),
                 new FilterDateTime({}, this.filterDateNode),
                 new FilterFactors({}, this.filterFactorsNode),
+                new FilterControls({}, this.filterControlsNode),
                 new AdvancedFilterContainer({}, this.advancedFilterContainerNode)
             );
 
@@ -99,6 +102,7 @@ define([
                         id: 'CrashPoints',
                         url: config.urls.service,
                         serviceType: 'feature'
+                        //,mode: 0 // snapshot mode
                     });
                 })
             );
