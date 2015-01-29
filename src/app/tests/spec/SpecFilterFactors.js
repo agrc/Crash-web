@@ -29,5 +29,13 @@ require([
                 expect(widget).toEqual(jasmine.any(WidgetUnderTest));
             });
         });
+        describe('presentation', function () {
+            it('adds a css class when clicked on (checkbox checked)', function () {
+
+            });
+            it('removes a css class when clicked on (checkbox unchecked)', function () {
+
+            });
+        });
     });
 });

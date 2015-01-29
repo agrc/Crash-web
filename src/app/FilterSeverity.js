@@ -1,17 +1,23 @@
 define([
-    'dojo/text!app/templates/FilterSeverity.html',
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
 
     'dojo/_base/declare',
-
-    'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin'
+    'dojo/dom-class',
+    'dojo/NodeList-dom',
+    'dojo/on',
+    'dojo/query',
+    'dojo/text!app/templates/FilterSeverity.html'
 ], function(
-    template,
+    _TemplatedMixin,
+    _WidgetBase,
 
     declare,
-
-    _WidgetBase,
-    _TemplatedMixin
+    domClass,
+    NodeListDom,
+    on,
+    query,
+    template
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -39,6 +45,37 @@ define([
             //
             console.log('app.FilterSeverity::setupConnections', arguments);
 
+            var self = this;
+            this.own(
+                on(this.domNode, 'button:click', function(evt) {
+                    self.clearSelection(evt);
+                    self.clicked(evt);
+                })
+            );
+        },
+        clearSelection: function(evt) {
+            // summary:
+            //      clears all selections
+            //
+            console.log('app.FilterSeverity::clearSelection', arguments);
+
+            query('button', this.domNode).forEach(function(node) {
+                if (node === evt.target) {
+                    return;
+                }
+
+                domClass.remove(node, 'btn-success');
+            });
+        },
+        clicked: function(evt) {
+            // summary:
+            //      click handler
+            // evt: the click event
+            console.log('app.FilterSeverity::clicked', arguments);
+
+            var factor = evt.target;
+
+            domClass.toggle(factor, 'btn-success');
         }
     });
 });
