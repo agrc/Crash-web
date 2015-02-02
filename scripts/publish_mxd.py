@@ -109,7 +109,7 @@ def upload_to_server():
 
 if __name__ == '__main__':
     create_sd_draft()
-    analyze_sd()  # this seems to create the same output as the create sd draft
+    # analyze_sd()  # this seems to create the same output as the create sd draft
     stage_service()
     upload_to_server()
 
