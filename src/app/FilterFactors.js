@@ -2,6 +2,7 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
+    'dojo/_base/array',
     'dojo/_base/declare',
     'dojo/_base/event',
     'dojo/dom-class',
@@ -12,6 +13,7 @@ define([
     _TemplatedMixin,
     _WidgetBase,
 
+    array,
     declare,
     event,
     domClass,
@@ -62,6 +64,26 @@ define([
             var factor = evt.target.parentNode;
 
             domClass.toggle(factor, 'btn-success');
+
+            this._gatherData();
+        },
+        _gatherData: function() {
+            // summary:
+            //      builds the object to publish
+            //
+            console.log('app.FilterFactors::_gatherData', arguments);
+
+            var factors = array.map(query('input[type="checkbox"]:checked', this.domNode), function mapCheckboxes(node){
+                return node.value;
+            }, this);
+
+            if(factors.length < 1){
+                factors = null;
+            }
+
+            this.set('data', {
+                factors: factors
+            });
         }
     });
 });

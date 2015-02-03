@@ -1,6 +1,4 @@
 define([
-    'app/config',
-
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
@@ -12,8 +10,6 @@ define([
     'dojo/query',
     'dojo/text!app/templates/FilterDateTime.html'
 ], function(
-    config,
-
     _TemplatedMixin,
     _WidgetBase,
 
@@ -53,8 +49,14 @@ define([
             //
             console.log('app.FilterDateTime::setupConnections', arguments);
 
+            var events = [
+                'input:change',
+                'input:input',
+                'select:change',
+                'select:input'
+            ];
             this.own(
-                on(this.domNode, 'input:change, select:change, input:input, select:input', lang.hitch(this, '_gatherData'))
+                on(this.domNode, events.join(','), lang.hitch(this, '_gatherData'))
             );
         },
         _gatherData: function() {
@@ -65,17 +67,17 @@ define([
 
             var date = {};
 
-            if(this.fromDateNode.value && this.toDateNode.value){
+            if (this.fromDateNode.value && this.toDateNode.value) {
                 date.fromDate = this.fromDateNode.value;
                 date.toDate = this.toDateNode.value;
             }
 
             var days = this._getDaysFromSelect(this.daysNode);
-            if(days.length > 0){
+            if (days.length > 0) {
                 date.specificDays = days;
             }
 
-            if(this.fromTimeNode.value && this.toTimeNode.value){
+            if (this.fromTimeNode.value && this.toTimeNode.value) {
                 date.fromTime = this.fromTimeNode.value;
                 date.toTime = this.toTimeNode.value;
             }
@@ -92,8 +94,8 @@ define([
 
             var optionValues = [];
 
-            array.forEach(node.children, function searchChildren(child){
-                if(child.selected){
+            array.forEach(node.children, function searchChildren(child) {
+                if (child.selected) {
                     optionValues.push(+child.value);
                 }
             }, this);
