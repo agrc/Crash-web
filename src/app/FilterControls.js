@@ -93,6 +93,16 @@ define([
             console.log('app.FilterControls::_buildDefinitionQueryFromObject', arguments);
             var filters = [];
 
+            if (criteria.factors){
+                var factors = array.map(criteria.factors, function formatFactors(factor){
+                    return factor + '=1';
+                });
+
+                var factorClause = factors.join(' AND ');
+
+                filters.push('crash_id IN (SELECT id FROM [rollup] WHERE ' + factorClause + ')');
+            }
+
             if (criteria.date) {
                 if (criteria.date.predefined) {
                     var today = criteria.date.today || Date.now();

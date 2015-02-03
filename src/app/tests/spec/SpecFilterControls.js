@@ -107,7 +107,7 @@ require([
                     expect(actual).toEqual('');
                 });
             });
-            describe('combined date and time criteria', function() {
+            describe('combined criteria', function() {
                 var today = new Date(2015, 0, 1, 0, 0, 0, 0); //  Thu Jan 01 2015 00:00:00 GMT-0700 (MST)
                 var past = new Date(2014, 0, 2, 0, 0, 0, 0);
                 it('formats custom range and day of week', function() {
@@ -138,8 +138,45 @@ require([
                         'day IN (1,2,3,4,5) AND ' +
                         'CAST(date as TIME) BETWEEN \'12:00\' AND \'13:00\'');
                 });
+                it('formats custom range and day of week and time and crash factors', function() {
+                    var criteria = {
+                        date: {
+                            fromDate: past,
+                            toDate: today,
+                            specificDays: [1, 2, 3, 4, 5],
+                            fromTime: '12:00',
+                            toTime: '13:00'
+                        },
+                        factors: ['dui', 'pedestrian']
+                    };
+
+                    var actual = widget._buildDefinitionQueryFromObject(criteria);
+                    expect(actual).toEqual('crash_id IN (SELECT id FROM [rollup] WHERE dui=1 AND pedestrian=1) AND ' +
+                        'date BETWEEN \'2014-01-02\' AND \'2015-01-01\' AND ' +
+                        'day IN (1,2,3,4,5) AND ' +
+                        'CAST(date as TIME) BETWEEN \'12:00\' AND \'13:00\'');
+                });
+            });
+            describe('filter factor criteria', function () {
+                it('formats single crash factors', function () {
+                    var criteria = {
+                        factors: ['dui']
+                    };
+
+                    var actual = widget._buildDefinitionQueryFromObject(criteria);
+                    expect(actual).toEqual('crash_id IN (SELECT id FROM [rollup] WHERE dui=1)');
+                });
+                it('formats multiple crash factors', function () {
+                    var criteria = {
+                        factors: ['dui', 'pedestrian']
+                    };
+
+                    var actual = widget._buildDefinitionQueryFromObject(criteria);
+                    expect(actual).toEqual('crash_id IN (SELECT id FROM [rollup] WHERE dui=1 AND pedestrian=1)');
+                });
             });
         });
+
         describe('Data Gathering', function() {
             it('gathers data from its child widgets', function() {
                 widget.childWidgets = [
