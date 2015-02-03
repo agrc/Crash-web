@@ -151,7 +151,7 @@ require([
                     };
 
                     var actual = widget._buildDefinitionQueryFromObject(criteria);
-                    expect(actual).toEqual('crash_id IN (SELECT id FROM [rollup] WHERE dui=1 AND pedestrian=1) AND ' +
+                    expect(actual).toEqual('crash_id IN (SELECT id FROM rollup WHERE dui=1 AND pedestrian=1) AND ' +
                         'date BETWEEN \'2014-01-02\' AND \'2015-01-01\' AND ' +
                         'day IN (1,2,3,4,5) AND ' +
                         'CAST(date as TIME) BETWEEN \'12:00\' AND \'13:00\'');
@@ -164,7 +164,7 @@ require([
                     };
 
                     var actual = widget._buildDefinitionQueryFromObject(criteria);
-                    expect(actual).toEqual('crash_id IN (SELECT id FROM [rollup] WHERE dui=1)');
+                    expect(actual).toEqual('crash_id IN (SELECT id FROM rollup WHERE dui=1)');
                 });
                 it('formats multiple crash factors', function () {
                     var criteria = {
@@ -172,7 +172,7 @@ require([
                     };
 
                     var actual = widget._buildDefinitionQueryFromObject(criteria);
-                    expect(actual).toEqual('crash_id IN (SELECT id FROM [rollup] WHERE dui=1 AND pedestrian=1)');
+                    expect(actual).toEqual('crash_id IN (SELECT id FROM rollup WHERE dui=1 AND pedestrian=1)');
                 });
             });
         });

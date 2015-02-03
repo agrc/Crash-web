@@ -37,7 +37,9 @@ require([
             it('adds a css class when clicked on (checkbox checked)', function() {
                 var node = query('input[type="checkbox"][value="pedestrian"]', widget.domNode)[0];
                 widget.clicked({
-                    target: node,
+                    target: {
+                        parentNode: node
+                    },
                     preventDefault: function(){},
                     stopPropagation: function(){},
                     cancelBubble: false
@@ -50,7 +52,9 @@ require([
                 domClass.add(node.parentNode, 'btn-success');
 
                 widget.clicked({
-                    target: node,
+                    target: {
+                        parentNode: node
+                    },
                     preventDefault: function(){},
                     stopPropagation: function(){},
                     cancelBubble: false
