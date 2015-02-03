@@ -5,6 +5,7 @@ define([
     'dojo/_base/array',
     'dojo/_base/declare',
     'dojo/_base/event',
+    'dojo/_base/lang',
     'dojo/dom-class',
     'dojo/on',
     'dojo/query',
@@ -16,6 +17,7 @@ define([
     array,
     declare,
     event,
+    lang,
     domClass,
     on,
     query,
@@ -47,9 +49,8 @@ define([
             //
             console.log('app.FilterFactors::setupConnections', arguments);
 
-            var self = this;
             this.own(
-                on(this.domNode, 'label:click', self.clicked)
+                on(this.domNode, 'input[type="checkbox"]:change', lang.hitch(this, 'clicked'))
             );
         },
         clicked: function(evt) {
@@ -61,10 +62,9 @@ define([
             // stop input event from bubbling
             event.stop(evt);
 
-            var factor = evt.target.parentNode;
+            var factor = evt.target.parentNode.parentNode;
 
             domClass.toggle(factor, 'btn-success');
-
             this._gatherData();
         },
         _gatherData: function() {

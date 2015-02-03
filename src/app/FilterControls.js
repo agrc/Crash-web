@@ -57,10 +57,10 @@ define([
             //
             console.log('app.FilterControls::filter', arguments);
 
-            var smokingMirrors = this._getFilterCriteria();
-            smokingMirrors = this._buildDefinitionQueryFromObject(smokingMirrors);
+            var criteria = this._getFilterCriteria();
+            criteria = this._buildDefinitionQueryFromObject(criteria);
 
-            topic.publish(config.topics.search.filter, smokingMirrors);
+            topic.publish(config.topics.search.filter, criteria);
         },
         reset: function() {
             // summary:
@@ -100,7 +100,7 @@ define([
 
                 var factorClause = factors.join(' AND ');
 
-                filters.push('crash_id IN (SELECT id FROM [rollup] WHERE ' + factorClause + ')');
+                filters.push('crash_id IN (SELECT id FROM rollup WHERE ' + factorClause + ')');
             }
 
             if (criteria.date) {
