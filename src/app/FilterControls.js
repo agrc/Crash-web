@@ -4,7 +4,9 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
+    'dojo/_base/array',
     'dojo/_base/declare',
+    'dojo/_base/lang',
     'dojo/date',
     'dojo/date/locale',
     'dojo/text!app/templates/FilterControls.html',
@@ -15,7 +17,9 @@ define([
     _TemplatedMixin,
     _WidgetBase,
 
+    array,
     declare,
+    lang,
     date,
     locale,
     template,
@@ -46,16 +50,16 @@ define([
             //      wire events, and such
             //
             console.log('app.FilterControls::setupConnections', arguments);
-
         },
         filter: function() {
             // summary:
             //      handles gathering the filter criteria and sending the request
             //
             console.log('app.FilterControls::filter', arguments);
-            var smokingMirrors = 'crash_id in (select id from rollup where dui = 1) AND' +
-                ' date > \'2014-09-01 07:49:00\'';
-            //TODO: get all params to pass to filter
+
+            var smokingMirrors = this._getFilterCriteria();
+            smokingMirrors = this._buildDefinitionQueryFromObject(smokingMirrors);
+
             topic.publish(config.topics.search.filter, smokingMirrors);
         },
         reset: function() {
@@ -67,6 +71,20 @@ define([
 
             topic.publish(config.topics.search.filter, '');
             topic.publish(config.topics.search.reset, {});
+        },
+        _getFilterCriteria: function() {
+            // summary:
+            //      gets the filter criteria from the childWidgets array
+            //
+            console.log('app.FilterControls::_getFilterCriteria', arguments);
+
+            var criteria = {};
+
+            array.forEach(this.childWidgets, function mixinCriteria(widget){
+                lang.mixin(criteria, widget.get('data'));
+            }, this);
+
+            return criteria;
         },
         _buildDefinitionQueryFromObject: function(criteria) {
             // summary:

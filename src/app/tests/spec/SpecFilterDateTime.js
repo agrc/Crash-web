@@ -34,7 +34,8 @@ require([
                 widget.fromDateNode.value = '2015-01-01';
                 widget.toDateNode.value = '2015-02-11';
 
-                var actual = widget._gatherData();
+                widget._gatherData();
+                var actual = widget.get('data');
                 expect(actual).toEqual({
                     date: {
                         fromDate: '2015-01-01',
@@ -47,7 +48,8 @@ require([
                 options[0].selected = true; // monday
                 options[5].selected = true; // saturday
 
-                var actual = widget._gatherData();
+                widget._gatherData();
+                var actual = widget.get('data');
                 expect(actual).toEqual({
                     date: {
                         specificDays: [2,7]
@@ -55,7 +57,8 @@ require([
                 });
             });
             it('gathers nothing with days are not selected', function () {
-                var actual = widget._gatherData();
+                widget._gatherData();
+                var actual = widget.get('data');
                 expect(actual).toEqual({
                     date: {}
                 });
@@ -64,7 +67,8 @@ require([
                 widget.fromTimeNode.value = '00:00';
                 widget.toTimeNode.value = '01:23';
 
-                var actual = widget._gatherData();
+                widget._gatherData();
+                var actual = widget.get('data');
                 expect(actual).toEqual({
                     date: {
                         fromTime: '00:00',
@@ -82,7 +86,8 @@ require([
                 options[0].selected = true; // monday
                 options[5].selected = true; // saturday
 
-                var actual = widget._gatherData();
+                widget._gatherData();
+                var actual = widget.get('data');
                 expect(actual).toEqual({
                     date: {
                         fromDate: '2015-01-01',

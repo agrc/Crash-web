@@ -1,11 +1,13 @@
 require([
     'app/FilterControls',
 
-    'dojo/dom-construct'
+    'dojo/dom-construct',
+    'dojo/Stateful'
 ], function(
     WidgetUnderTest,
 
-    domConstruct
+    domConstruct,
+    Stateful
 ) {
     describe('app/FilterControls', function() {
         var widget;
@@ -138,8 +140,33 @@ require([
                 });
             });
         });
-        describe('Gather values', function () {
+        describe('Data Gathering', function() {
+            it('gathers data from its child widgets', function() {
+                widget.childWidgets = [
+                    new Stateful({
+                        data: {
+                            a: 1
+                        }
+                    }),
+                    new Stateful({
+                        data: {
+                            b: 2
+                        }
+                    }),
+                    new Stateful({
+                        data: {
+                            c: 3
+                        }
+                    })
+                ];
 
+                var actual = widget._getFilterCriteria();
+                expect(actual).toEqual({
+                        a: 1,
+                        b: 2,
+                        c: 3
+                });
+            });
         });
     });
 });

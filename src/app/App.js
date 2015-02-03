@@ -80,10 +80,13 @@ define([
                     map: MapController.map,
                     centerContainer: this.centerContainer
                 }, this.sidebarToggle),
-                new FilterDateTime({}, this.filterDateNode),
-                new FilterFactors({}, this.filterFactorsNode),
-                new FilterControls({}, this.filterControlsNode),
-                new AdvancedFilterContainer({}, this.advancedFilterContainerNode)
+                new FilterControls({
+                    childWidgets: [
+                        new FilterDateTime({}, this.filterDateNode),
+                        new FilterFactors({}, this.filterFactorsNode),
+                        new AdvancedFilterContainer({}, this.advancedFilterContainerNode)
+                    ]
+                }, this.filterControlsNode)
             );
 
             this.subscriptions();
@@ -102,7 +105,7 @@ define([
                         id: 'CrashPoints',
                         url: config.urls.service,
                         serviceType: 'feature'
-                        //,mode: 0 // snapshot mode
+                            //,mode: 0 // snapshot mode
                     });
                 })
             );

@@ -8,8 +8,9 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/dom-class',
-    'dojo/text!app/templates/FilterDateTime.html',
-    'dojo/topic'
+    'dojo/on',
+    'dojo/query',
+    'dojo/text!app/templates/FilterDateTime.html'
 ], function(
     config,
 
@@ -20,8 +21,9 @@ define([
     declare,
     lang,
     domClass,
-    template,
-    topic
+    on,
+    query,
+    template
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -39,6 +41,8 @@ define([
             //      private
             console.log('app.FilterDateTime::postCreate', arguments);
 
+            this.set('data', {});
+
             this.setupConnections();
 
             this.inherited(arguments);
@@ -50,18 +54,8 @@ define([
             console.log('app.FilterDateTime::setupConnections', arguments);
 
             this.own(
-                topic.subscribe(config.topics.search.gather, lang.hitch(this, 'publishData'))
+                on(this.domNode, 'input:change, select:change, input:input, select:input', lang.hitch(this, '_gatherData'))
             );
-        },
-        publishData: function() {
-            // summary:
-            //      publishes this widgets filter criteria
-            //
-            console.log('app.FilterDateTime::publishData', arguments);
-
-            var criteria = this._gatherData();
-
-            topic.publish(config.topics.filter.criteria, criteria);
         },
         _gatherData: function() {
             // summary:
@@ -86,9 +80,9 @@ define([
                 date.toTime = this.toTimeNode.value;
             }
 
-            return {
+            this.set('data', {
                 date: date
-            };
+            });
         },
         _getDaysFromSelect: function(node) {
             // summary:
