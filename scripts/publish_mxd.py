@@ -3,7 +3,7 @@ import sys
 import xml.dom.minidom as DOM
 
 arcpy.env.overwriteOutput = True
-temp_dir = 'c:\\temp\\'
+temp_dir = 'c:/temp/'
 
 temp_info = {
     'draft_location':  temp_dir + 'service.sddraft',
@@ -13,8 +13,10 @@ temp_info = {
 mxd_info = {
     'service': 'Crashes',
     'folder': 'Crash',
-    'mxd': arcpy.mapping.MapDocument(r'C:\Projects\GitHub\Crash-web\maps\sqlexpress.mxd'),
-    'connection': r'C:\Projects\GitHub\Crash-web\scripts\connections\arcgis on localhost_6080 (admin).ags',
+    # 'mxd': arcpy.mapping.MapDocument('C:/Projects/GitHub/Crash-web/maps/dev.mxd'),
+    # 'connection': 'C:/Projects/GitHub/Crash-web/scripts/connections/dev.ags',
+    'mxd': arcpy.mapping.MapDocument('C:/Projects/GitHub/Crash-web/maps/test.mxd'),
+    'connection': 'C:/Projects/GitHub/Crash-web/scripts/connections/test.ags',
     'summary': 'A map containing vehicle collision points'
 }
 
