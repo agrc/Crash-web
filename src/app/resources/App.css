@@ -11,6 +11,7 @@
 @import '../resources/FilterSeverity.css';
 @import '../resources/FilterDateTime.css';
 @import '../resources/FilterControls.css';
+@import '../resources/ResultsPanel.css';
 
 @font-face {
   font-family: 'Ubuntu';

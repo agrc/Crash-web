@@ -1,5 +1,6 @@
 define([
     'app/config',
+    'app/ResultsPanel',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -13,6 +14,7 @@ define([
     'dojo/topic'
 ], function(
     config,
+    ResultsPanel,
 
     _TemplatedMixin,
     _WidgetBase,
@@ -72,6 +74,22 @@ define([
             topic.publish(config.topics.search.filter, '');
             topic.publish(config.topics.search.reset, {});
         },
+        toggleCharts: function() {
+            // summary:
+            //      shows the charts
+            //
+            console.log('app.FilterControls::toggleCharts', arguments);
+
+            if (this.resultsPanel) {
+                this.resultsPanel.destroyRecursive();
+                this.resultsPanel = null;
+                return;
+            }
+
+            this.resultsPanel = new ResultsPanel({}, 'div');
+            // place at calls startup
+            this.resultsPanel.placeAt(this.getParent().centerContainer, 'first');
+        },
         _getFilterCriteria: function() {
             // summary:
             //      gets the filter criteria from the childWidgets array
@@ -80,7 +98,7 @@ define([
 
             var criteria = {};
 
-            array.forEach(this.childWidgets, function mixinCriteria(widget){
+            array.forEach(this.childWidgets, function mixinCriteria(widget) {
                 lang.mixin(criteria, widget.get('data'));
             }, this);
 
@@ -93,8 +111,8 @@ define([
             console.log('app.FilterControls::_buildDefinitionQueryFromObject', arguments);
             var filters = [];
 
-            if (criteria.factors){
-                var factors = array.map(criteria.factors, function formatFactors(factor){
+            if (criteria.factors) {
+                var factors = array.map(criteria.factors, function formatFactors(factor) {
                     return factor + '=1';
                 });
 
@@ -116,7 +134,7 @@ define([
                         to = criteria.date.toDate;
 
                     filters.push('date BETWEEN \'' + this._formatDateForArcGis(from) +
-                                 '\' AND \'' + this._formatDateForArcGis(to) + '\'');
+                        '\' AND \'' + this._formatDateForArcGis(to) + '\'');
                 }
 
                 if (criteria.date.specificDays) {

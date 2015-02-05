@@ -13,10 +13,10 @@ temp_info = {
 mxd_info = {
     'service': 'Crashes',
     'folder': 'Crash',
-    # 'mxd': arcpy.mapping.MapDocument('C:/Projects/GitHub/Crash-web/maps/dev.mxd'),
-    # 'connection': 'C:/Projects/GitHub/Crash-web/scripts/connections/dev.ags',
-    'mxd': arcpy.mapping.MapDocument('C:/Projects/GitHub/Crash-web/maps/test.mxd'),
-    'connection': 'C:/Projects/GitHub/Crash-web/scripts/connections/test.ags',
+    'mxd': arcpy.mapping.MapDocument('C:/Projects/GitHub/Crash-web/maps/dev.mxd'),
+    'connection': 'C:/Projects/GitHub/Crash-web/scripts/connections/dev.ags',
+    # 'mxd': arcpy.mapping.MapDocument('C:/Projects/GitHub/Crash-web/maps/test.mxd'),
+    # 'connection': 'C:/Projects/GitHub/Crash-web/scripts/connections/test.ags',
     'summary': 'A map containing vehicle collision points'
 }
 
