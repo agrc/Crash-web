@@ -59,7 +59,7 @@ define([
 
             this.map = new BaseMap(this.mapDiv, {
                 showAttribution: false,
-                defaultBaseMap: 'Lite'
+                defaultBaseMap: 'Hybrid'
             });
 
             this.symbol = new LineSymbol(LineSymbol.STYLE_SOLID, new Color('#F012BE'), 3);
