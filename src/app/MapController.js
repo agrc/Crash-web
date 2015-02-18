@@ -101,7 +101,7 @@ define([
             // filterCriteria
             console.log('app.MapController::setQueryFilter', arguments);
 
-            this.activeLayer.setDefinitionExpression(filterCriteria);
+            this.activeLayer.setWhere(filterCriteria);
         },
         addLayerAndMakeVisible: function(props) {
             // summary:
