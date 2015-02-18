@@ -17,7 +17,7 @@ define(['dojo/has'], function(has) {
         apiKey: '', // acquire at developer.mapserv.utah.gov
 
         urls: {
-            service: 'http://localhost/arcgis/rest/services/Crash/Crashes/MapServer/0'
+            service: '/arcgis/rest/services/Crash/Crashes/MapServer/0'
         },
 
         topics: {

@@ -156,7 +156,7 @@ module.exports = function(grunt) {
         cssmin: {
             main: {
                 files: {
-                    'dist/leaflet/leaflet.min.css': [
+                    'dist/leaflet/leaflet.css': [
                         'src/leaflet/dist/leaflet.css',
                         'src/leaflet.markercluster/dist/MarkerCluster.css',
                         'src/leaflet.markercluster/dist/MarkerCluster.Default.css'
@@ -311,7 +311,7 @@ module.exports = function(grunt) {
         uglify: {
             main: {
                 files: {
-                    'dist/leaflet/leaflet.min.js': [
+                    'dist/leaflet/leaflet.js': [
                         'src/leaflet/dist/leaflet.js',
                         'src/leaflet.markercluster/dist/leaflet.markercluster.js',
                         'src/proj4/dist/proj4.js',
@@ -358,20 +358,22 @@ module.exports = function(grunt) {
         'if-missing:esri_slurp:prod',
         'newer:imagemin:main',
         'dojo:prod',
-        'copy',
+        'copy:main',
         'processhtml:main',
         'cssmin:main',
-        'uglify:main'
+        'uglify:main',
+        'copy:leaflet'
     ]);
     grunt.registerTask('build-stage', [
         'clean:build',
         'if-missing:esri_slurp:prod',
         'newer:imagemin:main',
         'dojo:stage',
-        'copy',
+        'copy:main',
         'processhtml:main',
         'cssmin:main',
-        'uglify:main'
+        'uglify:main',
+        'copy:leaflet'
     ]);
     grunt.registerTask('deploy-prod', [
         'clean:deploy',
