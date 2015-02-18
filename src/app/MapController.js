@@ -1,35 +1,18 @@
+/* global L  */
 define([
-    'agrc/widgets/map/BaseMap',
-
     'app/config',
 
     'dojo/_base/array',
     'dojo/_base/Color',
     'dojo/_base/lang',
-    'dojo/topic',
-
-    'esri/graphic',
-    'esri/layers/ArcGISDynamicMapServiceLayer',
-    'esri/layers/ArcGISTiledMapServiceLayer',
-    'esri/layers/FeatureLayer',
-    'esri/renderers/HeatmapRenderer',
-    'esri/symbols/SimpleLineSymbol'
+    'dojo/topic'
 ], function(
-    BaseMap,
-
     config,
 
     array,
     Color,
     lang,
-    topic,
-
-    Graphic,
-    DynamicLayer,
-    TiledLayer,
-    FeatureLayer,
-    HeatmapRenderer,
-    LineSymbol
+    topic
 ) {
     return {
         // description:
@@ -57,12 +40,38 @@ define([
 
             this.childWidgets = [];
 
-            this.map = new BaseMap(this.mapDiv, {
-                showAttribution: false,
-                defaultBaseMap: 'Hybrid'
-            });
+            var crs = new L.Proj.CRS('EPSG:26912',
+                '+proj=utm +zone=12 +ellps=GRS80 +datum=NAD83 +units=m +no_defs', {
+                    origin: [-5120900, 9998100],
+                    resolutions: [
+                        4891.96999883583,
+                        2445.98499994708,
+                        1222.99250010583,
+                        611.496250052917,
+                        305.748124894166,
+                        152.8740625,
+                        76.4370312632292,
+                        38.2185156316146,
+                        19.1092578131615,
+                        9.55462890525781,
+                        4.77731445262891,
+                        2.38865722657904,
+                        1.19432861315723,
+                        0.597164306578613,
+                        0.298582153289307
+                    ]
+                });
 
-            this.symbol = new LineSymbol(LineSymbol.STYLE_SOLID, new Color('#F012BE'), 3);
+            this.map = new L.Map(this.mapDiv, {
+                crs: crs
+            }).setView([39.381, -111.859], 2);
+
+            new L.esri.Layers.TiledMapLayer('http://mapserv.utah.gov/arcgis/rest/services/BaseMaps/Hybrid/MapServer', {
+                maxZoom: 14,
+                minZoom: 0,
+                continuousWorld: true,
+                attribution: 'State of Utah'
+            }).addTo(this.map);
 
             this.layers = [];
 
@@ -103,58 +112,37 @@ define([
 
             // check to see if layer has already been added to the map
             var lyr;
-            var alreadyAdded = array.some(this.map.graphicsLayerIds, function(id) {
-                console.log('app.MapController::addLayerAndMakeVisible||looping ids ', id);
-                return id === props.id;
-            }, this);
 
-            console.log('app.MapController::addLayerAndMakeVisible||already added ', alreadyAdded);
+            var LayerClass;
 
-            if (!alreadyAdded) {
-                var LayerClass, Renderer;
-
-                switch (props.serviceType || 'dynamic') {
-                    case 'feature':
-                        {
-                            LayerClass = FeatureLayer;
-                            Renderer = new HeatmapRenderer({
-                                colors: [
-                                    'rgba(0,0,0,0)',
-                                    'rgba(0,116,217,1)',
-                                    'rgba(255,220,0,1)',
-                                    'rgba(255,133,27,1)',
-                                    'rgba(255,133,27,1)',
-                                    'rgba(255,65,54,1)'
-                                ],
-                                blurRadius: 8
-                            });
-                            break;
-                        }
-                    case 'tiled':
-                        {
-                            LayerClass = TiledLayer;
-                            break;
-                        }
-                    default:
-                        {
-                            LayerClass = DynamicLayer;
-                            break;
-                        }
-                }
-
-                lyr = new LayerClass(props.url, props);
-                lyr.setRenderer(Renderer);
-
-                this.map.addLayer(lyr);
-                this.map.addLoaderToLayer(lyr);
-
-                this.layers.push({
-                    id: props.id,
-                    layer: lyr
-                });
-
-                this.activeLayer = lyr;
+            switch (props.serviceType || 'dynamic') {
+                case 'feature':
+                    {
+                        break;
+                    }
+                case 'tiled':
+                    {
+                        break;
+                    }
+                case 'clustered':
+                    {
+                        LayerClass = L.esri.Layers.ClusteredFeatureLayer;
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
             }
+
+            lyr = new LayerClass(props.url, props).addTo(this.map);
+
+            this.layers.push({
+                id: props.id,
+                layer: lyr
+            });
+
+            this.activeLayer = lyr;
         },
         updateOpacity: function(opacity) {
             // summary:
@@ -173,17 +161,13 @@ define([
 
             this.activeLayer.layer.setOpacity(this.currentOpacity);
         },
-        highlight: function(evt) {
+        highlight: function() {
             // summary:
             //      adds the clicked shape geometry to the graphics layer
             //      highlighting it
             // evt - mouse click event
             console.log('app.MapController::highlight', arguments);
 
-            this.clearGraphic(this.graphic);
-
-            this.graphic = new Graphic(evt.graphic.geometry, this.symbol);
-            this.map.graphics.add(this.graphic);
         },
         clearGraphic: function(graphic) {
             // summary:

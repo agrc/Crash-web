@@ -69,10 +69,6 @@ define([
             // set version number
             this.version.innerHTML = config.version;
 
-            MapController.init({
-                mapDiv: this.mapDiv
-            });
-
             this.childWidgets.push(
                 MapController,
                 new SideBarToggler({
@@ -89,6 +85,19 @@ define([
                 }, this.filterControlsNode)
             );
 
+            MapController.init({
+                mapDiv: this.mapDiv
+            });
+
+            MapController.addLayerAndMakeVisible({
+                id: 'CrashPoints',
+                url: config.urls.service,
+                serviceType: 'clustered',
+                polygonOptions: {
+                    color: '#B10DC9'
+                }
+            });
+
             this.subscriptions();
 
             this.inherited(arguments);
@@ -99,16 +108,6 @@ define([
             //
             console.log('app.App::subscriptions', arguments);
 
-            this.own(
-                MapController.map.on('load', function() {
-                    MapController.addLayerAndMakeVisible({
-                        id: 'CrashPoints',
-                        url: config.urls.service,
-                        serviceType: 'feature'
-                            //,mode: 0 // snapshot mode
-                    });
-                })
-            );
         },
         startup: function() {
             // summary:

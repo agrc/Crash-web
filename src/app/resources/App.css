@@ -1,12 +1,6 @@
-@import '../../dijit/themes/claro/claro.css';
-@import '../../esri/css/esri.css';
 @import '../../bootstrap/dist/css/bootstrap.css';
-@import '../../agrc/resources/map/BaseMap.css';
 @import '../../ijit/themes/standard/layout/SideBarToggler.css';
 @import '../../ijit/themes/standard/layout/PaneStack.css';
-@import '../../agrc/resources/map/BaseMapSelector.css';
-@import '../../agrc/resources/locate/FindAddress.css';
-@import '../../agrc/resources/locate/MagicZoom.css';
 @import '../resources/FilterFactors.css';
 @import '../resources/FilterSeverity.css';
 @import '../resources/FilterDateTime.css';
@@ -60,9 +54,6 @@ body, html, .app {
     top: -3px;
     right: 0;
 }
-.app [data-dojo-attach-point='popupBlurb'] {
-    display: none;
-}
 
 /* SIDE BAR */
 .app .side-bar-container {
@@ -78,12 +69,6 @@ body, html, .app {
     padding: 10px;
     width: 300px;
     margin: -1px;
-}
-.app .side-bar-container .magic-zoom {
-    position: relative;
-}
-.app .side-bar-container .magic-zoom.first {
-    z-index: 27;
 }
 
 /* CENTER (MAP) */
@@ -108,17 +93,6 @@ body, html, .app {
 *:focus {
     outline: none;
 }
-
-.map .tooltip {
-    width: 100px;
-    position: absolute;
-    border: 1px solid #7EABCD;
-    background-color: white;
-    padding: 5px;
-    font-size: 9pt;
-    z-index: 9999;
-    border-radius: 4px;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-    filter: alpha(opacity=100);
-    opacity: 1;
-}
+.app .leaflet-top {
+    top: 20px;
+    }

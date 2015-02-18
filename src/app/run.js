@@ -10,7 +10,6 @@
             window.dojoConfig.isJasmineTestRunner
             ) ? '/src': './',
         packages: [
-            'agrc',
             'app',
             'dgrid',
             'dijit',
@@ -18,7 +17,6 @@
             'dojox',
             'esri',
             'ijit',
-            'proj4',
             'put-selector',
             'xstyle',
             {
@@ -39,7 +37,7 @@
                 main: 'mustache'
             },{
                 name: 'spin',
-                location: './spinjs',
+                location: './spin.js',
                 main: 'spin'
             },{
                 name: 'stubmodule',

@@ -6,7 +6,7 @@
     <!-- META TAGS -->
     <!-- required for IE and bootstrap -->
     <meta http-equiv="X-UA-Compatible" content="IE=9" />
-
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <meta charset='utf-8'>
     <link rel="shortcut icon" href="http://mapserv.utah.gov/cdn/images/favicon.ico"/>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -14,6 +14,9 @@
     <meta name="keywords" content="utah, crash, car, car accident, car crash, crash, agrc, highway patrol" />
 
     <!-- CSS -->
+    <link rel='stylesheet' href='leaflet/dist/leaflet.css'>
+    <link rel='stylesheet' href='leaflet.markercluster/dist/MarkerCluster.css'>
+    <link rel='stylesheet' href='leaflet.markercluster/dist/MarkerCluster.Default.css'>
     <link rel='stylesheet' href='app/resources/App.css'>
 </head>
 <body class='claro'>
@@ -24,6 +27,12 @@
     /build -->
 
     <!-- build:remove -->
+    <script src='leaflet/dist/leaflet.js'></script>
+    <script src='leaflet.markercluster/dist/leaflet.markercluster.js'></script>
+    <script src='proj4/dist/proj4.js'></script>
+    <script src='proj4leaflet/src/proj4leaflet.js'></script>
+    <script src='esri-leaflet/dist/esri-leaflet.js'></script>
+    <script src='esri-leaflet-clustered-feature-layer/dist/esri-leaflet-clustered-feature-layer.js'></script>
     <script data-dojo-config="isDebug: 1" src='dojo/dojo.js'></script>
     <script src='app/run.js'></script>
     <!-- /build -->

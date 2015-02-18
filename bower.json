@@ -2,20 +2,24 @@
   "name": "crash.web",
   "version": "0.5.0",
   "dependencies": {
-    "agrc": "agrc-widgets#2.9.1",
-    "bootstrap": "~3.2",
+    "bootstrap": "~3",
     "dijit": "~1.10",
     "dojo": "~1.10",
     "dojox": "~1.10",
     "ijit": "agrc-ijit#3.1.1",
     "jasmine-favicon-reporter": "*",
-    "stubmodule": "0.6.0",
+    "stubmodule": "0",
     "util": "dojo-util#~1.10",
-    "proj4": "1.4.1",
-    "jasmine-jsreporter": "~0.1.2",
-    "xstyle": "~0.3"
+    "jasmine-jsreporter": "~0",
+    "xstyle": "8a80773bed850a3230451c6a38c1386e180b6070",
+    "proj4leaflet": "~0",
+    "proj4": "~2.3.4",
+    "leaflet": "~0.7.3",
+    "esri-leaflet": "~1.0.0-rc.5",
+    "esri-leaflet-clustered-feature-layer": "~1.0.0-rc.4",
+    "leaflet.markercluster": "~0.4.0"
   },
   "resolutions": {
-    "xstyle": "~0.3"
+    "xstyle": "8a80773bed850a3230451c6a38c1386e180b6070"
   }
 }

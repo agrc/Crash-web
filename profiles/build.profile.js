@@ -29,14 +29,6 @@ var profile = {
             exclude: ['dojo/dojo']
         }
     },
-    packages: [{
-        name: 'proj4',
-        resourceTags: {
-            copyOnly: function () {
-                return true;
-            }
-        }
-    }],
     staticHasFeatures: {
         // The trace & log APIs are used for debugging the loader, so we don’t need them in the build
         'dojo-trace-api':0,
@@ -58,6 +50,6 @@ var profile = {
         'xstyle/css': 'xstyle/build/amd-css'
     },
     userConfig: {
-        packages: ['app', 'dijit', 'dojox', 'agrc', 'ijit', 'esri']
+        packages: ['app', 'dijit', 'dojox', 'ijit']
     }
 };

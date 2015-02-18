@@ -20,7 +20,6 @@
     "grunt-contrib-jshint": "^0",
     "grunt-contrib-watch": "^0",
     "grunt-dojo": "^0",
-    "grunt-esri-slurp": "^1",
     "grunt-if-missing": "^1",
     "grunt-newer": "^0",
     "grunt-processhtml": "^0",
