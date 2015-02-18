@@ -17,6 +17,7 @@ src/dojo/
 src/dojox/
 src/esri-leaflet-clustered-feature-layer/
 src/esri-leaflet/
+src/esri/
 src/favico.js/
 src/ijit/
 src/jasmine-favicon-reporter/

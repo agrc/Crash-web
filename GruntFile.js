@@ -141,6 +141,27 @@ module.exports = function(grunt) {
                     src: ['*.html'],
                     dest: 'dist/'
                 }]
+            },
+            leaflet: {
+                files: [{
+                expand: true,
+                cwd: 'src',
+                src: ['leaflet/dist/images/**'],
+                dest: 'dist/leaflet/images/',
+                filter: 'isFile',
+                flatten: true
+                }]
+            }
+        },
+        cssmin: {
+            main: {
+                files: {
+                    'dist/leaflet/leaflet.min.css': [
+                        'src/leaflet/dist/leaflet.css',
+                        'src/leaflet.markercluster/dist/MarkerCluster.css',
+                        'src/leaflet.markercluster/dist/MarkerCluster.Default.css'
+                    ]
+                }
             }
         },
         dojo: {
@@ -163,6 +184,20 @@ module.exports = function(grunt) {
                 releaseDir: '../dist',
                 require: 'src/app/run.js', // Optional: Module to require for the build (Default: nothing)
                 basePath: './src'
+            }
+        },
+        esri_slurp: {
+            options: {
+                version: '3.12'
+            },
+            dev: {
+                options: {
+                    beautify: true
+                },
+                dest: 'src/esri'
+            },
+            prod: {
+                dest: 'src/esri'
             }
         },
         imagemin: {
@@ -273,6 +308,20 @@ module.exports = function(grunt) {
                 command: 'python scripts/publish_mxd.py'
             }
         },
+        uglify: {
+            main: {
+                files: {
+                    'dist/leaflet/leaflet.min.js': [
+                        'src/leaflet/dist/leaflet.js',
+                        'src/leaflet.markercluster/dist/leaflet.markercluster.js',
+                        'src/proj4/dist/proj4.js',
+                        'src/proj4leaflet/src/proj4leaflet.js',
+                        'src/esri-leaflet/dist/esri-leaflet.js',
+                        'src/esri-leaflet-clustered-feature-layer/dist/esri-leaflet-clustered-feature-layer.js'
+                    ]
+                }
+            }
+        },
         watch: {
             jshint: {
                 files: jshintFiles,
@@ -300,22 +349,29 @@ module.exports = function(grunt) {
         'jasmine:main:build',
         'jshint:main',
         'amdcheck:main',
+        'if-missing:esri_slurp:dev',
         'connect',
         'watch'
     ]);
     grunt.registerTask('build-prod', [
         'clean:build',
+        'if-missing:esri_slurp:prod',
         'newer:imagemin:main',
         'dojo:prod',
-        'copy:main',
-        'processhtml:main'
+        'copy',
+        'processhtml:main',
+        'cssmin:main',
+        'uglify:main'
     ]);
     grunt.registerTask('build-stage', [
         'clean:build',
+        'if-missing:esri_slurp:prod',
         'newer:imagemin:main',
         'dojo:stage',
-        'copy:main',
-        'processhtml:main'
+        'copy',
+        'processhtml:main',
+        'cssmin:main',
+        'uglify:main'
     ]);
     grunt.registerTask('deploy-prod', [
         'clean:deploy',
@@ -335,6 +391,7 @@ module.exports = function(grunt) {
         'saucelabs-jasmine'
     ]);
     grunt.registerTask('travis', [
+        'if-missing:esri_slurp:prod',
         'jshint',
         'sauce',
         'build-prod'
