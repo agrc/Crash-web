@@ -87,11 +87,10 @@ define([
                         new FilterDateTime({}, this.filterDateNode),
                         new FilterFactors({}, this.filterFactorsNode),
                         new AdvancedFilterContainer({}, this.advancedFilterContainerNode),
-                        new FilterDraw({}, this.filderDrawNode)
+                        new FilterDraw({map: MapController.map}, this.filterDrawNode)
                     ]
                 }, this.filterControlsNode)
             );
-
 
             // MapController.addLayerAndMakeVisible({
             //     id: 'CrashPoints',

@@ -26,6 +26,8 @@ define([
 
         // Properties to be sent into constructor
 
+        map: null,
+
         postCreate: function() {
             // summary:
             //      Overrides method of same name in dijit._Widget.
@@ -33,7 +35,7 @@ define([
             //      private
             console.log('app.FilterDraw::postCreate', arguments);
 
-            this.polygonDrawer = new L.Draw.Polyline();
+            this.polygonDrawer = new L.Draw.Polygon(this.map);
             this.setupConnections();
 
             this.inherited(arguments);

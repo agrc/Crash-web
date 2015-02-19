@@ -76,6 +76,10 @@ define([
                 attribution: 'State of Utah'
             }).addTo(this.map);
 
+            // Initialise the FeatureGroup to store editable layers
+            this.graphicsLayer = new L.FeatureGroup();
+            this.map.addLayer(this.graphicsLayer);
+
             this.layers = [];
 
             this.subscriptions();
@@ -87,13 +91,9 @@ define([
 
             this.handles.push(
                 topic.subscribe(config.topics.search.filter, lang.hitch(this, 'setQueryFilter')),
-                // Assumming you have a Leaflet map accessible
-                this.map.on('draw:created', function(e) {
-                    var type = e.layerType,
-                        layer = e.layer;
-
-                    layer.addTo(this.map);
-                })
+                this.map.on('draw:created', lang.hitch(this, function(e) {
+                    this.graphicsLayer.addLayer(e.layer);
+                }))
             );
         },
         startup: function() {

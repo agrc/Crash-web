@@ -160,7 +160,8 @@ module.exports = function(grunt) {
                         'src/leaflet/dist/leaflet.css',
                         'src/leaflet.loading/src/Control.Loading.css',
                         'src/leaflet.markercluster/dist/MarkerCluster.css',
-                        'src/app/resources/MarkerCluster.Custom.css'
+                        'src/app/resources/MarkerCluster.Custom.css',
+                        'src/leaflet.draw/dist/leaflet.draw.css'
                     ]
                 }
             }
@@ -319,7 +320,8 @@ module.exports = function(grunt) {
                         'src/proj4/dist/proj4.js',
                         'src/proj4leaflet/src/proj4leaflet.js',
                         'src/esri-leaflet/dist/esri-leaflet.js',
-                        'src/esri-leaflet-clustered-feature-layer/dist/esri-leaflet-clustered-feature-layer.js'
+                        'src/esri-leaflet-clustered-feature-layer/dist/esri-leaflet-clustered-feature-layer.js',
+                        'src/leaflet.draw/dist/leaflet.draw.js'
                     ]
                 }
             }
