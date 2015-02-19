@@ -3,7 +3,6 @@ define([
     'app/config',
 
     'dojo/_base/array',
-    'dojo/_base/Color',
     'dojo/_base/lang',
     'dojo/topic',
 
@@ -12,7 +11,6 @@ define([
     config,
 
     array,
-    Color,
     lang,
     topic,
 
