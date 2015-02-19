@@ -158,8 +158,9 @@ module.exports = function(grunt) {
                 files: {
                     'dist/leaflet/leaflet.css': [
                         'src/leaflet/dist/leaflet.css',
+                        'src/leaflet.loading/src/Control.Loading.css',
                         'src/leaflet.markercluster/dist/MarkerCluster.css',
-                        'src/leaflet.markercluster/dist/MarkerCluster.Default.css'
+                        'src/app/resources/MarkerCluster.Custom.css'
                     ]
                 }
             }
@@ -313,6 +314,7 @@ module.exports = function(grunt) {
                 files: {
                     'dist/leaflet/leaflet.js': [
                         'src/leaflet/dist/leaflet.js',
+                        'src/leaflet.loading/src/Control.Loading.js',
                         'src/leaflet.markercluster/dist/leaflet.markercluster.js',
                         'src/proj4/dist/proj4.js',
                         'src/proj4leaflet/src/proj4leaflet.js',
