@@ -5,14 +5,18 @@ define([
     'dojo/_base/array',
     'dojo/_base/Color',
     'dojo/_base/lang',
-    'dojo/topic'
+    'dojo/topic',
+
+    'mustache/mustache'
 ], function(
     config,
 
     array,
     Color,
     lang,
-    topic
+    topic,
+
+    mustache
 ) {
     return {
         // description:
@@ -137,6 +141,21 @@ define([
             }
 
             lyr = new LayerClass(props.url, props).addTo(this.map);
+
+            var template = '<h5>{{severity}}</h5>' +
+                '<label>Date</label>: {{date}}<br/>' +
+                '<label>Event</label>: {{event}}<br/>' +
+                '{{#collision_type}}' +
+                '<label>Collision Type</label>: {{collision_type}}<br/>' +
+                '{{/collision_type}}' +
+                '<label>Weather</label>: {{weather_condition}}<br/>' +
+                '<label>Road</label>: {{road_name}} was {{road_condition}}';
+            mustache.parse(template);
+
+            lyr.bindPopup(function(feature) {
+                feature.properties.date = new Date(feature.properties.date).toLocaleString();
+                return mustache.render(template, feature.properties);
+            });
 
             this.layers.push({
                 id: props.id,

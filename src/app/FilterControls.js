@@ -159,6 +159,10 @@ define([
             // d
             console.log('app.FilterControls::_formatDateForArcGis', arguments);
 
+            if(!(d instanceof Date) && isNaN(d.valueOf())){
+                d = new Date(d);
+            }
+
             return locale.format(d, {
                 datePattern: 'yyyy-MM-dd',
                 selector: 'date'

@@ -93,6 +93,17 @@ define([
                 id: 'CrashPoints',
                 url: config.urls.service,
                 serviceType: 'clustered',
+                displayFieldName: 'date',
+                fields: [
+                    'objectid',
+                    'severity',
+                    'date',
+                    'weather_condition',
+                    'event',
+                    'collision_type',
+                    'road_name',
+                    'road_condition'
+                ],
                 polygonOptions: {
                     color: '#B10DC9'
                 }
