@@ -1,6 +1,6 @@
 {
   "name": "crash.web",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "dependencies": {
     "bootstrap": "~3",
     "dijit": "~1.10",
