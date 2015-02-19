@@ -17,7 +17,8 @@
     "leaflet": "~0.7.3",
     "esri-leaflet": "~1.0.0-rc.5",
     "esri-leaflet-clustered-feature-layer": "~1.0.0-rc.4",
-    "leaflet.markercluster": "~0.4.0"
+    "leaflet.markercluster": "~0.4.0",
+    "leaflet.loading": "~0.1.15"
   },
   "resolutions": {
     "xstyle": "8a80773bed850a3230451c6a38c1386e180b6070"

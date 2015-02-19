@@ -25,6 +25,7 @@ src/jasmine-jsreporter/
 src/jquery/
 src/ladda-bootstrap/
 src/leaflet
+src/leaflet.loading/
 src/leaflet.markercluster/
 src/mustache/
 src/proj4/

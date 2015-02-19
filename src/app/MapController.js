@@ -63,7 +63,8 @@ define([
                 });
 
             this.map = new L.Map(this.mapDiv, {
-                crs: crs
+                crs: crs,
+                loadingControl: true
             }).setView([39.381, -111.859], 2);
 
             new L.esri.Layers.TiledMapLayer('http://mapserv.utah.gov/arcgis/rest/services/BaseMaps/Hybrid/MapServer', {
