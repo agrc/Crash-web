@@ -86,7 +86,14 @@ define([
             console.log('app.MapController::subscriptions', arguments);
 
             this.handles.push(
-                topic.subscribe(config.topics.search.filter, lang.hitch(this, 'setQueryFilter'))
+                topic.subscribe(config.topics.search.filter, lang.hitch(this, 'setQueryFilter')),
+                // Assumming you have a Leaflet map accessible
+                this.map.on('draw:created', function(e) {
+                    var type = e.layerType,
+                        layer = e.layer;
+
+                    layer.addTo(this.map);
+                })
             );
         },
         startup: function() {

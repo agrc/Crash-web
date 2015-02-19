@@ -3,6 +3,7 @@ define([
     'app/config',
     'app/FilterControls',
     'app/FilterDateTime',
+    'app/FilterDraw',
     'app/FilterFactors',
     'app/MapController',
 
@@ -23,6 +24,7 @@ define([
     config,
     FilterControls,
     FilterDateTime,
+    FilterDraw,
     FilterFactors,
     MapController,
 
@@ -69,6 +71,10 @@ define([
             // set version number
             this.version.innerHTML = config.version;
 
+            MapController.init({
+                mapDiv: this.mapDiv
+            });
+
             this.childWidgets.push(
                 MapController,
                 new SideBarToggler({
@@ -80,34 +86,32 @@ define([
                     childWidgets: [
                         new FilterDateTime({}, this.filterDateNode),
                         new FilterFactors({}, this.filterFactorsNode),
-                        new AdvancedFilterContainer({}, this.advancedFilterContainerNode)
+                        new AdvancedFilterContainer({}, this.advancedFilterContainerNode),
+                        new FilterDraw({}, this.filderDrawNode)
                     ]
                 }, this.filterControlsNode)
             );
 
-            MapController.init({
-                mapDiv: this.mapDiv
-            });
 
-            MapController.addLayerAndMakeVisible({
-                id: 'CrashPoints',
-                url: config.urls.service,
-                serviceType: 'clustered',
-                displayFieldName: 'date',
-                fields: [
-                    'objectid',
-                    'severity',
-                    'date',
-                    'weather_condition',
-                    'event',
-                    'collision_type',
-                    'road_name',
-                    'road_condition'
-                ],
-                polygonOptions: {
-                    color: '#B10DC9'
-                }
-            });
+            // MapController.addLayerAndMakeVisible({
+            //     id: 'CrashPoints',
+            //     url: config.urls.service,
+            //     serviceType: 'clustered',
+            //     displayFieldName: 'date',
+            //     fields: [
+            //         'objectid',
+            //         'severity',
+            //         'date',
+            //         'weather_condition',
+            //         'event',
+            //         'collision_type',
+            //         'road_name',
+            //         'road_condition'
+            //     ],
+            //     polygonOptions: {
+            //         color: '#B10DC9'
+            //     }
+            // });
 
             this.subscriptions();
 
