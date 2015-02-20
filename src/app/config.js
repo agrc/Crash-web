@@ -25,6 +25,15 @@ define(['dojo/has'], function(has) {
                 filter: 'f',
                 reset: 'r',
                 gather: 'g'
+            },
+            map: {
+                graphic: {
+                    add: 'a'
+                },
+                drawing: {
+                    activate: 'e',
+                    clear: 'c'
+                }
             }
         }
     };

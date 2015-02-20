@@ -1,18 +1,21 @@
-/* global L */
 define([
-    'dojo/text!app/templates/FilterDraw.html',
+    'app/config',
+
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
 
     'dojo/_base/declare',
-
-    'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin'
+    'dojo/text!app/templates/FilterDraw.html',
+    'dojo/topic'
 ], function(
-    template,
+    config,
+
+    _TemplatedMixin,
+    _WidgetBase,
 
     declare,
-
-    _WidgetBase,
-    _TemplatedMixin
+    template,
+    topic
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -21,12 +24,7 @@ define([
         templateString: template,
         baseClass: 'filter-draw',
 
-        // polygon draw layer
-        polygonDrawer: null,
-
         // Properties to be sent into constructor
-
-        map: null,
 
         postCreate: function() {
             // summary:
@@ -35,7 +33,6 @@ define([
             //      private
             console.log('app.FilterDraw::postCreate', arguments);
 
-            this.polygonDrawer = new L.Draw.Polygon(this.map);
             this.setupConnections();
 
             this.inherited(arguments);
@@ -46,7 +43,15 @@ define([
             //
             console.log('app.FilterDraw::activate', arguments);
 
-            this.polygonDrawer.enable();
+            topic.publish(config.topics.map.drawing.activate, 'polygon');
+        },
+        clear: function() {
+            // summary:
+            //      clears graphics
+            //
+            console.log('app.FilterDraw::clear', arguments);
+
+            topic.publish(config.topics.map.drawing.clear);
         },
         setupConnections: function() {
             // summary:

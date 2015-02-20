@@ -76,10 +76,6 @@ define([
                 attribution: 'State of Utah'
             }).addTo(this.map);
 
-            // Initialise the FeatureGroup to store editable layers
-            this.graphicsLayer = new L.FeatureGroup();
-            this.map.addLayer(this.graphicsLayer);
-
             this.layers = [];
 
             this.subscriptions();
@@ -91,9 +87,9 @@ define([
 
             this.handles.push(
                 topic.subscribe(config.topics.search.filter, lang.hitch(this, 'setQueryFilter')),
-                this.map.on('draw:created', lang.hitch(this, function(e) {
-                    this.graphicsLayer.addLayer(e.layer);
-                }))
+                topic.subscribe(config.topics.map.drawing.activate, lang.hitch(this, 'activateDrawing')),
+                topic.subscribe(config.topics.map.drawing.clear, lang.hitch(this, 'clearGraphic')),
+                this.map.on('draw:created', lang.hitch(this, 'addGraphic'))
             );
         },
         startup: function() {
@@ -192,36 +188,38 @@ define([
             //      highlighting it
             // evt - mouse click event
             console.log('app.MapController::highlight', arguments);
-
         },
-        clearGraphic: function(graphic) {
+        addGraphic: function(e) {
+            // summary:
+            //      adds graphics to a graphics layer
+            // e: a polygon or shape style layer
+            console.log('app.MapController::addGraphic', arguments);
+
+            this.graphic = e.layer;
+
+            this.map.addLayer(this.graphic);
+            this.graphic.bringToFront();
+        },
+        clearGraphic: function() {
             // summary:
             //      removes the graphic from the map
-            // graphic
             console.log('app.MapController::clearGraphic', arguments);
 
-            if (graphic) {
-                this.map.graphics.remove(graphic);
+            if(this.graphic){
+                this.map.removeLayer(this.graphic);
                 this.graphic = null;
             }
         },
-        showPopup: function(mouseEvent) {
+        activateDrawing: function(type) {
             // summary:
-            //      shows the popup content for the graphic on the mouse over event
-            // mouseEvent - mouse over event
-            console.log('app.MapController::showPopup', arguments);
+            //      activates the drawing for the layer
+            // type
+            console.log('app.MapControl::activateDrawing', arguments);
 
-            var graphic = mouseEvent.graphic;
-
-            if (graphic === undefined) {
+            if(type === 'polygon'){
+                new L.Draw.Polygon(this.map).enable();
                 return;
             }
-        },
-        buildContent: function() {
-            // summary:
-            //      build the popup content text based on the attribute values
-            // attributes
-            console.log('app.MapController::buildContent', arguments);
         },
         destroy: function() {
             // summary:
