@@ -5,6 +5,7 @@ define([
     'dijit/_WidgetBase',
 
     'dojo/_base/declare',
+    'dojo/_base/lang',
     'dojo/text!app/templates/FilterDraw.html',
     'dojo/topic'
 ], function(
@@ -14,6 +15,7 @@ define([
     _WidgetBase,
 
     declare,
+    lang,
     template,
     topic
 ) {
@@ -37,6 +39,16 @@ define([
 
             this.inherited(arguments);
         },
+        setupConnections: function() {
+            // summary:
+            //      wire events, and such
+            //
+            console.log('app.FilterDraw::setupConnections', arguments);
+
+            this.own(
+                topic.subscribe(config.topics.map.graphic.add, lang.hitch(this, '_gatherData'))
+            );
+        },
         activate: function() {
             // summary:
             //      description
@@ -53,12 +65,15 @@ define([
 
             topic.publish(config.topics.map.drawing.clear);
         },
-        setupConnections: function() {
+        _gatherData: function(graphic) {
             // summary:
-            //      wire events, and such
-            //
-            console.log('app.FilterDraw::setupConnections', arguments);
+            //      gets the user drawn shape and sets it as the data source
+            // graphic
+            console.log('app.FilterDraw::_gatherData', arguments);
 
+            this.set('data', {
+                shape: graphic
+            });
         }
     });
 });

@@ -107,7 +107,15 @@ define([
             // filterCriteria
             console.log('app.MapController::setQueryFilter', arguments);
 
-            this.activeLayer.setWhere(filterCriteria);
+            if(filterCriteria.shape){
+                this.activeLayer.query().within(filterCriteria.shape)
+                    .where(filterCriteria.sql)
+                    .run(function(e, f){
+                        // update cluster layer
+                        console.log(f);
+                    });
+            }
+            this.activeLayer.setWhere(filterCriteria.sql);
         },
         addLayerAndMakeVisible: function(props) {
             // summary:
@@ -199,6 +207,8 @@ define([
 
             this.map.addLayer(this.graphic);
             this.graphic.bringToFront();
+
+            topic.publish(config.topics.map.graphic.add, this.graphic);
         },
         clearGraphic: function() {
             // summary:

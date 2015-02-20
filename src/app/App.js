@@ -92,25 +92,25 @@ define([
                 }, this.filterControlsNode)
             );
 
-            // MapController.addLayerAndMakeVisible({
-            //     id: 'CrashPoints',
-            //     url: config.urls.service,
-            //     serviceType: 'clustered',
-            //     displayFieldName: 'date',
-            //     fields: [
-            //         'objectid',
-            //         'severity',
-            //         'date',
-            //         'weather_condition',
-            //         'event',
-            //         'collision_type',
-            //         'road_name',
-            //         'road_condition'
-            //     ],
-            //     polygonOptions: {
-            //         color: '#B10DC9'
-            //     }
-            // });
+            MapController.addLayerAndMakeVisible({
+                id: 'CrashPoints',
+                url: config.urls.service,
+                serviceType: 'clustered',
+                displayFieldName: 'date',
+                fields: [
+                    'objectid',
+                    'severity',
+                    'date',
+                    'weather_condition',
+                    'event',
+                    'collision_type',
+                    'road_name',
+                    'road_condition'
+                ],
+                polygonOptions: {
+                    color: '#B10DC9'
+                }
+            });
 
             this.subscriptions();
 
