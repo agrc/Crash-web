@@ -1,6 +1,6 @@
 {
     "name": "crash.web.app",
-    "version": "0.7.0",
+    "version": "v0.7.0-5-gc822",
     "main": "main",
     "description": "Utah Vehicle Collisions",
     "homepage": "https://github.com/agrc/crash.web",

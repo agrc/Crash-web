@@ -10,7 +10,7 @@ define(['dojo/has'], function(has) {
 
         // version.: String
         //      The version number.
-        version: '0.7.0',
+        version: 'v0.7.0-5-gc822',
 
         // apiKey: String
         //      The api key used for services on api.mapserv.utah.gov
