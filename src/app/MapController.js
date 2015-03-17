@@ -12,7 +12,7 @@ define([
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/ArcGISTiledMapServiceLayer',
     'esri/layers/FeatureLayer',
-    'esri/renderers/HeatmapRenderer',
+    'app/layers/ClusterFeatureLayer',
     'esri/symbols/SimpleLineSymbol'
 ], function(
     BaseMap,
@@ -28,7 +28,7 @@ define([
     DynamicLayer,
     TiledLayer,
     FeatureLayer,
-    HeatmapRenderer,
+    ClusterFeatureLayer,
     LineSymbol
 ) {
     return {
@@ -111,23 +111,15 @@ define([
             console.log('app.MapController::addLayerAndMakeVisible||already added ', alreadyAdded);
 
             if (!alreadyAdded) {
-                var LayerClass, Renderer;
+                var LayerClass;
+
 
                 switch (props.serviceType || 'dynamic') {
-                    case 'feature':
+                    case 'clustered':
                         {
-                            LayerClass = FeatureLayer;
-                            Renderer = new HeatmapRenderer({
-                                colors: [
-                                    'rgba(0,0,0,0)',
-                                    'rgba(0,116,217,1)',
-                                    'rgba(255,220,0,1)',
-                                    'rgba(255,133,27,1)',
-                                    'rgba(255,133,27,1)',
-                                    'rgba(255,65,54,1)'
-                                ],
-                                blurRadius: 8
-                            });
+                            LayerClass = ClusterFeatureLayer;
+                            props.resolution = this.map.extent.getWidth() / this.map.width;
+                            props.spatialReference = this.map.spatialReference;
                             break;
                         }
                     case 'tiled':
@@ -142,8 +134,7 @@ define([
                         }
                 }
 
-                lyr = new LayerClass(props.url, props);
-                lyr.setRenderer(Renderer);
+                lyr = new LayerClass(props);
 
                 this.map.addLayer(lyr);
                 this.map.addLoaderToLayer(lyr);

@@ -167,7 +167,7 @@ module.exports = function(grunt) {
         },
         esri_slurp: {
             options: {
-                version: '3.12'
+                version: '3.13'
             },
             dev: {
                 options: {
@@ -310,7 +310,7 @@ module.exports = function(grunt) {
 
     // Default task.
     grunt.registerTask('default', [
-        'shell:bootstrapMapServices',
+        //'shell:bootstrapMapServices',
         'jasmine:main:build',
         'jshint:main',
         'amdcheck:main',
