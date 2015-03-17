@@ -1,34 +1,28 @@
 define([
-    'dijit/_TemplatedMixin',
-    'dijit/_WidgetBase',
+    'app/config',
+    'app/FilterCommon',
 
     'dojo/_base/array',
     'dojo/_base/declare',
-    'dojo/_base/event',
-    'dojo/_base/lang',
-    'dojo/dom-class',
-    'dojo/on',
     'dojo/query',
     'dojo/text!app/templates/FilterFactors.html'
 ], function(
-    _TemplatedMixin,
-    _WidgetBase,
+    config,
+    FilterCommon,
 
     array,
     declare,
-    event,
-    lang,
-    domClass,
-    on,
     query,
     template
 ) {
-    return declare([_WidgetBase, _TemplatedMixin], {
+    return declare([FilterCommon], {
         // description:
         //      Filter crashes based on the factors that went into the collision
 
         templateString: template,
         baseClass: 'filter-factors',
+        selectedTopic: config.topics.events.title.selected,
+        type: 'factors',
 
         // Properties to be sent into constructor
 
@@ -49,23 +43,7 @@ define([
             //
             console.log('app.FilterFactors::setupConnections', arguments);
 
-            this.own(
-                on(this.domNode, 'input[type="checkbox"]:change', lang.hitch(this, 'clicked'))
-            );
-        },
-        clicked: function(evt) {
-            // summary:
-            //      click handler
-            // evt: the click event
-            console.log('app.FilterFactors::clicked', arguments);
-
-            // stop input event from bubbling
-            event.stop(evt);
-
-            var factor = evt.target.parentNode.parentNode;
-
-            domClass.toggle(factor, 'btn-success');
-            this._gatherData();
+            this.inherited(arguments);
         },
         _gatherData: function() {
             // summary:
@@ -78,7 +56,7 @@ define([
             }, this);
 
             if(factors.length < 1){
-                factors = null;
+                factors = [];
             }
 
             this.set('data', {

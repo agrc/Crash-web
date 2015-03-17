@@ -1,32 +1,28 @@
 define([
-    'dijit/_TemplatedMixin',
-    'dijit/_WidgetBase',
+    'app/config',
+    'app/FilterCommon',
 
-    'dojo/_base/array',
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojo/dom-class',
     'dojo/on',
-    'dojo/query',
     'dojo/text!app/templates/FilterDateTime.html'
 ], function(
-    _TemplatedMixin,
-    _WidgetBase,
+    config,
+    FilterCommon,
 
-    array,
     declare,
     lang,
-    domClass,
     on,
-    query,
     template
 ) {
-    return declare([_WidgetBase, _TemplatedMixin], {
+    return declare([FilterCommon], {
         // description:
         //      Filter crash points by date and time options.
 
         templateString: template,
         baseClass: 'filter-date-time',
+        selectedTopic: config.topics.events.title.selected,
+        type: 'calendar',
 
         // Properties to be sent into constructor
 
@@ -51,13 +47,13 @@ define([
 
             var events = [
                 'input:change',
-                'input:input',
-                'select:change',
-                'select:input'
+                'input:input'
             ];
             this.own(
                 on(this.domNode, events.join(','), lang.hitch(this, '_gatherData'))
             );
+
+            this.inherited(arguments);
         },
         _gatherData: function() {
             // summary:
@@ -72,7 +68,7 @@ define([
                 date.toDate = this.toDateNode.value;
             }
 
-            var days = this._getDaysFromSelect(this.daysNode);
+            var days = this._getValues(this.daysNode);
             if (days.length > 0) {
                 date.specificDays = days;
             }
@@ -85,30 +81,6 @@ define([
             this.set('data', {
                 date: date
             });
-        },
-        _getDaysFromSelect: function(node) {
-            // summary:
-            //      gets the selected nodes from a filtered select
-            // node
-            console.log('app.FilterDateTime::_getDaysFromSelect', arguments);
-
-            var optionValues = [];
-
-            array.forEach(node.children, function searchChildren(child) {
-                if (child.selected) {
-                    optionValues.push(+child.value);
-                }
-            }, this);
-
-            return optionValues;
-        },
-        toggle: function() {
-            // summary:
-            //      show and hide the extra date filters
-            //
-            console.log('app.FilterDateTime::toggle', arguments);
-
-            domClass.toggle(this.extraFiltersNode, 'hidden');
         }
     });
 });

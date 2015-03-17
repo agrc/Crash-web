@@ -18,7 +18,6 @@
             'dojox',
             'esri',
             'ijit',
-            'proj4',
             'put-selector',
             'xstyle',
             {

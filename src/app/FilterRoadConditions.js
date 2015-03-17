@@ -1,20 +1,28 @@
 define([
-    'app/FilterFactors',
+    'app/config',
+    'app/FilterCommon',
 
+    'dojo/_base/array',
     'dojo/_base/declare',
+    'dojo/query',
     'dojo/text!app/templates/FilterRoadConditions.html'
 ], function(
-    FilterFactors,
+    config,
+    FilterCommon,
 
+    array,
     declare,
+    query,
     template
 ) {
-    return declare([FilterFactors], {
+    return declare([FilterCommon], {
         // description:
         //      Filter the crashes by the conditions of the road at the time
 
         templateString: template,
-        baseClass: 'filter-factors',
+        baseClass: 'filter-conditions',
+        selectedTopic: config.topics.events.title.selected,
+        type: 'weather',
 
         // Properties to be sent into constructor
 
@@ -26,6 +34,35 @@ define([
             console.log('app.FilterRoadConditions::postCreate', arguments);
 
             this.inherited(arguments);
+
+            this.setupConnections();
+        },
+        setupConnections: function() {
+            // summary:
+            //      wire events, and such
+            //
+            console.log('app.FilterRoadConditions::setupConnections', arguments);
+
+            this.inherited(arguments);
+        },
+        _gatherData: function() {
+            // summary:
+            //      builds the object to publish
+            //
+            console.log('app.FilterRoadConditions::_gatherData', arguments);
+
+            var roadConditions = array.map(query('input[type="checkbox"]:checked', this.domNode),
+                function mapCheckboxes(node) {
+                    return node.value;
+                }, this);
+
+            if (roadConditions.length < 1) {
+                roadConditions = [];
+            }
+
+            this.set('data', {
+                roadConditions: roadConditions
+            });
         }
     });
 });

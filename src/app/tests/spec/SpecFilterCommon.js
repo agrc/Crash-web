@@ -1,5 +1,5 @@
 require([
-    'app/AdvancedFilterContainer',
+    'app/FilterCommon',
 
     'dojo/dom-construct'
 ], function(
@@ -7,7 +7,7 @@ require([
 
     domConstruct
 ) {
-    describe('app/AdvancedFilterContainer', function() {
+    describe('app/FilterCommon', function() {
         var widget;
         var destroy = function (widget) {
             widget.destroyRecursive();
@@ -25,7 +25,7 @@ require([
         });
 
         describe('Sanity', function() {
-            it('should create a AdvancedFilterContainer', function() {
+            it('should create a FilterCommon', function() {
                 expect(widget).toEqual(jasmine.any(WidgetUnderTest));
             });
         });

@@ -2,33 +2,37 @@ define([
     'agrc/widgets/map/BaseMap',
 
     'app/config',
+    'app/layers/ClusterFeatureLayer',
 
     'dojo/_base/array',
     'dojo/_base/Color',
     'dojo/_base/lang',
+    'dojo/dom-construct',
+    'dojo/query',
     'dojo/topic',
 
     'esri/graphic',
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/ArcGISTiledMapServiceLayer',
     'esri/layers/FeatureLayer',
-    'esri/renderers/HeatmapRenderer',
     'esri/symbols/SimpleLineSymbol'
 ], function(
     BaseMap,
 
     config,
+    ClusterFeatureLayer,
 
     array,
     Color,
     lang,
+    domConstruct,
+    query,
     topic,
 
     Graphic,
     DynamicLayer,
     TiledLayer,
     FeatureLayer,
-    HeatmapRenderer,
     LineSymbol
 ) {
     return {
@@ -61,6 +65,9 @@ define([
                 showAttribution: false,
                 defaultBaseMap: 'Hybrid'
             });
+
+            this.appendLogo('logo-alt');
+            this.appendLogo('logo-alt2');
 
             this.symbol = new LineSymbol(LineSymbol.STYLE_SOLID, new Color('#F012BE'), 3);
 
@@ -111,23 +118,15 @@ define([
             console.log('app.MapController::addLayerAndMakeVisible||already added ', alreadyAdded);
 
             if (!alreadyAdded) {
-                var LayerClass, Renderer;
+                var LayerClass;
+
 
                 switch (props.serviceType || 'dynamic') {
-                    case 'feature':
+                    case 'clustered':
                         {
-                            LayerClass = FeatureLayer;
-                            Renderer = new HeatmapRenderer({
-                                colors: [
-                                    'rgba(0,0,0,0)',
-                                    'rgba(0,116,217,1)',
-                                    'rgba(255,220,0,1)',
-                                    'rgba(255,133,27,1)',
-                                    'rgba(255,133,27,1)',
-                                    'rgba(255,65,54,1)'
-                                ],
-                                blurRadius: 8
-                            });
+                            LayerClass = ClusterFeatureLayer;
+                            props.resolution = this.map.extent.getWidth() / this.map.width;
+                            props.spatialReference = this.map.spatialReference;
                             break;
                         }
                     case 'tiled':
@@ -142,8 +141,7 @@ define([
                         }
                 }
 
-                lyr = new LayerClass(props.url, props);
-                lyr.setRenderer(Renderer);
+                lyr = new LayerClass(props);
 
                 this.map.addLayer(lyr);
                 this.map.addLoaderToLayer(lyr);
@@ -213,6 +211,17 @@ define([
             //      build the popup content text based on the attribute values
             // attributes
             console.log('app.MapController::buildContent', arguments);
+        },
+        appendLogo: function(css) {
+            // summary:
+            //      adds css to map
+            //
+            console.log('app.MapController::appendLogo', arguments);
+
+            var node = query('.esriControlsBR', this.map.domNode)[0];
+            var logo = domConstruct.toDom('<div class="' + css + '"></div>');
+
+            domConstruct.place(logo, node, 'first');
         },
         destroy: function() {
             // summary:

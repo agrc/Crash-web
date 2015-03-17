@@ -36,6 +36,10 @@ define([
 
         // Properties to be sent into constructor
 
+        constructor: function(){
+            this.filters = [];
+        },
+
         postCreate: function() {
             // summary:
             //      Overrides method of same name in dijit._Widget.
@@ -92,13 +96,13 @@ define([
         },
         _getFilterCriteria: function() {
             // summary:
-            //      gets the filter criteria from the childWidgets array
+            //      gets the filter criteria from the filters array
             //
             console.log('app.FilterControls::_getFilterCriteria', arguments);
 
             var criteria = {};
 
-            array.forEach(this.childWidgets, function mixinCriteria(widget) {
+            array.forEach(this.filters, function mixinCriteria(widget) {
                 lang.mixin(criteria, widget.get('data'));
             }, this);
 
@@ -109,7 +113,8 @@ define([
             //      gets the object criteria from the filters and creates a definition query
             // criteria
             console.log('app.FilterControls::_buildDefinitionQueryFromObject', arguments);
-            var filters = [];
+            var filters = [],
+                result = {};
 
             if (criteria.factors) {
                 var factors = array.map(criteria.factors, function formatFactors(factor) {
@@ -151,7 +156,19 @@ define([
                 }
             }
 
-            return filters.join(' AND ');
+            if (criteria.milepost) {
+                var milepost = criteria.milepost;
+                filters.push('route_number = ' + milepost.route +
+                    ' AND milepost BETWEEN ' + milepost.from + ' AND ' + milepost.to);
+            }
+
+            if (criteria.shape) {
+                result.shape = criteria.shape;
+            }
+
+            result.sql = filters.join(' OR ');
+
+            return result;
         },
         _formatDateForArcGis: function(d) {
             // summary:

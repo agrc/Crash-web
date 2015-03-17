@@ -1,9 +1,12 @@
 define([
-    'app/AdvancedFilterContainer',
     'app/config',
-    'app/FilterControls',
     'app/FilterDateTime',
     'app/FilterFactors',
+    'app/FilterMilepost',
+    'app/FilterRoadConditions',
+    'app/FilterSelector',
+    'app/FilterSeverity',
+    'app/FilterTitleNode',
     'app/MapController',
 
     'dijit/_TemplatedMixin',
@@ -12,18 +15,17 @@ define([
 
     'dojo/_base/array',
     'dojo/_base/declare',
-    'dojo/text!app/templates/App.html',
-
-    'ijit/widgets/layout/SideBarToggler',
-
-    'dijit/layout/BorderContainer',
-    'dijit/layout/ContentPane'
+    'dojo/dom-class',
+    'dojo/text!app/templates/App.html'
 ], function(
-    AdvancedFilterContainer,
     config,
-    FilterControls,
     FilterDateTime,
     FilterFactors,
+    FilterMilepost,
+    FilterRoadConditions,
+    FilterSelector,
+    FilterSeverity,
+    FilterTitleNode,
     MapController,
 
     _TemplatedMixin,
@@ -32,9 +34,8 @@ define([
 
     array,
     declare,
-    template,
-
-    SideBarToggler
+    domClass,
+    template
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
@@ -47,9 +48,6 @@ define([
         // childWidgets: Object[]
         //      container for holding custom child widgets
         childWidgets: null,
-
-        // map: agrc.widgets.map.Basemap
-        map: null,
 
         constructor: function() {
             // summary:
@@ -73,20 +71,41 @@ define([
                 mapDiv: this.mapDiv
             });
 
+            this.filterSelector = new FilterSelector({
+                tabs: [
+                    new FilterTitleNode({
+                        type: 'calendar',
+                        description: 'Date and Time Factors'
+                    }),
+                    new FilterTitleNode({
+                        type: 'spatial',
+                        description: 'Spatial Factors'
+                    }),
+                    new FilterTitleNode({
+                        type: 'factors',
+                        description: 'Contributing Factors'
+                    }),
+                    new FilterTitleNode({
+                        type: 'severity',
+                        description: 'Crash Severity'
+                    }),
+                    new FilterTitleNode({
+                        type: 'weather',
+                        description: 'Weather Condition Factors'
+                    })
+                ],
+                filters: [
+                    FilterDateTime,
+                    FilterFactors,
+                    FilterSeverity,
+                    FilterMilepost,
+                    FilterRoadConditions
+                ]
+            }, this.sideBar);
+
             this.childWidgets.push(
                 MapController,
-                new SideBarToggler({
-                    sidebar: this.sideBar,
-                    map: MapController.map,
-                    centerContainer: this.centerContainer
-                }, this.sidebarToggle),
-                new FilterControls({
-                    childWidgets: [
-                        new FilterDateTime({}, this.filterDateNode),
-                        new FilterFactors({}, this.filterFactorsNode),
-                        new AdvancedFilterContainer({}, this.advancedFilterContainerNode)
-                    ]
-                }, this.filterControlsNode)
+                this.filterSelector
             );
 
             this.subscriptions();
@@ -99,16 +118,29 @@ define([
             //
             console.log('app.App::subscriptions', arguments);
 
-            this.own(
-                MapController.map.on('load', function() {
-                    MapController.addLayerAndMakeVisible({
-                        id: 'CrashPoints',
-                        url: config.urls.service,
-                        serviceType: 'feature'
-                            //,mode: 0 // snapshot mode
-                    });
-                })
-            );
+            // this.own(
+            //     MapController.map.on('load', function() {
+            //         MapController.addLayerAndMakeVisible({
+            //             id: 'CrashPoints',
+            //             url: config.urls.service,
+            //             serviceType: 'clustered',
+            //             distance: 75,
+            //             displayFieldName: 'objectid',
+            //             labelColor: '#fff',
+            //             maxSingles: 1000,
+            //             outFields: [
+            //                 'objectid',
+            //                 'severity',
+            //                 'date',
+            //                 'weather_condition',
+            //                 'event',
+            //                 'collision_type',
+            //                 'road_name',
+            //                 'road_condition'
+            //             ]
+            //         });
+            //     })
+            // );
         },
         startup: function() {
             // summary:
@@ -123,6 +155,14 @@ define([
             });
 
             this.inherited(arguments);
+        },
+        toggle: function() {
+            // summary:
+            //      hide and show the menu
+            //
+            console.log('app.App::toggle', arguments);
+
+            domClass.toggle(this.filterSelector.domNode, 'hidden');
         }
     });
 });

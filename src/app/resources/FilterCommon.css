@@ -1,0 +1,62 @@
+.filter label {
+    margin-left: 5px;
+    padding: 0;
+    line-height: 2.5em;
+}
+.filter .separator {
+    text-align: left;
+    width: 100%;
+    font-size: 100%;
+    border-radius: 0;
+    background-color: #231F20;
+    display: inline-block;
+}
+.filter .pad {
+    margin-bottom: 10px;
+}
+
+.filter .form-control {
+    display: inline;
+}
+
+.filter .row {
+    width: 100%;
+    margin: 0;
+}
+.filter .col {
+    float: left;
+    width: 75%;
+    height: 45px;
+    padding-right: 10px;
+}
+.filter .item {
+    float: left;
+    height: 45px;
+    width: 50%;
+    display: table;
+    table-layout: fixed;
+    overflow: hidden;
+    border: 1px solid #231F20;
+}
+.filter .selected {
+    background-color: #f5bd47;
+}
+
+.filter input[type=checkbox] {
+    position: absolute;
+    opacity: 0;
+    display: none;
+}
+.filter label.button {
+    width: 100%;
+    text-align: center;
+    font-weight: inherit;
+    display: table-cell;
+    vertical-align: middle;
+}
+.filter .row:last-child .item:first-child {
+    border-radius: 0 0 0 10px;
+}
+.filter .row:last-child .item:last-child {
+     border-radius: 0 0 10px 0;
+}

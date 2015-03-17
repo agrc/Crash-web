@@ -1,28 +1,24 @@
 define([
-    'dijit/_TemplatedMixin',
-    'dijit/_WidgetBase',
+    'app/config',
+    'app/FilterCommon',
 
     'dojo/_base/declare',
-    'dojo/dom-class',
-    'dojo/on',
-    'dojo/query',
     'dojo/text!app/templates/FilterSeverity.html'
 ], function(
-    _TemplatedMixin,
-    _WidgetBase,
+    config,
+    FilterCommon,
 
     declare,
-    domClass,
-    on,
-    query,
     template
 ) {
-    return declare([_WidgetBase, _TemplatedMixin], {
+    return declare([FilterCommon], {
         // description:
         //      Filter based on how bad a vehicle collision was.
 
         templateString: template,
         baseClass: 'filter-severity',
+        selectedTopic: config.topics.events.title.selected,
+        type: 'severity',
 
         // Properties to be sent into constructor
 
@@ -43,37 +39,19 @@ define([
             //
             console.log('app.FilterSeverity::setupConnections', arguments);
 
-            var self = this;
-            this.own(
-                on(this.domNode, 'button:click', function(evt) {
-                    self.clearSelection(evt);
-                    self.clicked(evt);
-                })
-            );
+            this.inherited(arguments);
         },
-        clearSelection: function(evt) {
+        _gatherData: function(){
             // summary:
-            //      clears all selections
+            //      builds the object to publish
             //
-            console.log('app.FilterSeverity::clearSelection', arguments);
+            console.log('app.FilterSeverity::_gatherData', arguments);
 
-            query('button', this.domNode).forEach(function(node) {
-                if (node === evt.target) {
-                    return;
-                }
+            var severity = this._getValues(this.domNode);
 
-                domClass.remove(node, 'btn-success');
+            this.set('data', {
+                severity: severity
             });
-        },
-        clicked: function(evt) {
-            // summary:
-            //      click handler
-            // evt: the click event
-            console.log('app.FilterSeverity::clicked', arguments);
-
-            var factor = evt.target;
-
-            domClass.toggle(factor, 'btn-success');
         }
     });
 });
