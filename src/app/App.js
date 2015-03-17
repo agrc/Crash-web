@@ -48,9 +48,6 @@ define([
         //      container for holding custom child widgets
         childWidgets: null,
 
-        // map: agrc.widgets.map.Basemap
-        map: null,
-
         constructor: function() {
             // summary:
             //      first function to fire after page loads
@@ -99,30 +96,29 @@ define([
             //
             console.log('app.App::subscriptions', arguments);
 
-            this.own(
-                MapController.map.on('load', function() {
-                    MapController.addLayerAndMakeVisible({
-                        id: 'CrashPoints',
-                        url: config.urls.service,
-                        serviceType: 'clustered',
-                        distance: 75,
-                        displayFieldName: 'objectid',
-                        labelColor: '#fff',
-                        maxSingles: 1000,
-                        outFields: [
-                            'objectid',
-                            'severity',
-                            'date',
-                            'weather_condition',
-                            'event',
-                            'collision_type',
-                            'road_name',
-                            'road_condition'
-                        ]
-                            //,mode: 0 // snapshot mode
-                    });
-                })
-            );
+            // this.own(
+            //     MapController.map.on('load', function() {
+            //         MapController.addLayerAndMakeVisible({
+            //             id: 'CrashPoints',
+            //             url: config.urls.service,
+            //             serviceType: 'clustered',
+            //             distance: 75,
+            //             displayFieldName: 'objectid',
+            //             labelColor: '#fff',
+            //             maxSingles: 1000,
+            //             outFields: [
+            //                 'objectid',
+            //                 'severity',
+            //                 'date',
+            //                 'weather_condition',
+            //                 'event',
+            //                 'collision_type',
+            //                 'road_name',
+            //                 'road_condition'
+            //             ]
+            //         });
+            //     })
+            // );
         },
         startup: function() {
             // summary:
