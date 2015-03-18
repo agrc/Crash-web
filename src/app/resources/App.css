@@ -1,24 +1,13 @@
-@import '../../dijit/themes/claro/claro.css';
 @import '../../esri/css/esri.css';
 @import '../../bootstrap/dist/css/bootstrap.css';
 @import '../../agrc/resources/map/BaseMap.css';
-@import '../../ijit/themes/standard/layout/SideBarToggler.css';
-@import '../../ijit/themes/standard/layout/PaneStack.css';
 @import '../../agrc/resources/map/BaseMapSelector.css';
-@import '../../agrc/resources/locate/FindAddress.css';
-@import '../../agrc/resources/locate/MagicZoom.css';
 @import '../resources/FilterFactors.css';
 @import '../resources/FilterSeverity.css';
 @import '../resources/FilterDateTime.css';
 @import '../resources/FilterControls.css';
 @import '../resources/ResultsPanel.css';
-
-@font-face {
-  font-family: 'Ubuntu';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Ubuntu'), url(http://fonts.gstatic.com/s/ubuntu/v7/zvCUQcxqeoKhyOlbifSAaevvDin1pK8aKteLpeZ5c0A.woff2) format('woff2');
-}
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
 
 body, html, .app {
     width: 100%;
@@ -27,41 +16,43 @@ body, html, .app {
     padding: 0;
     overflow: hidden;
     color: #444;
-    font-family: 'Ubuntu', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
-}
-.app .container-with-border {
-    border: 1px solid #b5bcc7;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
 }
 
 /* TITLE PANE */
 .app .title-container {
     position: absolute;
-    top: 5px;
-    left: 5px;
-    right: 5px;
+    background-color: #231F20;
+    color: #ddd;
+    left: 0px;
+    right: 0px;
     padding: 8px;
 }
+.app .title-container .diamond {
+    position: absolute;
+    top: 0px;
+    left: 20px;
+    z-index: 30;
+    background-image:url(yield.png);
+    height: 90px;
+    width: 97px;
+}
 .app .title-container h1 {
-    margin: 5px 0 0 5px;
-    font-size: 40px;
-    letter-spacing: -2px;
+    margin: 0 0 0 40px;
+    font-size: 30px;
+}
+.app .highlight {
+    color: #f5bd47;
 }
 .app .title-container .version {
-    font-size: 16px;
+    font-size: 10px;
     text-decoration: none;
-    color: gray;
-    letter-spacing: 0;
+    vertical-align: sub;
+    margin-left: -10px;
 }
 .app .title-container .version:hover {
     text-decoration: underline !important;
-}
-.app .title-container>img {
-    position: absolute;
-    top: -3px;
-    right: 0;
-}
-.app [data-dojo-attach-point='popupBlurb'] {
-    display: none;
+    color: #f5bd47;
 }
 
 /* SIDE BAR */
@@ -70,15 +61,16 @@ body, html, .app {
     overflow-y: auto;
     overflow-x: hidden;
     position: absolute;
-    left: 5px;
     top: 75px;
-    bottom: 5px;
+    right: 25px;
+    height: 50%;
+    z-index: 100;
+    background-color: #fff;
+    border-radius: 5px;
+    border: 1px black solid;
+    opacity: 0.8
 }
-.app .side-bar-padder {
-    padding: 10px;
-    width: 300px;
-    margin: -1px;
-}
+
 .app .side-bar-container .magic-zoom {
     position: relative;
 }
@@ -89,10 +81,10 @@ body, html, .app {
 /* CENTER (MAP) */
 .app .center-container {
     position: absolute;
-    top: 75px;
-    left: 310px;
-    bottom: 5px;
-    right: 5px;
+    top: 53px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
     overflow: hidden;
 }
 .app .center-container [data-dojo-attach-point='mapDiv'] {
@@ -102,12 +94,13 @@ body, html, .app {
     left: 0;
     right: 0;
 }
-
 /* GENERAL STUFF */
 /* remove orange outline in chrome */
 *:focus {
     outline: none;
 }
+
+
 
 .map .tooltip {
     width: 100px;
