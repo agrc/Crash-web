@@ -3,6 +3,7 @@
 @import '../../agrc/resources/map/BaseMap.css';
 @import '../../agrc/resources/map/BaseMapSelector.css';
 @import '../resources/FilterFactors.css';
+@import '../resources/FilterTitleNode.css';
 @import '../resources/FilterSeverity.css';
 @import '../resources/FilterSelector.css';
 @import '../resources/FilterDateTime.css';

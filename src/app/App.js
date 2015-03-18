@@ -4,7 +4,11 @@ define([
     'app/FilterControls',
     'app/FilterDateTime',
     'app/FilterFactors',
+    'app/FilterMilepost',
+    'app/FilterRoadConditions',
     'app/FilterSelector',
+    'app/FilterSeverity',
+    'app/FilterTitleNode',
     'app/MapController',
 
     'dijit/_TemplatedMixin',
@@ -23,7 +27,11 @@ define([
     FilterControls,
     FilterDateTime,
     FilterFactors,
+    FilterMilepost,
+    FilterRoadConditions,
     FilterSelector,
+    FilterSeverity,
+    FilterTitleNode,
     MapController,
 
     _TemplatedMixin,
@@ -71,10 +79,34 @@ define([
             this.childWidgets.push(
                 MapController,
                 new FilterSelector({
+                    tabs: [
+                        new FilterTitleNode({
+                            type: 'calendar',
+                            description: 'Date and Time Factors'
+                        }),
+                        new FilterTitleNode({
+                            type: 'spatial',
+                            description: 'Spatial Factors'
+                        }),
+                        new FilterTitleNode({
+                            type: 'factors',
+                            description: 'Contributing Factors'
+                        }),
+                        new FilterTitleNode({
+                            type: 'severity',
+                            description: 'Crash Severity'
+                        }),
+                        new FilterTitleNode({
+                            type: 'weather',
+                            description: 'Weather Condition Factors'
+                        })
+                    ],
                     filters: [
-                        // FilterDateTime,
-                        FilterFactors
-                        // AdvancedFilterContainer
+                        FilterDateTime,
+                        FilterFactors,
+                        FilterSeverity,
+                        FilterMilepost,
+                        FilterRoadConditions
                     ]
                 }, this.sideBar)
             );
