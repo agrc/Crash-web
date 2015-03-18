@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="../../bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="../resources/FilterSelector.css">
     <link rel="stylesheet" href="../resources/FilterFactors.css">
+    <link rel="stylesheet" href="../resources/FilterTitleNode.css">
     <style type='text/css'>
         body {
             padding: 50px;
@@ -30,12 +31,38 @@
         }, [
             'app/FilterSelector',
             'app/FilterFactors',
+            'app/FilterTitleNode',
+            'app/FilterDateTime',
+            'app/FilterSeverity',
+            'app/FilterRoadConditions',
 
             'dojo/domReady!'
-        ], function(Module, Dep) {
+        ], function(Module, Dep, Dep2, Dep3, Dep4, Dep5) {
             widgetUnderTest = new Module({
-                filters: [
-                    Dep
+                tabs: [
+                    new Dep2({
+                        type: 'calendar',
+                        description: 'Date and Time Factors'
+                    }),
+                    new Dep2({
+                        type: 'spatial',
+                        description: 'Spatial Factors'
+                    }),
+                    new Dep2({
+                        type: 'factors',
+                        description: 'Contributing Factors'
+                    }),
+                    new Dep2({
+                        type: 'severity',
+                        description: 'Crash Severity'
+                    }),
+                    new Dep2({
+                        type: 'weather',
+                        description: 'Weather Condition Factors'
+                    })
+                ],
+                filters:[
+                    Dep, Dep3, Dep4, Dep5
                 ]
             }, 'node');
 

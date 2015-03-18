@@ -1,4 +1,6 @@
 define([
+    'app/config',
+
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
@@ -9,8 +11,11 @@ define([
     'dojo/dom-class',
     'dojo/on',
     'dojo/query',
-    'dojo/text!app/templates/FilterFactors.html'
+    'dojo/text!app/templates/FilterFactors.html',
+    'dojo/topic'
 ], function(
+    config,
+
     _TemplatedMixin,
     _WidgetBase,
 
@@ -21,7 +26,8 @@ define([
     domClass,
     on,
     query,
-    template
+    template,
+    topic
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -29,6 +35,8 @@ define([
 
         templateString: template,
         baseClass: 'filter-factors',
+        selectedTopic: config.topics.events.title.selected,
+        type: 'factors',
 
         // Properties to be sent into constructor
 
@@ -50,7 +58,8 @@ define([
             console.log('app.FilterFactors::setupConnections', arguments);
 
             this.own(
-                on(this.domNode, 'input[type="checkbox"]:change', lang.hitch(this, 'clicked'))
+                on(this.domNode, 'input[type="checkbox"]:change', lang.hitch(this, 'clicked')),
+                topic.subscribe(this.selectedTopic, lang.hitch(this, 'updateDomState'))
             );
         },
         clicked: function(evt) {
@@ -84,6 +93,14 @@ define([
             this.set('data', {
                 factors: factors
             });
+        },
+        updateDomState: function(t) {
+            // summary:
+            //      updates the visbility state
+            // t the {who:, type:, description:} topic
+            console.log('app.FilterFactors::updateDomState', arguments);
+
+            domClass.toggle(this.domNode, 'hidden', t.type !== this.type);
         }
     });
 });

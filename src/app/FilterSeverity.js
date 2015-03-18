@@ -1,21 +1,29 @@
 define([
+    'app/config',
+
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
     'dojo/_base/declare',
+    'dojo/_base/lang',
     'dojo/dom-class',
     'dojo/on',
     'dojo/query',
-    'dojo/text!app/templates/FilterSeverity.html'
+    'dojo/text!app/templates/FilterSeverity.html',
+    'dojo/topic'
 ], function(
+    config,
+
     _TemplatedMixin,
     _WidgetBase,
 
     declare,
+    lang,
     domClass,
     on,
     query,
-    template
+    template,
+    topic
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -23,6 +31,8 @@ define([
 
         templateString: template,
         baseClass: 'filter-severity',
+        selectedTopic: config.topics.events.title.selected,
+        type: 'severity',
 
         // Properties to be sent into constructor
 
@@ -48,7 +58,8 @@ define([
                 on(this.domNode, 'button:click', function(evt) {
                     self.clearSelection(evt);
                     self.clicked(evt);
-                })
+                }),
+                topic.subscribe(this.selectedTopic, lang.hitch(this, 'updateDomState'))
             );
         },
         clearSelection: function(evt) {
@@ -74,6 +85,14 @@ define([
             var factor = evt.target;
 
             domClass.toggle(factor, 'btn-success');
+        },
+        updateDomState: function(t) {
+            // summary:
+            //      updates the visbility state
+            // t the {who:, type:, description:} topic
+            console.log('app.FilterSeverity::updateDomState', arguments);
+
+            domClass.toggle(this.domNode, 'hidden', t.type !== this.type);
         }
     });
 });

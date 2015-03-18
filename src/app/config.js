@@ -29,6 +29,11 @@ define(['dojo/has', 'esri/config'], function(has, esriConfig) {
                 filter: 'f',
                 reset: 'r',
                 gather: 'g'
+            },
+            events: {
+                title: {
+                    selected: 's'
+                }
             }
         }
     };

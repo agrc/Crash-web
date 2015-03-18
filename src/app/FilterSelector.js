@@ -1,17 +1,27 @@
 define([
+    'app/config',
+
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
     'dojo/_base/array',
     'dojo/_base/declare',
-    'dojo/text!app/templates/FilterSelector.html'
+    'dojo/_base/lang',
+    'dojo/dom-class',
+    'dojo/text!app/templates/FilterSelector.html',
+    'dojo/topic'
 ], function(
+    config,
+
     _TemplatedMixin,
     _WidgetBase,
 
     array,
     declare,
-    template
+    lang,
+    domClass,
+    template,
+    topic
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -33,8 +43,14 @@ define([
 
             this.childWidgets = this.childWidgets || [];
 
-            array.forEach(this.filters, function(Filter){
-                this.childWidgets.push(new Filter().placeAt(this.filterNode, 'last'));
+            array.forEach(this.tabs, function(Tab) {
+                this.childWidgets.push(Tab.placeAt(this.titleNode, 'last'));
+            }, this);
+
+            array.forEach(this.filters, function(Filter) {
+                var filter = new Filter().placeAt(this.filterNode, 'last');
+                domClass.add(filter.domNode, 'hidden');
+                this.childWidgets.push(filter);
             }, this);
 
             this.inherited(arguments);
@@ -45,6 +61,18 @@ define([
             //
             console.log('app.FilterSelector::setupConnections', arguments);
 
+            this.own(
+                topic.subscribe(config.topics.events.title.selected, lang.hitch(this, 'updateDomState'))
+            );
+
+        },
+        updateDomState: function(t) {
+            // summary:
+            //      updates the text published from the filter title node
+            // t the {who:, type:, description:} topic
+            console.log('app.FilterSelector::updateDomState', arguments);
+
+            this.descriptionNode.innerHTML = t.description;
         }
     });
 });

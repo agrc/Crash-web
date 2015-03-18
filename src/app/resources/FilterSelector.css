@@ -12,7 +12,7 @@
 }
 
 .filter-selector .title {
-    height: 50px;
+    height: 59px;
     background-color: #231F20;
     color: #ddd;
     border-radius: 5px 5px 0 0;
@@ -20,17 +20,13 @@
     width: 100%;
 }
 
-.filter-selector .title-item {
-    width: 19%;
-    display: inline-block;
-    text-align: center;
-}
-
 .filter-selector .description {
     width: 100%;
-    color: #f5bd47;
+    height: 2em;
     text-align: center;
+    padding-top: 4px;
     background-color: #231F20;
+    color: #f5bd47;
 }
 
 .filter-selector .filters {

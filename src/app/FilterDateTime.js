@@ -1,4 +1,6 @@
 define([
+    'app/config',
+
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
@@ -8,8 +10,11 @@ define([
     'dojo/dom-class',
     'dojo/on',
     'dojo/query',
-    'dojo/text!app/templates/FilterDateTime.html'
+    'dojo/text!app/templates/FilterDateTime.html',
+    'dojo/topic'
 ], function(
+    config,
+
     _TemplatedMixin,
     _WidgetBase,
 
@@ -19,7 +24,8 @@ define([
     domClass,
     on,
     query,
-    template
+    template,
+    topic
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -27,6 +33,8 @@ define([
 
         templateString: template,
         baseClass: 'filter-date-time',
+        selectedTopic: config.topics.events.title.selected,
+        type: 'calendar',
 
         // Properties to be sent into constructor
 
@@ -56,7 +64,8 @@ define([
                 'select:input'
             ];
             this.own(
-                on(this.domNode, events.join(','), lang.hitch(this, '_gatherData'))
+                on(this.domNode, events.join(','), lang.hitch(this, '_gatherData')),
+                topic.subscribe(this.selectedTopic, lang.hitch(this, 'updateDomState'))
             );
         },
         _gatherData: function() {
@@ -109,6 +118,14 @@ define([
             console.log('app.FilterDateTime::toggle', arguments);
 
             domClass.toggle(this.extraFiltersNode, 'hidden');
+        },
+        updateDomState: function(t) {
+            // summary:
+            //      updates the visbility state
+            // t the {who:, type:, description:} topic
+            console.log('app.FilterDateTime::updateDomState', arguments);
+
+            domClass.toggle(this.domNode, 'hidden', t.type !== this.type);
         }
     });
 });
