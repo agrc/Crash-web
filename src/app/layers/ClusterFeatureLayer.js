@@ -485,7 +485,7 @@ define([
         },
 
         _onError: function (err) {
-
+            console.error(err);
         },
 
         _onIdsReturned: function (results) {
@@ -957,8 +957,6 @@ define([
             });
             if ( cg.length === 1 ) {
                 cg[0].geometry.update(c.x, c.y);
-            } else {
-
             }
         },
 
@@ -982,8 +980,6 @@ define([
                         newLabel,
                         c.attributes)
                 );
-            } else {
-
             }
         },
 
