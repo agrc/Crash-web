@@ -109,7 +109,8 @@ define([
             //      gets the object criteria from the filters and creates a definition query
             // criteria
             console.log('app.FilterControls::_buildDefinitionQueryFromObject', arguments);
-            var filters = [];
+            var filters = [],
+                result = {};
 
             if (criteria.factors) {
                 var factors = array.map(criteria.factors, function formatFactors(factor) {
@@ -151,7 +152,19 @@ define([
                 }
             }
 
-            return filters.join(' AND ');
+            if (criteria.milepost) {
+                var milepost = criteria.milepost;
+                filters.push('route_number = ' + milepost.route +
+                    ' AND milepost BETWEEN ' + milepost.from + ' AND ' + milepost.to);
+            }
+
+            if (criteria.shape) {
+                result.shape = criteria.shape;
+            }
+
+            result.sql = filters.join(' OR ');
+
+            return result;
         },
         _formatDateForArcGis: function(d) {
             // summary:

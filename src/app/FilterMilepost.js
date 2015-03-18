@@ -33,6 +33,7 @@ define([
         baseClass: 'filter-milepost',
         selectedTopic: config.topics.events.title.selected,
         type: 'spatial',
+
         // Properties to be sent into constructor
 
         postCreate: function() {
