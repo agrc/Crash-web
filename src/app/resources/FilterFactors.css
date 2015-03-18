@@ -16,22 +16,14 @@
 }
 .filter-factors .col {
     float: left;
-    width: 32%;
+    width: 50%;
     height: 55px;
     padding: 5px;
-    margin-bottom: 2px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 1px solid #231F20;
     display: table;
     table-layout: fixed;
     overflow: hidden;
 }
-.filter-factors .col.empty {
-    border: 0;
-}
-.filter-factors .col:first-child {
-    margin-right: 1%;
-}
-.filter-factors .col:last-child {
-    margin-left: 1%;
+.filter-factors .selected {
+    background-color: #f5bd47;
 }

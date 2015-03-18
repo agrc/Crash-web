@@ -64,7 +64,7 @@ define([
 
             var factor = evt.target.parentNode.parentNode;
 
-            domClass.toggle(factor, 'btn-success');
+            domClass.toggle(factor, 'selected');
             this._gatherData();
         },
         _gatherData: function() {

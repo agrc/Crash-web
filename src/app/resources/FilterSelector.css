@@ -1,3 +1,38 @@
 .filter-selector {
+    width: 350px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: absolute;
+    top: 80px;
+    right: 25px;
+    z-index: 100;
+    background-color: #fff;
+    border-radius: 5px;
+    border: 1px black solid;
+}
 
+.filter-selector .title {
+    height: 50px;
+    background-color: #231F20;
+    color: #ddd;
+    border-radius: 5px 5px 0 0;
+    padding: 5px;
+    width: 100%;
+}
+
+.filter-selector .title-item {
+    width: 19%;
+    display: inline-block;
+    text-align: center;
+}
+
+.filter-selector .description {
+    width: 100%;
+    color: #f5bd47;
+    text-align: center;
+    background-color: #231F20;
+}
+
+.filter-selector .filters {
+    border-radius: 0 0 5px 5px;
 }

@@ -4,6 +4,7 @@ define([
     'app/FilterControls',
     'app/FilterDateTime',
     'app/FilterFactors',
+    'app/FilterSelector',
     'app/MapController',
 
     'dijit/_TemplatedMixin',
@@ -14,8 +15,6 @@ define([
     'dojo/_base/declare',
     'dojo/text!app/templates/App.html',
 
-    'ijit/widgets/layout/SideBarToggler',
-
     'dijit/layout/BorderContainer',
     'dijit/layout/ContentPane'
 ], function(
@@ -24,6 +23,7 @@ define([
     FilterControls,
     FilterDateTime,
     FilterFactors,
+    FilterSelector,
     MapController,
 
     _TemplatedMixin,
@@ -32,9 +32,7 @@ define([
 
     array,
     declare,
-    template,
-
-    SideBarToggler
+    template
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
@@ -72,18 +70,13 @@ define([
 
             this.childWidgets.push(
                 MapController,
-                new SideBarToggler({
-                    sidebar: this.sideBar,
-                    map: MapController.map,
-                    centerContainer: this.centerContainer
-                }, this.sidebarToggle),
-                new FilterControls({
-                    childWidgets: [
-                        new FilterDateTime({}, this.filterDateNode),
-                        new FilterFactors({}, this.filterFactorsNode),
-                        new AdvancedFilterContainer({}, this.advancedFilterContainerNode)
+                new FilterSelector({
+                    filters: [
+                        // FilterDateTime,
+                        FilterFactors
+                        // AdvancedFilterContainer
                     ]
-                }, this.filterControlsNode)
+                }, this.sideBar)
             );
 
             this.subscriptions();

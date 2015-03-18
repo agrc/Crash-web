@@ -1,17 +1,17 @@
 define([
-    'dojo/text!app/templates/FilterSelector.html',
-
-    'dojo/_base/declare',
-
+    'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin'
+
+    'dojo/_base/array',
+    'dojo/_base/declare',
+    'dojo/text!app/templates/FilterSelector.html'
 ], function(
-    template,
-
-    declare,
-
+    _TemplatedMixin,
     _WidgetBase,
-    _TemplatedMixin
+
+    array,
+    declare,
+    template
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -30,6 +30,12 @@ define([
             console.log('app.FilterSelector::postCreate', arguments);
 
             this.setupConnections();
+
+            this.childWidgets = this.childWidgets || [];
+
+            array.forEach(this.filters, function(Filter){
+                this.childWidgets.push(new Filter().placeAt(this.filterNode, 'last'));
+            }, this);
 
             this.inherited(arguments);
         },

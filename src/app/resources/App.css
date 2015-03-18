@@ -4,6 +4,7 @@
 @import '../../agrc/resources/map/BaseMapSelector.css';
 @import '../resources/FilterFactors.css';
 @import '../resources/FilterSeverity.css';
+@import '../resources/FilterSelector.css';
 @import '../resources/FilterDateTime.css';
 @import '../resources/FilterControls.css';
 @import '../resources/ResultsPanel.css';
@@ -53,29 +54,6 @@ body, html, .app {
 .app .title-container .version:hover {
     text-decoration: underline !important;
     color: #f5bd47;
-}
-
-/* SIDE BAR */
-.app .side-bar-container {
-    width: 300px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    position: absolute;
-    top: 75px;
-    right: 25px;
-    height: 50%;
-    z-index: 100;
-    background-color: #fff;
-    border-radius: 5px;
-    border: 1px black solid;
-    opacity: 0.8
-}
-
-.app .side-bar-container .magic-zoom {
-    position: relative;
-}
-.app .side-bar-container .magic-zoom.first {
-    z-index: 27;
 }
 
 /* CENTER (MAP) */
