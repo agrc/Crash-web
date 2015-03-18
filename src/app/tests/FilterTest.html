@@ -35,9 +35,10 @@
             'app/FilterDateTime',
             'app/FilterSeverity',
             'app/FilterRoadConditions',
+            'app/FilterMilepost',
 
             'dojo/domReady!'
-        ], function(Module, Dep, Dep2, Dep3, Dep4, Dep5) {
+        ], function(Module, Dep, Dep2, Dep3, Dep4, Dep5, Dep6) {
             widgetUnderTest = new Module({
                 tabs: [
                     new Dep2({
@@ -62,7 +63,7 @@
                     })
                 ],
                 filters:[
-                    Dep, Dep3, Dep4, Dep5
+                    Dep, Dep3, Dep4, Dep5, Dep6
                 ]
             }, 'node');
 
