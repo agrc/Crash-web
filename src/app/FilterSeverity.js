@@ -30,7 +30,7 @@ define([
         //      Filter based on how bad a vehicle collision was.
 
         templateString: template,
-        baseClass: 'filter-severity',
+        baseClass: 'filter filter-severity',
         selectedTopic: config.topics.events.title.selected,
         type: 'severity',
 

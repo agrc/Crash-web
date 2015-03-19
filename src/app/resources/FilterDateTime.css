@@ -1,28 +1,3 @@
-.filter-date-time .item {
-    float: left;
-    height: 45px;
-    width: 50%;
-    display: table;
-    table-layout: fixed;
-    overflow: hidden;
-    border: 1px solid #231F20;
-}
-.filter-date-time .selected {
-    background-color: #f5bd47;
-}
 .filter-date-time .col:first-child {
     width: 25%;
-}
-
-.filter-date-time input[type=checkbox] {
-    position: absolute;
-    opacity: 0;
-    display: none;
-}
-.filter-date-time label.button {
-    width: 100%;
-    text-align: center;
-    font-weight: inherit;
-    display: table-cell;
-    vertical-align: middle;
 }
