@@ -1,3 +1,8 @@
 .filter-milepost {
-   padding: 8px;
 }
+
+.filter-milepost .col {
+    float: left;
+    width: 50%;
+    height: 45px;
+    padding-right: 10px;

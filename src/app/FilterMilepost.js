@@ -30,7 +30,7 @@ define([
         //      filters the layer by milepost to and from
 
         templateString: template,
-        baseClass: 'filter-milepost',
+        baseClass: 'filter filter-milepost',
         selectedTopic: config.topics.events.title.selected,
         type: 'spatial',
 

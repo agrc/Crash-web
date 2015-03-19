@@ -34,7 +34,7 @@ define([
         //      Filter crash points by date and time options.
 
         templateString: template,
-        baseClass: 'filter-date-time',
+        baseClass: 'filter filter-date-time',
         selectedTopic: config.topics.events.title.selected,
         type: 'calendar',
 

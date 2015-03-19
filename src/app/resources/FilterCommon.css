@@ -1,0 +1,31 @@
+.filter label {
+    margin-left: 5px;
+    padding: 0;
+    line-height: 2.5em;
+}
+.filter .separator {
+    text-align: left;
+    width: 100%;
+    font-size: 100%;
+    border-radius: 0;
+    background-color: #231F20;
+    display: inline-block;
+}
+.filter .pad {
+    margin-bottom: 10px;
+}
+
+.filter .form-control {
+    display: inline;
+}
+
+.filter .row {
+    width: 100%;
+    margin: 0;
+}
+.filter .col {
+    float: left;
+    width: 75%;
+    height: 45px;
+    padding-right: 10px;
+}

@@ -1,17 +1,30 @@
 <div>
-    <h4><span class="label label-primary">Between Mileposts</span></h4>
-    <div class='form-group'>
-        <label>Route</label>
-        <select class='form-control' data-dojo-attach-event='onchange: _gatherData' data-dojo-attach-point='routeNode'>
-            <option value="" disabled selected>Select the route</option>
-        </select>
+    <div class="pad"></div>
+    <span class="label label-primary separator pad">Between Mileposts</span>
+    <div class='row'>
+        <div class="col">
+            <label class='filter'>Route</label>
+        </div>
+        <div class="col">
+            <select class='form-control' data-dojo-attach-event='onchange: _gatherData' data-dojo-attach-point='routeNode'>
+                <option value="" disabled selected>Select the route</option>
+            </select>
+        </div>
     </div>
-    <div class='form-group'>
-        <label>Starting Milepost</label>
-        <input class='form-control' data-dojo-attach-event='onchange: _gatherData' type='number' data-dojo-attach-point='startNode' placeholder='0' />
+    <div class='row'>
+        <div class="col">
+            <label class='filter'>Starting Milepost</label>
+        </div>
+        <div class="col">
+            <input class='form-control' data-dojo-attach-event='onchange: _gatherData' type='number' data-dojo-attach-point='startNode' placeholder='0' />
+        </div>
     </div>
-    <div class='form-group'>
-        <label>Ending Milepost</label>
-        <input class='form-control' data-dojo-attach-event='onchange: _gatherData' type='number' data-dojo-attach-point='endNode' placeholder='0' />
+    <div class='row'>
+        <div class="col">
+            <label class='filter'>Ending Milepost</label>
+        </div>
+        <div class="col">
+            <input class='form-control' data-dojo-attach-event='onchange: _gatherData' type='number' data-dojo-attach-point='endNode' placeholder='0' />
+        </div>
     </div>
 </div>
