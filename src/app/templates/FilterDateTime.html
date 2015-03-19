@@ -1,29 +1,79 @@
 <div>
-    <h4><span class="label label-primary">Custom Range</span></h4>
-    <div class="well well-sm form-group">
-        <label for="${id}_from_date">From Date</label>
-        <input data-dojo-attach-point="fromDateNode" type="date" class="form-control" id="${id}_from_date" placeholder="Select Range">
-        <label for="${id}_to_date">To Date</label>
-        <input data-dojo-attach-point="toDateNode" type="date" class="form-control" id="${id}_to_date" placeholder="Select Range">
-    </div>
-    <div data-dojo-attach-point="extraFiltersNode">
-        <h4><span class="label label-primary">Days of the Week</span></h4>
-        <div class="well well-sm form-group">
-            <select data-dojo-attach-point="daysNode" multiple class="form-control" placeholder="Select Days">
-                <option value="2">Monday</option>
-                <option value="3">Tuesday</option>
-                <option value="4">Wednesday</option>
-                <option value="5">Thursday</option>
-                <option value="6">Friday</option>
-                <option value="7">Saturday</option>
-                <option value="1">Sunday</option>
-            </select>
+    <div class="pad"></div>
+    <div class="label label-default separator pad">Custom Range</div>
+    <div class="row">
+        <div class="col">
+            <label for="${id}_from_date">From Date</label>
         </div>
-        <h4><span class="label label-primary">Time of Day</span></h4>
-        <div class="well well-sm form-group">
+        <div class="col">
+            <input data-dojo-attach-point="fromDateNode" type="date" class="form-control" id="${id}_from_date" placeholder="Select Range">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label for="${id}_to_date">To Date</label>
+        </div>
+        <div class="col">
+            <input data-dojo-attach-point="toDateNode" type="date" class="form-control" id="${id}_to_date" placeholder="Select Range">
+        </div>
+    </div>
+    <span class="label label-primary separator">Days of the Week</span>
+    <div class="row">
+        <div class="item">
+            <label class='button'>
+                <input type="checkbox" value="2" /> Monday
+            </label>
+        </div>
+        <div class="item">
+            <label class='button'>
+                <input type="checkbox" value="3" /> Tuesday </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="item">
+            <label class='button'>
+                <input type="checkbox" value="4" /> Wednesday
+            </label>
+        </div>
+        <div class="item">
+            <label class='button'>
+                <input type="checkbox" value="5" /> Thursday </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="item">
+            <label class='button'>
+                <input type="checkbox" value="6" /> Friday
+            </label>
+        </div>
+        <div class="item">
+            <label class='button'>
+                <input type="checkbox" value="7" /> Saturday </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="item">
+            <label class='button'>
+                <input type="checkbox" value="1" /> Sunday
+            </label>
+        </div>
+        <div class="item empty">
+        </div>
+    </div>
+    <span class="label label-primary separator pad">Time of Day</span>
+    <div class="row">
+        <div class="col">
             <label for="${id}_from_time">From Time</label>
+        </div>
+        <div class="col">
             <input data-dojo-attach-point="fromTimeNode" type="time" class="form-control" id="${id}_from_time" placeholder="Select Range">
+        </div>
+        </div>
+        <div class="row">
+        <div class="col">
             <label for="${id}_to_time">To Time</label>
+        </div>
+        <div class="col">
             <input data-dojo-attach-point="toTimeNode" type="time" class="form-control" id="${id}_to_time" placeholder="Select Range">
         </div>
     </div>

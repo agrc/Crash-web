@@ -6,6 +6,7 @@ define([
 
     'dojo/_base/array',
     'dojo/_base/declare',
+    'dojo/_base/event',
     'dojo/_base/lang',
     'dojo/dom-class',
     'dojo/on',
@@ -20,6 +21,7 @@ define([
 
     array,
     declare,
+    event,
     lang,
     domClass,
     on,
@@ -60,11 +62,10 @@ define([
             var events = [
                 'input:change',
                 'input:input',
-                'select:change',
-                'select:input'
             ];
             this.own(
                 on(this.domNode, events.join(','), lang.hitch(this, '_gatherData')),
+                on(this.domNode, 'input[type="checkbox"]:change', lang.hitch(this, 'updateButtonState')),
                 topic.subscribe(this.selectedTopic, lang.hitch(this, 'updateDomState'))
             );
         },
@@ -95,29 +96,34 @@ define([
                 date: date
             });
         },
+        updateButtonState: function(evt) {
+            // summary:
+            //      click handler
+            // evt: the click event
+            console.log('app.FilterDateTime::updateButtonState', arguments);
+
+            // stop input event from bubbling
+            event.stop(evt);
+
+            var factor = evt.target.parentNode.parentNode;
+
+            domClass.toggle(factor, 'selected');
+        },
         _getDaysFromSelect: function(node) {
             // summary:
             //      gets the selected nodes from a filtered select
             // node
             console.log('app.FilterDateTime::_getDaysFromSelect', arguments);
 
-            var optionValues = [];
-
-            array.forEach(node.children, function searchChildren(child) {
-                if (child.selected) {
-                    optionValues.push(+child.value);
-                }
+            var factors = array.map(query('input[type="checkbox"]:checked', this.domNode), function mapCheckboxes(node){
+                return node.value;
             }, this);
 
-            return optionValues;
-        },
-        toggle: function() {
-            // summary:
-            //      show and hide the extra date filters
-            //
-            console.log('app.FilterDateTime::toggle', arguments);
+            if(factors.length < 1){
+                factors = [];
+            }
 
-            domClass.toggle(this.extraFiltersNode, 'hidden');
+            return factors;
         },
         updateDomState: function(t) {
             // summary:
