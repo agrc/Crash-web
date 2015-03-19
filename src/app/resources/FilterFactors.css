@@ -17,7 +17,7 @@
 .filter-factors .col {
     float: left;
     width: 50%;
-    height: 55px;
+    height: 45px;
     padding: 5px;
     border: 1px solid #231F20;
     display: table;
@@ -26,4 +26,10 @@
 }
 .filter-factors .selected {
     background-color: #f5bd47;
+}
+.filter-factors .row:last-child .col:first-child {
+    border-radius: 0 0 0 10px;
+}
+.filter-factors .row:last-child .col:last-child {
+     border-radius: 0 0 10px 0;
 }

@@ -1,5 +1,6 @@
 define([
     'app/config',
+    'app/FilterControls',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -12,6 +13,7 @@ define([
     'dojo/topic'
 ], function(
     config,
+    FilterControls,
 
     _TemplatedMixin,
     _WidgetBase,
@@ -52,6 +54,8 @@ define([
                 domClass.add(filter.domNode, 'hidden');
                 this.childWidgets.push(filter);
             }, this);
+
+            this.childWidgets.push(new FilterControls({}, this.controlNode));
 
             this.inherited(arguments);
         },

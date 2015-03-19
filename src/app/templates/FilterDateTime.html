@@ -6,8 +6,7 @@
         <label for="${id}_to_date">To Date</label>
         <input data-dojo-attach-point="toDateNode" type="date" class="form-control" id="${id}_to_date" placeholder="Select Range">
     </div>
-    <h4><span class="label label-default" style="cursor:pointer" data-dojo-attach-event="click:toggle">Show More</span></h4>
-    <div data-dojo-attach-point="extraFiltersNode" class="hidden">
+    <div data-dojo-attach-point="extraFiltersNode">
         <h4><span class="label label-primary">Days of the Week</span></h4>
         <div class="well well-sm form-group">
             <select data-dojo-attach-point="daysNode" multiple class="form-control" placeholder="Select Days">
