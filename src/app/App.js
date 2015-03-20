@@ -1,6 +1,5 @@
 define([
     'app/config',
-    'app/FilterControls',
     'app/FilterDateTime',
     'app/FilterFactors',
     'app/FilterMilepost',
@@ -16,13 +15,9 @@ define([
 
     'dojo/_base/array',
     'dojo/_base/declare',
-    'dojo/text!app/templates/App.html',
-
-    'dijit/layout/BorderContainer',
-    'dijit/layout/ContentPane'
+    'dojo/text!app/templates/App.html'
 ], function(
     config,
-    FilterControls,
     FilterDateTime,
     FilterFactors,
     FilterMilepost,

@@ -3,20 +3,12 @@ define([
     'app/FilterCommon',
 
     'dojo/_base/declare',
-    'dojo/_base/lang',
-    'dojo/dom-class',
-    'dojo/on',
-    'dojo/query',
     'dojo/text!app/templates/FilterSeverity.html'
 ], function(
     config,
     FilterCommon,
 
     declare,
-    lang,
-    domClass,
-    on,
-    query,
     template
 ) {
     return declare([FilterCommon], {

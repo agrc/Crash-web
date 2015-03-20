@@ -4,10 +4,6 @@ define([
 
     'dojo/_base/array',
     'dojo/_base/declare',
-    'dojo/_base/event',
-    'dojo/_base/lang',
-    'dojo/dom-class',
-    'dojo/on',
     'dojo/query',
     'dojo/text!app/templates/FilterFactors.html'
 ], function(
@@ -16,10 +12,6 @@ define([
 
     array,
     declare,
-    event,
-    lang,
-    domClass,
-    on,
     query,
     template
 ) {
