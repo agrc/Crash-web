@@ -55,7 +55,7 @@ define([
 
             var events = [
                 'input:change',
-                'input:input',
+                'input:input'
             ];
             this.own(
                 on(this.domNode, events.join(','), lang.hitch(this, '_gatherData'))
