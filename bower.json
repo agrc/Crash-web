@@ -1,6 +1,6 @@
 {
   "name": "crash.web",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "dependencies": {
     "agrc": "agrc-widgets#2.11.0",
     "bootstrap": "~3.3.4",
@@ -12,9 +12,9 @@
     "jasmine-jsreporter": "~0.1.2",
     "stubmodule": "0.6.1",
     "util": "dojo-util#~1.10",
-    "xstyle": "7acb8186ccee813802625ca600eda2e307f9542c"
+    "xstyle": "^0.3"
   },
   "resolutions": {
-    "xstyle": "7acb8186ccee813802625ca600eda2e307f9542c"
+    "xstyle": "^0.3"
   }
 }
