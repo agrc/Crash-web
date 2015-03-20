@@ -91,14 +91,6 @@ define([
             this.set('data', {
                 date: date
             });
-        },
-        updateDomState: function(t) {
-            // summary:
-            //      updates the visbility state
-            // t the {who:, type:, description:} topic
-            console.log('app.FilterDateTime::updateDomState', arguments);
-
-            domClass.toggle(this.domNode, 'hidden', t.type !== this.type);
         }
     });
 });

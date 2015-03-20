@@ -1,6 +1,6 @@
 define([
     'app/config',
-    'app/FilterFactors',
+    'app/FilterCommon',
 
     'dojo/_base/array',
     'dojo/_base/declare',
@@ -13,7 +13,7 @@ define([
     'dojo/topic'
 ], function(
     config,
-    FilterFactors,
+    FilterCommon,
 
     array,
     declare,
@@ -25,12 +25,12 @@ define([
     template,
     topic
 ) {
-    return declare([FilterFactors], {
+    return declare([FilterCommon], {
         // description:
         //      Filter the crashes by the conditions of the road at the time
 
         templateString: template,
-        baseClass: 'filter-factors',
+        baseClass: 'filter-conditions',
         selectedTopic: config.topics.events.title.selected,
         type: 'weather',
 
@@ -43,9 +43,9 @@ define([
             //      private
             console.log('app.FilterRoadConditions::postCreate', arguments);
 
-            this.setupConnections();
-
             this.inherited(arguments);
+
+            this.setupConnections();
         },
         setupConnections: function() {
             // summary:
@@ -73,14 +73,6 @@ define([
             this.set('data', {
                 roadConditions: roadConditions
             });
-        },
-        updateDomState: function(t) {
-            // summary:
-            //      updates the visbility state
-            // t the {who:, type:, description:} topic
-            console.log('app.FilterRoadConditions::updateDomState', arguments);
-
-            domClass.toggle(this.domNode, 'hidden', t.type !== this.type);
         }
     });
 });

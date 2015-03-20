@@ -73,8 +73,9 @@ define([
             // node: the dom node
             console.log('app.FilterCommon::_getValues', arguments);
 
-            var items = array.map(query('input[type="checkbox"]:checked', this.domNode), function mapCheckboxes(node){
-                return node.value;
+            node = node || this.domNode;
+            var items = array.map(query('input[type="checkbox"]:checked', node), function mapCheckboxes(n){
+                return n.value;
             }, this);
 
             if(items.length < 1){
@@ -82,6 +83,14 @@ define([
             }
 
             return items;
+        },
+        updateDomState: function(t) {
+            // summary:
+            //      updates the visbility state
+            // t the {who:, type:, description:} topic
+            console.log('app.FilterRoadConditions::updateDomState', arguments);
+
+            domClass.toggle(this.domNode, 'hidden', t.type !== this.type);
         }
     });
 });

@@ -39,7 +39,6 @@ define([
             //      private
             console.log('app.FilterSeverity::postCreate', arguments);
 
-
             this.setupConnections();
 
             this.inherited(arguments);
@@ -51,14 +50,6 @@ define([
             console.log('app.FilterSeverity::setupConnections', arguments);
 
             this.inherited(arguments);
-        },
-        updateDomState: function(t) {
-            // summary:
-            //      updates the visbility state
-            // t the {who:, type:, description:} topic
-            console.log('app.FilterSeverity::updateDomState', arguments);
-
-            domClass.toggle(this.domNode, 'hidden', t.type !== this.type);
         },
         _gatherData: function(){
             // summary:

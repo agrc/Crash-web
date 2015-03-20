@@ -49,13 +49,17 @@ define([
                 this.childWidgets.push(Tab.placeAt(this.titleNode, 'last'));
             }, this);
 
+            var filterControls = new FilterControls({}, this.controlNode);
+
+            this.childWidgets.push(filterControls);
+
             array.forEach(this.filters, function(Filter) {
                 var filter = new Filter().placeAt(this.filterNode, 'last');
                 domClass.add(filter.domNode, 'hidden');
                 this.childWidgets.push(filter);
-            }, this);
 
-            this.childWidgets.push(new FilterControls({}, this.controlNode));
+                filterControls.filters.push(filter);
+            }, this);
 
             this.inherited(arguments);
         },
