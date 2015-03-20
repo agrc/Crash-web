@@ -9,8 +9,7 @@ define([
     'dojo/dom-class',
     'dojo/on',
     'dojo/query',
-    'dojo/text!app/templates/FilterDateTime.html',
-    'dojo/topic'
+    'dojo/text!app/templates/FilterDateTime.html'
 ], function(
     config,
     FilterCommon,
@@ -22,8 +21,7 @@ define([
     domClass,
     on,
     query,
-    template,
-    topic
+    template
 ) {
     return declare([FilterCommon], {
         // description:
