@@ -43,6 +43,8 @@ define([
             //      private
             console.log('app.FilterRoadConditions::postCreate', arguments);
 
+            this.setupConnections();
+
             this.inherited(arguments);
         },
         setupConnections: function() {
@@ -51,24 +53,7 @@ define([
             //
             console.log('app.FilterRoadConditions::setupConnections', arguments);
 
-            this.own(
-                on(this.domNode, 'input[type="checkbox"]:change', lang.hitch(this, 'clicked')),
-                topic.subscribe(this.selectedTopic, lang.hitch(this, 'updateDomState'))
-            );
-        },
-        clicked: function(evt) {
-            // summary:
-            //      click handler
-            // evt: the click event
-            console.log('app.FilterRoadConditions::clicked', arguments);
-
-            // stop input event from bubbling
-            event.stop(evt);
-
-            var factor = evt.target.parentNode.parentNode;
-
-            domClass.toggle(factor, 'selected');
-            this._gatherData();
+            this.inherited(arguments);
         },
         _gatherData: function() {
             // summary:
@@ -82,7 +67,7 @@ define([
                 }, this);
 
             if (roadConditions.length < 1) {
-                roadConditions = null;
+                roadConditions = [];
             }
 
             this.set('data', {

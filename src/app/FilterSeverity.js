@@ -1,8 +1,6 @@
 define([
     'app/config',
-
-    'dijit/_TemplatedMixin',
-    'dijit/_WidgetBase',
+    'app/FilterCommon',
 
     'dojo/_base/declare',
     'dojo/_base/lang',
@@ -13,9 +11,7 @@ define([
     'dojo/topic'
 ], function(
     config,
-
-    _TemplatedMixin,
-    _WidgetBase,
+    FilterCommon,
 
     declare,
     lang,
@@ -25,12 +21,12 @@ define([
     template,
     topic
 ) {
-    return declare([_WidgetBase, _TemplatedMixin], {
+    return declare([FilterCommon], {
         // description:
         //      Filter based on how bad a vehicle collision was.
 
         templateString: template,
-        baseClass: 'filter filter-severity',
+        baseClass: 'filter-severity',
         selectedTopic: config.topics.events.title.selected,
         type: 'severity',
 
@@ -43,6 +39,7 @@ define([
             //      private
             console.log('app.FilterSeverity::postCreate', arguments);
 
+
             this.setupConnections();
 
             this.inherited(arguments);
@@ -53,38 +50,7 @@ define([
             //
             console.log('app.FilterSeverity::setupConnections', arguments);
 
-            var self = this;
-            this.own(
-                on(this.domNode, 'button:click', function(evt) {
-                    self.clearSelection(evt);
-                    self.clicked(evt);
-                }),
-                topic.subscribe(this.selectedTopic, lang.hitch(this, 'updateDomState'))
-            );
-        },
-        clearSelection: function(evt) {
-            // summary:
-            //      clears all selections
-            //
-            console.log('app.FilterSeverity::clearSelection', arguments);
-
-            query('button', this.domNode).forEach(function(node) {
-                if (node === evt.target) {
-                    return;
-                }
-
-                domClass.remove(node, 'btn-success');
-            });
-        },
-        clicked: function(evt) {
-            // summary:
-            //      click handler
-            // evt: the click event
-            console.log('app.FilterSeverity::clicked', arguments);
-
-            var factor = evt.target;
-
-            domClass.toggle(factor, 'btn-success');
+            this.inherited(arguments);
         },
         updateDomState: function(t) {
             // summary:
@@ -93,6 +59,18 @@ define([
             console.log('app.FilterSeverity::updateDomState', arguments);
 
             domClass.toggle(this.domNode, 'hidden', t.type !== this.type);
+        },
+        _gatherData: function(){
+            // summary:
+            //      builds the object to publish
+            //
+            console.log('app.FilterSeverity::_gatherData', arguments);
+
+            var severity = this._getValues(this.domNode);
+
+            this.set('data', {
+                severity: severity
+            });
         }
     });
 });
