@@ -2,6 +2,7 @@
 @import '../../bootstrap/dist/css/bootstrap.css';
 @import '../../agrc/resources/map/BaseMap.css';
 @import '../../agrc/resources/map/BaseMapSelector.css';
+@import '../resources/FilterCommon.css';
 @import '../resources/FilterFactors.css';
 @import '../resources/FilterTitleNode.css';
 @import '../resources/FilterSeverity.css';

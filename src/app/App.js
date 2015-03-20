@@ -1,5 +1,4 @@
 define([
-    'app/AdvancedFilterContainer',
     'app/config',
     'app/FilterControls',
     'app/FilterDateTime',
@@ -22,7 +21,6 @@ define([
     'dijit/layout/BorderContainer',
     'dijit/layout/ContentPane'
 ], function(
-    AdvancedFilterContainer,
     config,
     FilterControls,
     FilterDateTime,
