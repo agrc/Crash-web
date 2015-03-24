@@ -16,6 +16,7 @@ define([
     'dojo/_base/array',
     'dojo/_base/declare',
     'dojo/dom-class',
+    'dojo/request/xhr',
     'dojo/text!app/templates/App.html'
 ], function(
     config,
@@ -35,6 +36,7 @@ define([
     array,
     declare,
     domClass,
+    xhr,
     template
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -70,6 +72,8 @@ define([
             MapController.init({
                 mapDiv: this.mapDiv
             });
+
+            this.getPoints();
 
             this.filterSelector = new FilterSelector({
                 tabs: [
@@ -142,6 +146,24 @@ define([
             //     })
             // );
         },
+        toggle: function() {
+            // summary:
+            //      hide and show the menu
+            //
+            console.log('app.App::toggle', arguments);
+
+            domClass.toggle(this.filterSelector.domNode, 'hidden');
+        },
+        getPoints: function() {
+            // summary:
+            //      description
+            console.log('app.getPoints::getPoints', arguments);
+
+            xhr.get('points.json').then(function(result){
+                console.log(result);
+            });
+
+        },
         startup: function() {
             // summary:
             //      Fires after postCreate when all of the child widgets are finished laying out.
@@ -155,14 +177,6 @@ define([
             });
 
             this.inherited(arguments);
-        },
-        toggle: function() {
-            // summary:
-            //      hide and show the menu
-            //
-            console.log('app.App::toggle', arguments);
-
-            domClass.toggle(this.filterSelector.domNode, 'hidden');
         }
     });
 });
