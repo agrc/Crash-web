@@ -2,17 +2,17 @@
 define([
     'dojo/_base/array',
     'dojo/_base/Color',
-    'dojo/_base/connect',
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/on',
     'dojo/promise/all',
+    'dojo/request/xhr',
+
+    'dojox/lang/functional/object',
 
     'esri/config',
     'esri/dijit/PopupTemplate',
     'esri/geometry/Extent',
-    'esri/geometry/Multipoint',
-    'esri/geometry/normalizeUtils',
     'esri/geometry/Point',
     'esri/graphic',
     'esri/layers/GraphicsLayer',
@@ -21,27 +21,25 @@ define([
     'esri/request',
     'esri/SpatialReference',
     'esri/symbols/Font',
-    'esri/symbols/jsonUtils',
-    'esri/symbols/SimpleFillSymbol',
     'esri/symbols/SimpleLineSymbol',
     'esri/symbols/SimpleMarkerSymbol',
     'esri/symbols/TextSymbol',
     'esri/tasks/query',
     'esri/tasks/QueryTask'
-], function (
+], function(
     arrayUtils,
     Color,
-    connect,
     declare,
     lang,
     on,
     all,
+    xhr,
+
+    object,
 
     esriConfig,
     PopupTemplate,
     Extent,
-    Multipoint,
-    normalizeUtils,
     Point,
     Graphic,
     GraphicsLayer,
@@ -50,8 +48,6 @@ define([
     esriRequest,
     SpatialReference,
     Font,
-    symbolJsonUtils,
-    SimpleFillSymbol,
     SimpleLineSymbol,
     SimpleMarkerSymbol,
     TextSymbol,
@@ -60,55 +56,50 @@ define([
 ) {
 
     function concat(a1, a2) {
-
         return a1.concat(a2);
     }
 
-    function merge(arrs) {
+    // function merge(arrs) {
+    //     var len = arrs.length,
+    //         target = [];
+    //     while (len--) {
+    //         var o = arrs[len];
+    //         if (o.constructor === Array) {
+    //             target = concat(target, o);
+    //         } else {
+    //             target.push(o);
+    //         }
+    //     }
 
+    //     return target;
+    // }
 
-        var len = arrs.length, target = [];
-        while (len--) {
-            var o = arrs[len];
-            if (o.constructor === Array) {
-                target = concat(target, o);
-            } else {
-                target.push(o);
-            }
-        }
+    // function difference(arr1 /*new objectIds*/ , cacheCount /*objectId cache length*/ , hash /*objecid hash*/ ) {
+    //     var len = arr1.length,
+    //         diff = [];
+    //     if (!cacheCount) {
+    //         diff = arr1;
+    //         while (len--) {
+    //             var value = arr1[len];
+    //             if (!hash[value]) {
+    //                 hash[value] = value;
+    //             }
+    //         }
 
-        return target;
-    }
+    //         return diff;
+    //     }
+    //     while (len--) {
+    //         var val = arr1[len];
+    //         if (!hash[val]) {
+    //             hash[val] = val;
+    //             diff.push(val);
+    //         }
+    //     }
 
-    function difference(arr1/*new objectIds*/, cacheCount/*objectId cache length*/, hash/*objecid hash*/) {
-
-
-        var len = arr1.length, diff = [];
-        if (!cacheCount) {
-            diff = arr1;
-            while (len--) {
-                var value = arr1[len];
-                if (!hash[value]) {
-                    hash[value] = value;
-                }
-            }
-
-            return diff;
-        }
-        while (len--) {
-            var val = arr1[len];
-            if (!hash[val]) {
-                hash[val] = val;
-                diff.push(val);
-            }
-        }
-
-        return diff;
-    }
+    //     return diff;
+    // }
 
     function toPoints(features) {
-
-
         var len = features.length;
         var points = [];
         while (len--) {
@@ -118,14 +109,14 @@ define([
                     g.geometry.getCentroid(),
                     g.symbol, g.attributes,
                     g.infoTemplate
-            ));
+                ));
         }
         return points;
     }
 
     return declare([GraphicsLayer], {
         constructor: function(options) {
-
+            console.log('app.ClusterFeatureLayer::constructor', arguments);
             // options:
             //     url:    string
             //        URL string. Required. Will generate clusters based on Features returned from map service.
@@ -185,20 +176,26 @@ define([
             this._showSingles = options.hasOwnProperty('showSingles') ? options.showSingles : true;
             this._zoomOnClick = options.hasOwnProperty('zoomOnClick') ? options.zoomOnClick : true;
             // symbol for single graphics
-            //this._singleSym = options.singleSymbol || new SimpleMarkerSymbol('circle', 6, null, new Color('#888'));
-            this._singleSym = options.singleSymbol || new SimpleMarkerSymbol('circle', 16,
-                                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([85, 125, 140, 1]), 3),
-                                    new Color([255, 255, 255, 1]));
-            this._singleTemplate = options.singleTemplate || new PopupTemplate({ 'title': '', 'description': '{*}' });
+            this._singleSym = options.singleSymbol || new SimpleMarkerSymbol('circle', 8,
+                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                    new Color([0, 116, 217, 0.35]), 8),
+                new Color([0, 116, 217, 0.75]));
+            this._singleTemplate = options.singleTemplate || new PopupTemplate({
+                'title': '',
+                'description': '{*}'
+            });
             this._maxSingles = options.maxSingles || 10000;
 
             this._font = options.font || new Font('10pt').setFamily('Arial');
 
-            this._sr = options.spatialReference || new SpatialReference({ 'wkid': 102100 });
+            this._sr = options.spatialReference || new SpatialReference({
+                'wkid': 102100
+            });
 
             this._zoomEnd = null;
 
             this.url = options.url || null;
+            this.points = options.points || null;
             this._outFields = options.outFields || ['*'];
             this.queryTask = new QueryTask(this.url);
             this._where = options.where || null;
@@ -231,9 +228,8 @@ define([
 
             esriConfig.defaults.geometryService = '/arcgis/rest/services/Utilities/Geometry/GeometryServer';
         },
-
-        _getServiceDetails: function () {
-
+        _getServiceDetails: function() {
+            console.log('app.ClusterFeatureLayer::_getServiceDetails', arguments);
 
             esriRequest({
                 url: this.url,
@@ -246,14 +242,12 @@ define([
                     rendererJsonUtil.fromJson(response.drawingInfo.renderer);
                 if (response.geometryType === 'esriGeometryPolygon') {
                     this._useDefaultSymbol = false;
-
                 }
                 this.emit('details-loaded', response);
             }));
         },
-
-        _getDefaultSymbol: function (g) {
-
+        _getDefaultSymbol: function(g) {
+            console.log('app.ClusterFeatureLayer::_getDefaultSymbol', arguments);
 
             var rend = this._defaultRenderer;
             if (!this._useDefaultSymbol || !rend) {
@@ -262,9 +256,8 @@ define([
                 return rend.getSymbol(g);
             }
         },
-
-        _getRenderedSymbol: function (feature) {
-
+        _getRenderedSymbol: function(feature) {
+            console.log('app.ClusterFeatureLayer::_getRenderedSymbol', arguments);
 
             var attr = feature.attributes;
             if (attr.clusterCount === 1) {
@@ -281,31 +274,29 @@ define([
                 return null;
             }
         },
-
         // Recluster when extent changes
-        _reCluster: function () {
-
+        _reCluster: function() {
+            console.log('app.ClusterFeatureLayer::_reCluster', arguments);
 
             // update resolution
             this._clusterResolution = this._map.extent.getWidth() / this._map.width;
             // Smarter cluster, only query when we have to
             // Fist time
             if (!this._visitedExtent) {
-                this._getObjectIds(this._map.extent);
-            // New extent
+                this._getObjectIds();
+                // New extent
             } else if (!this._visitedExtent.contains(this._map.extent)) {
-                this._getObjectIds(this._map.extent);
-            // Been there, but is this a pan or zoom level change?
+                this._getObjectIds();
+                // Been there, but is this a pan or zoom level change?
             } else {
                 this._clusterGraphics();
             }
             // update clustered extent
             this._visitedExtent = this._visitedExtent ? this._visitedExtent.union(this._map.extent) : this._map.extent;
         },
-
         // Function to set the current cluster graphic (lable and cluster) that was clicked.
-        _setClickedClusterGraphics: function (g) {
-
+        _setClickedClusterGraphics: function(g) {
+            console.log('app.ClusterFeatureLayer::_setClickedClusterGraphics', arguments);
 
             // Reset
             if (g === null) {
@@ -317,7 +308,7 @@ define([
             if (g.symbol === null) {
                 this._currentClusterLabel = this._getCurrentLabelGraphic(g);
                 this._currentClusterGraphic = g;
-            // Text symbol was clicked
+                // Text symbol was clicked
             } else if (g.symbol.declaredClass === 'esri.symbol.TextSymbol') {
                 this._currentClusterLabel = g;
                 this._currentClusterGraphic = this._getCurrentClusterGraphic(g);
@@ -328,32 +319,27 @@ define([
             //     this._getCurrentLabelGraphic = null;
             // }
         },
-
         // Find the actual cluster graphic in the graphics layer
-        _getCurrentClusterGraphic: function (c) {
+        _getCurrentClusterGraphic: function(c) {
+            console.log('app.ClusterFeatureLayer::_getCurrentClusterGraphic', arguments);
 
-
-            var gArray = arrayUtils.filter(this.graphics, function (g) {
+            var gArray = arrayUtils.filter(this.graphics, function(g) {
                 return (g.attributes.clusterId === c.attributes.clusterId);
             });
             return gArray[0];
         },
-
         // Find the actual cluster graphic label in the graphics layer
-        _getCurrentLabelGraphic: function (c) {
-
-
-            var gArray = arrayUtils.filter(this.graphics, function (g) {
+        _getCurrentLabelGraphic: function(c) {
+            var gArray = arrayUtils.filter(this.graphics, function(g) {
                 return (g.symbol &&
                     g.symbol.declaredClass === 'esri.symbol.TextSymbol' &&
                     g.attributes.clusterId === c.attributes.clusterId);
             });
             return gArray[0];
         },
-
         // When the popup appears, toggle the cluster to singles or the singles to a cluster
-        _popupVisibilityChange: function () {
-
+        _popupVisibilityChange: function() {
+            console.log('app.ClusterFeatureLayer::_popupVisibilityChange', arguments);
 
             var show = this._map.infoWindow.isShowing;
             // Popup hidden, show cluster
@@ -361,14 +347,13 @@ define([
             // Remove singles from layer
             if (!show) {
                 //if (this._currentClusterGraphic && this._currentClusterLabel) {
-                    this.clearSingles();
+                this.clearSingles();
                 //}
             }
         },
-
         // Show or hide the currently selected cluster
-        _showClickedCluster: function (show) {
-
+        _showClickedCluster: function(show) {
+            console.log('app.ClusterFeatureLayer::_showClickedCluster', arguments);
 
             if (this._currentClusterGraphic && this._currentClusterLabel) {
                 if (show) {
@@ -380,13 +365,12 @@ define([
                 }
             }
         },
-
         // override esri/layers/GraphicsLayer methods
-        _setMap: function (map) {
-
+        _setMap: function(map) {
+            console.log('app.ClusterFeatureLayer::_setMap', arguments);
 
             this._query.outSpatialReference = map.spatialReference;
-            this._query.returnGeometry = true;
+            this._query.returnGeometry = false;
             this._query.outFields = this._outFields;
             // listen to extent-change so data is re-clustered when zoom level changes
             this._extentChange = on(map, 'extent-change', lang.hitch(this, '_reCluster'));
@@ -400,35 +384,30 @@ define([
                     if (!this.detailsLoaded) {
                         on.once(this, 'details-loaded', lang.hitch(this, function() {
                             if (!this.renderer) {
-
-                                this._singleSym = this._singleSym || new SimpleMarkerSymbol('circle', 16,
-                                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([85, 125, 140, 1]), 3),
-                                    new Color([255, 255, 255, 0.5]));
-
                                 var renderer = new ClassBreaksRenderer(this._singleSym, 'clusterCount');
 
                                 // Blue clusters
                                 var small = new SimpleMarkerSymbol('circle', 25,
-                                            new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-                                                new Color([140,177,210,0.35]), 15),
-                                            new Color([140,177,210,0.75]));
-                                var medium = new SimpleMarkerSymbol('circle', 50,
-                                            new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-                                                new Color([97,147,179,0.35]), 15),
-                                            new Color([97,147,179,0.75]));
-                                var large = new SimpleMarkerSymbol('circle', 80,
-                                            new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-                                                new Color([59,110,128,0.35]), 15),
-                                            new Color([59,110,128,0.75]));
-                                var xlarge = new SimpleMarkerSymbol('circle', 110,
-                                            new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-                                                new Color([20,72,77,0.35]), 15),
-                                            new Color([20,72,77,0.75]));
+                                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                                        new Color([46, 204, 64, 0.35]), 10),
+                                    new Color([46, 204, 64, 0.75]));
+                                var medium = new SimpleMarkerSymbol('circle', 35,
+                                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                                        new Color([255, 220, 0, 0.35]), 10),
+                                    new Color([255, 220, 0, 0.75]));
+                                var large = new SimpleMarkerSymbol('circle', 45,
+                                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                                        new Color([255, 133, 27, 0.35]), 10),
+                                    new Color([255, 133, 27, 0.75]));
+                                var xlarge = new SimpleMarkerSymbol('circle', 50,
+                                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                                        new Color([255, 65, 54, 0.35]), 10),
+                                    new Color([255, 65, 54, 0.75]));
 
-                                renderer.addBreak(2, 10, small);
-                                renderer.addBreak(10, 25, medium);
-                                renderer.addBreak(25, 100, large);
-                                renderer.addBreak(100, Infinity, xlarge);
+                                renderer.addBreak(2, 100, small);
+                                renderer.addBreak(100, 500, medium);
+                                renderer.addBreak(500, 2500, large);
+                                renderer.addBreak(2500, Infinity, xlarge);
                                 this.setRenderer(renderer);
                             }
                             this._reCluster();
@@ -441,96 +420,154 @@ define([
             var div = this.inherited(arguments);
             return div;
         },
-
-        _unsetMap: function () {
-
+        _unsetMap: function() {
+            console.log('app.ClusterFeatureLayer::_unsetMap', arguments);
 
             this.inherited(arguments);
             this._extentChange.remove();
         },
-
-        _onClusterClick: function (e) {
-
+        _onClusterClick: function(e) {
+            console.log('app.ClusterFeatureLayer::_onClusterClick', arguments);
 
             var attr = e.graphic.attributes;
             if (attr && attr.clusterCount) {
                 // Find points (data) in cluster
-                var source = arrayUtils.filter(this._clusterData, function (g) {
+                var source = arrayUtils.filter(this._clusterData, function(g) {
                     return attr.clusterId === g.attributes.clusterId;
                 }, this);
                 this.emit('cluster-click', source);
             }
         },
-
         // Get the features by IDs
-        _getObjectIds: function (extent) {
+        _getObjectIds: function(where) {
+            console.log('app.ClusterFeatureLayer::_getObjectIds', arguments);
 
-
-            if (this.url) {
-                var ext = extent || this._map.extent;
-                this._query.objectIds = null;
-                if (this._where) {
-                    this._query.where = this._where;
-                }
-                if (!this.MODE_SNAPSHOT) {
-                    this._query.geometry = ext;
-                }
-                if (!this._query.geometry && !this._query.where) {
-                    this._query.where = '1=1';
-                }
-                this.queryTask.executeForIds(this._query).then(
-                    lang.hitch(this, '_onIdsReturned'), this._onError
-                );
+            if (!this.url) {
+                return;
             }
-        },
 
-        _onError: function (err) {
+            if (where) {
+                this._query.where = where;
+                this.queryTask.executeForIds(this._query).then(
+                    lang.hitch(this, '_onIdFiltering'), this._onError);
+
+                return;
+            }
+
+            // don't fetch points when resetting
+            if (!this._pointCache || this._pointCache.length < 1) {
+                xhr.get(this.points, {
+                    handleAs: 'json'
+                }).then(lang.hitch(this, '_onIdsReturned'), this._onError);
+
+                return;
+            }
+
+            this._onFeaturesReturned({
+                features: this.getPoints(this._pointCache)
+            });
+        },
+        _onError: function(err) {
             console.error(err);
         },
+        getIds: function(points) {
+            // summary:
+            //      gets the [[id,x,y]]
+            // points
+            console.log('app.ClusterFeatureLayer::getIds', arguments);
 
-        _onIdsReturned: function (results) {
-
-
-            var uncached = difference(results, this._objectIdCache.length, this._objectIdHash);
-            this._objectIdCache = concat(this._objectIdCache, uncached);
-            if (uncached && uncached.length) {
-                this._query.where = null;
-                this._query.geometry = null;
-                var queries = [];
-                if (uncached.length > this._returnLimit) {
-                    while(uncached.length) {
-                        // Improve performance by just passing list of IDs
-                        this._query.objectIds = uncached.splice(0, this._returnLimit - 1);
-                        queries.push(this.queryTask.execute(this._query));
-                    }
-                    all(queries).then(lang.hitch(this, function(res) {
-                        var features = arrayUtils.map(res, function(r) {
-                            return r.features;
-                        });
-                        this._onFeaturesReturned({
-                            features: merge(features)
-                        });
-                    }));
-                } else {
-                    // Improve performance by just passing list of IDs
-                    this._query.objectIds = uncached.splice(0, this._returnLimit - 1);
-                    this.queryTask.execute(this._query).then(
-                        lang.hitch(this, '_onFeaturesReturned'), this._onError
-                    );
-                }
-            } else if (this._objectIdCache.length) {
-                this._onFeaturesReturned({ // kinda hacky here
-                    features: []
-                });
-                //this._clusterGraphics();
-            } else {
-                this.clear();
-            }
+            return object.keys(points);
         },
+        getPoints: function(points) {
+            console.log('app.ClusterFeatureLayer::getPoints', arguments);
 
+            return object.values(points);
+        },
+        _onIdFiltering: function(results) {
+            // summary:
+            //      when we get the ids from a query
+            // results
+            console.log('app.ClusterFeatureLayer::_onIdFiltering', arguments);
+
+            var points = [];
+
+            arrayUtils.forEach(results, function(id) {
+                if (this._pointCache[id]) {
+                    points.push(this._pointCache[id]);
+                }
+            }, this);
+
+            this._onFeaturesReturned({
+                features: points
+            });
+        },
+        _onIdsReturned: function(results) {
+            console.log('app.ClusterFeatureLayer::_onIdsReturned', arguments);
+
+            if (!this._pointCache || this._pointCache.length < 1) {
+                this._pointCache = {};
+                var l = results.points.length;
+                for (var i = l - 1; i >= 0; i--) {
+                    this._pointCache[results.points[i][0]] = {
+                        x: results.points[i][1],
+                        y: results.points[i][2],
+                        id: results.points[i][0],
+                        attributes: {}
+                    };
+                }
+            }
+
+            this._objectIdCache = this.getIds(this._pointCache);
+            this._onFeaturesReturned({
+                features: this.getPoints(this._pointCache)
+            });
+            // var uncached = difference(results, this._objectIdCache.length, this._objectIdHash);
+            // this._objectIdCache = concat(this._objectIdCache, uncached);
+            // if (uncached && uncached.length) {
+            //     this._query.where = null;
+            //     this._query.geometry = null;
+            //     var queries = [];
+            //     if (uncached.length > this._returnLimit) {
+            //         while (uncached.length) {
+            //             // Improve performance by just passing list of IDs
+            //             this._query.objectIds = uncached.splice(0, this._returnLimit - 1);
+            //             queries.push(this.queryTask.execute(this._query));
+            //         }
+            //         all(queries).then(lang.hitch(this, function(res) {
+            //             var features = arrayUtils.map(res, function(r) {
+            //                 return r.features;
+            //             });
+            //             this._onFeaturesReturned({
+            //                 features: merge(features)
+            //             });
+            //         }));
+            //     } else {
+            //         // Improve performance by just passing list of IDs
+            //         this._query.objectIds = uncached.splice(0, this._returnLimit - 1);
+            //         this.queryTask.execute(this._query).then(
+            //             lang.hitch(this, '_onFeaturesReturned'), this._onError
+            //         );
+            //     }
+            // } else if (this._objectIdCache.length) {
+            //     this._onFeaturesReturned({ // kinda hacky here
+            //         features: []
+            //     });
+            //     //this._clusterGraphics();
+            // } else {
+            //     this.clear();
+            // }
+        },
+        setDefinitionExpression: function(where) {
+            // summary:
+            //      description
+            // where
+            console.log('app.ClusterFeatureLayer::setDefinitionExpression', arguments);
+
+            this._getObjectIds(where.sql);
+        },
         // Return a cache of features in the current extent
         _inExtent: function() {
-
+            console.log('app.ClusterFeatureLayer::_inExtent', arguments);
 
             var ext = this._map.extent;
             var len = this._objectIdCache.length;
@@ -547,10 +584,9 @@ define([
 
             return valid;
         },
-
         // Add features to cluster cache and refine cluster data to draw - clears all graphics!
         _onFeaturesReturned: function(results) {
-
+            console.log('app.ClusterFeatureLayer::_onFeaturesReturned', arguments);
 
             var inExtent = this._inExtent();
             var features;
@@ -570,7 +606,10 @@ define([
                 this.clear();
                 // Append actual feature to oid cache
                 arrayUtils.forEach(features, function(feat) {
-                    this._clusterCache[feat.attributes[this._objectIdField]] = feat;
+                    if (feat) {
+                        this._clusterCache[feat.id] = feat;
+                    }
+                    // this._clusterCache[feat.attributes[this._objectIdField]] = feat;
                 }, this);
                 // Refine features to draw
                 this._clusterData = concat(features, inExtent);
@@ -584,17 +623,15 @@ define([
             // Cluster the features
             this._clusterGraphics();
         },
-
         // public ClusterLayer methods
         updateClusters: function() {
-
+            console.log('app.ClusterFeatureLayer::updateClusters', arguments);
 
             this.clearCache();
             this._reCluster();
         },
-
         clearCache: function() {
-
+            console.log('app.ClusterFeatureLayer::clearCache', arguments);
 
             // Summary: Clears the cache for clustered items
             arrayUtils.forEach(this._objectIdCache, function(oid) {
@@ -604,17 +641,14 @@ define([
             this._clusterCache = {};
             this._objectIdHash = {};
         },
-
         add: function(p) {
-
-
             // Summary:    The argument is a data point to be added to an existing cluster.
             //             If the data point falls within an existing cluster, it is added to
             //             that cluster and the cluster's label is updated. If the new point
             //             does not fall within an existing cluster, a new cluster is created.
             //
             // if passed a graphic, use the GraphicsLayer's add method
-            if ( p.declaredClass ) {
+            if (p.declaredClass) {
                 this.inherited(arguments);
                 return;
             }
@@ -623,9 +657,9 @@ define([
             this._clusterData.push(p);
             var clustered = false;
             // look for an existing cluster for the new point
-            for ( var i = 0; i < this._clusters.length; i++ ) {
+            for (var i = 0; i < this._clusters.length; i++) {
                 var c = this._clusters[i];
-                if ( this._clusterTest(p, c) ) {
+                if (this._clusterTest(p, c)) {
                     // add the point to an existing cluster
                     this._clusterAddPoint(p, c);
                     // update the cluster's geometry
@@ -643,18 +677,12 @@ define([
                 this._showCluster(p);
             }
         },
-
         clear: function() {
-
-
             // Summary:    Remove all clusters and data points.
             this.inherited(arguments);
             this._clusters.length = 0;
         },
-
         clearSingles: function(singles) {
-
-
             // Summary:    Remove graphics that represent individual data points.
             var s = singles || this._singles;
             arrayUtils.forEach(s, function(g) {
@@ -662,17 +690,14 @@ define([
             }, this);
             this._singles.length = 0;
         },
-
         onClick: function(e) {
-
-
             // Don't bubble click event to map
             e.stopPropagation();
 
             var singles = null;
 
             // Single cluster click - only good until re-cluster!
-            if (e.graphic.attributes.clusterCount === 1 ) {
+            if (e.graphic.attributes.clusterCount === 1) {
                 this._showClickedCluster(true);
                 // Unset cluster graphics
                 this._setClickedClusterGraphics(null);
@@ -693,8 +718,7 @@ define([
             }
             // Multi-cluster click, super zoom to cluster
             else if (this._zoomOnClick && e.graphic.attributes.clusterCount > 1 &&
-                this._map.getZoom() !== this._map.getMaxZoom())
-            {
+                this._map.getZoom() !== this._map.getMaxZoom()) {
                 // Zoom to level that shows all points in cluster, not necessarily the extent
                 var extent = this._getClusterExtent(e.graphic);
                 if (extent.getWidth()) {
@@ -702,14 +726,14 @@ define([
                 } else {
                     this._map.centerAndZoom(e.graphic.geometry, this._map.getMaxZoom());
                 }
-            // Multi-cluster click, show popup by finding actual singles and assigning to infoWindow
+                // Multi-cluster click, show popup by finding actual singles and assigning to infoWindow
             } else {
                 // Remove graphics from layer
                 this.clearSingles(this._singles);
                 // find single graphics that make up the cluster that was clicked
                 // would be nice to use filter but performance tanks with large arrays in IE
                 singles = this._getClusterSingles(e.graphic.attributes.clusterId);
-                if ( singles.length > this._maxSingles ) {
+                if (singles.length > this._maxSingles) {
                     alert('Sorry, that cluster contains more than ' + this._maxSingles +
                         ' points. Zoom in for more detail.');
                     return;
@@ -732,7 +756,7 @@ define([
 
         // Build new cluster array from features and draw graphics
         _clusterGraphics: function() {
-
+            console.log('app.ClusterFeatureLayer::_clusterGraphics', arguments);
 
             // TOD - should test if this is a pan or zoom level change before reclustering
 
@@ -740,9 +764,10 @@ define([
             this.clear();
 
             // first time through, loop through the points
-            for ( var j = 0, jl = this._clusterData.length; j < jl; j++ ) {
+            for (var j = 0, jl = this._clusterData.length; j < jl; j++) {
                 // see if the current feature should be added to a cluster
-                var point = this._clusterData[j].geometry || this._clusterData[j];
+                var point = this._clusterData[j].geometry ||
+                    new Point(this._clusterData[j].x, this._clusterData[j].y, this._map.spatialReference);
                 // TEST - Only cluster what's in the current extent.  TOD - better way to do this?
                 if (!this._map.extent.contains(point)) {
                     // Reset all other clusters and make sure their id is changed
@@ -752,9 +777,9 @@ define([
                 var feature = this._clusterData[j];
                 var clustered = false;
                 // Add point to existing cluster
-                for ( var i = 0; i < this._clusters.length; i++ ) {
+                for (var i = 0; i < this._clusters.length; i++) {
                     var c = this._clusters[i];
-                    if ( this._clusterTest(point, c) ) {
+                    if (this._clusterTest(point, c)) {
                         this._clusterAddPoint(feature, point, c);
                         clustered = true;
                         // TOD- try to update center of cluster - poor results, should use a grid system
@@ -775,17 +800,15 @@ define([
 
             this._showAllClusters();
         },
-
         // See if point is within the tolerance (pixels) of current cluster
         _clusterTest: function(p, cluster) {
             var distance = (
                 Math.sqrt(
                     Math.pow((cluster.x - p.x), 2) + Math.pow((cluster.y - p.y), 2)
-            ) / this._clusterResolution);
+                ) / this._clusterResolution);
 
             return (distance <= this._clusterTolerance);
         },
-
         // points passed to clusterAddPoint should be included
         // in an existing cluster
         // also give the point an attribute called clusterId
@@ -800,58 +823,60 @@ define([
             cluster.y = y;
 
             // Build an extent that includes all points in a cluster
-            if ( p.x < cluster.attributes.extent[0] ) {
+            if (p.x < cluster.attributes.extent[0]) {
                 cluster.attributes.extent[0] = p.x;
-            } else if ( p.x > cluster.attributes.extent[2] ) {
+            } else if (p.x > cluster.attributes.extent[2]) {
                 cluster.attributes.extent[2] = p.x;
             }
-            if ( p.y < cluster.attributes.extent[1] ) {
+            if (p.y < cluster.attributes.extent[1]) {
                 cluster.attributes.extent[1] = p.y;
-            } else if ( p.y > cluster.attributes.extent[3] ) {
+            } else if (p.y > cluster.attributes.extent[3]) {
                 cluster.attributes.extent[3] = p.y;
             }
 
             // Increment the count
             cluster.attributes.clusterCount++;
             // attributes might not exist
-            if ( ! p.hasOwnProperty('attributes') ) {
+            if (!p.hasOwnProperty('attributes')) {
                 p.attributes = {};
+            }
+
+            if (!feature.hasOwnProperty('attributes')) {
+                feature.attributes = {};
             }
             // give the graphic a cluster id
             feature.attributes.clusterId = p.attributes.clusterId = cluster.attributes.clusterId;
         },
-
         // Point isn't within the clustering distance specified for the layer so create a new cluster for it
         _clusterCreate: function(feature, p) {
-
-
             var clusterId = this._clusters.length + 1;
-            //
             // p.attributes might be undefined
-            if ( ! p.attributes ) {
+            if (!p.attributes) {
                 p.attributes = {};
+            }
+            if (!feature.attributes) {
+                feature.attributes = {};
             }
             feature.attributes.clusterId = p.attributes.clusterId = clusterId;
             // create the cluster
             var cluster = {
                 'x': p.x,
                 'y': p.y,
-                'attributes' : {
+                'attributes': {
                     'clusterCount': 1,
                     'clusterId': clusterId,
-                    'extent': [ p.x, p.y, p.x, p.y ]
+                    'extent': [p.x, p.y, p.x, p.y]
                 }
             };
             this._clusters.push(cluster);
         },
-
         // Add all graphics to layer and fire 'clusters-shown' event
         _showAllClusters: function() {
             // debug
             // var start = new Date().valueOf();
             //
 
-            for ( var i = 0, il = this._clusters.length; i < il; i++ ) {
+            for (var i = 0, il = this._clusters.length; i < il; i++) {
                 this._showCluster(this._clusters[i]);
             }
             this.emit('clusters-shown', this._clusters);
@@ -860,7 +885,6 @@ define([
             // var end = new Date().valueOf();
             //
         },
-
         // Add graphic and to layer
         _showCluster: function(c) {
             var point = new Point(c.x, c.y, this._sr);
@@ -870,7 +894,7 @@ define([
             this.add(g);
 
             // code below is used to not label clusters with a single point
-            if ( c.attributes.clusterCount < 2 ) {
+            if (c.attributes.clusterCount < 2) {
                 return;
             }
 
@@ -887,24 +911,21 @@ define([
                 )
             );
         },
-
         // Internal utility functions
         _findCluster: function(c) {
             arrayUtils.filter(this.graphics, function(g) {
-                return ! g.symbol &&
+                return !g.symbol &&
                     g.attributes.clusterId === c.attributes.clusterId;
             });
         },
-
         _getClusterExtent: function(cluster) {
             var ext;
             ext = cluster.attributes.extent;
-            return new Extent(ext[0],ext[1],ext[2],ext[3], this._map.spatialReference);
+            return new Extent(ext[0], ext[1], ext[2], ext[3], this._map.spatialReference);
         },
-
-        _getClusteredExtent: function () {
+        _getClusteredExtent: function() {
             var extent, clusteredExtent;
-            for ( var i = 0; i < this._clusters.length; i++ ) {
+            for (var i = 0; i < this._clusters.length; i++) {
                 extent = this._getClusteredExtent(this._clusters[i]);
                 if (!clusteredExtent) {
                     clusteredExtent = extent;
@@ -914,19 +935,18 @@ define([
             }
             return clusteredExtent;
         },
-
         // Return all singles for a given cluster id
-        _getClusterSingles: function (id) {
+        _getClusterSingles: function(id) {
             // debug
             // var start = new Date().valueOf();
             //
 
             var singles = [];
-                for ( var i = 0, il = this._clusterData.length; i < il; i++) {
-                    if ( id === this._clusterData[i].attributes.clusterId ) {
-                        singles.push(this._clusterData[i]);
-                    }
+            for (var i = 0, il = this._clusterData.length; i < il; i++) {
+                if (id === this._clusterData[i].attributes.clusterId) {
+                    singles.push(this._clusterData[i]);
                 }
+            }
 
             // debug
             // var end = new Date().valueOf();
@@ -934,7 +954,6 @@ define([
 
             return singles;
         },
-
         _addSingleGraphics: function(singles) {
             // add single graphics to the cluster layer
             arrayUtils.forEach(singles, function(g) {
@@ -942,24 +961,22 @@ define([
                 g.setInfoTemplate(this._singleTemplate);
                 this._singles.push(g);
                 // Add to layer
-                if ( this._showSingles ) {
+                if (this._showSingles) {
                     this.add(g);
                 }
             }, this);
             //this._map.infoWindow.setFeatures(this._singles);
         },
-
         _updateClusterGeometry: function(c) {
             // find the cluster graphic
             var cg = arrayUtils.filter(this.graphics, function(g) {
-                return ! g.symbol &&
+                return !g.symbol &&
                     g.attributes.clusterId === c.attributes.clusterId;
             });
-            if ( cg.length === 1 ) {
+            if (cg.length === 1) {
                 cg[0].geometry.update(c.x, c.y);
             }
         },
-
         _updateLabel: function(c) {
             // find the existing label
             var label = arrayUtils.filter(this.graphics, function(g) {
@@ -967,7 +984,7 @@ define([
                     g.symbol.declaredClass === 'esri.symbol.TextSymbol' &&
                     g.attributes.clusterId === c.attributes.clusterId;
             });
-            if ( label.length === 1 ) {
+            if (label.length === 1) {
                 //
                 this.remove(label[0]);
                 var newLabel = new TextSymbol(c.attributes.clusterCount)
@@ -982,7 +999,6 @@ define([
                 );
             }
         },
-
         // debug only...never called by the layer
         _clusterMeta: function() {
             // print total number of features
@@ -995,6 +1011,5 @@ define([
             });
 
         }
-
     });
 });

@@ -14,7 +14,6 @@ define([
     'esri/graphic',
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/ArcGISTiledMapServiceLayer',
-    'esri/layers/FeatureLayer',
     'esri/symbols/SimpleLineSymbol'
 ], function(
     BaseMap,
@@ -32,7 +31,6 @@ define([
     Graphic,
     DynamicLayer,
     TiledLayer,
-    FeatureLayer,
     LineSymbol
 ) {
     return {
@@ -119,7 +117,6 @@ define([
 
             if (!alreadyAdded) {
                 var LayerClass;
-
 
                 switch (props.serviceType || 'dynamic') {
                     case 'clustered':

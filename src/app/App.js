@@ -118,29 +118,29 @@ define([
             //
             console.log('app.App::subscriptions', arguments);
 
-            // this.own(
-            //     MapController.map.on('load', function() {
-            //         MapController.addLayerAndMakeVisible({
-            //             id: 'CrashPoints',
-            //             url: config.urls.service,
-            //             serviceType: 'clustered',
-            //             distance: 75,
-            //             displayFieldName: 'objectid',
-            //             labelColor: '#fff',
-            //             maxSingles: 1000,
-            //             outFields: [
-            //                 'objectid',
-            //                 'severity',
-            //                 'date',
-            //                 'weather_condition',
-            //                 'event',
-            //                 'collision_type',
-            //                 'road_name',
-            //                 'road_condition'
-            //             ]
-            //         });
-            //     })
-            // );
+            this.own(
+                MapController.map.on('load', function() {
+                    MapController.addLayerAndMakeVisible({
+                        id: 'CrashPoints',
+                        url: config.urls.service,
+                        points: 'points.json',
+                        serviceType: 'clustered',
+                        distance: 75,
+                        displayFieldName: 'objectid',
+                        labelColor: '#fff',
+                        maxSingles: 1000,
+                        outFields: ['objectid']
+                    });
+                })
+            );
+        },
+        toggle: function() {
+            // summary:
+            //      hide and show the menu
+            //
+            console.log('app.App::toggle', arguments);
+
+            domClass.toggle(this.filterSelector.domNode, 'hidden');
         },
         startup: function() {
             // summary:
@@ -155,14 +155,6 @@ define([
             });
 
             this.inherited(arguments);
-        },
-        toggle: function() {
-            // summary:
-            //      hide and show the menu
-            //
-            console.log('app.App::toggle', arguments);
-
-            domClass.toggle(this.filterSelector.domNode, 'hidden');
         }
     });
 });

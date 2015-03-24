@@ -1,6 +1,6 @@
 {
   "name": "crash.web",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "homepage": "https://github.com/agrc/crash.web",
   "repository": {
     "type": "git",
@@ -8,6 +8,7 @@
   },
   "devDependencies": {
     "dojo": "^1",
+    "geobuf": "^1.0.1",
     "grunt": "^0.4",
     "grunt-amdcheck": "^1",
     "grunt-bump": "^0",
@@ -20,10 +21,10 @@
     "grunt-contrib-jasmine": "^0",
     "grunt-contrib-jshint": "^0",
     "grunt-contrib-watch": "^0",
-    "grunt-dojo": "^0",
+    "grunt-dojo": "^1",
     "grunt-esri-slurp": "^1",
     "grunt-if-missing": "^1",
-    "grunt-newer": "^0",
+    "grunt-newer": "^1.1.0",
     "grunt-processhtml": "^0",
     "grunt-saucelabs": "^8",
     "grunt-shell": "^1",
