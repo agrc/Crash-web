@@ -16,7 +16,6 @@ define([
     'dojo/_base/array',
     'dojo/_base/declare',
     'dojo/dom-class',
-    'dojo/request/xhr',
     'dojo/text!app/templates/App.html'
 ], function(
     config,
@@ -36,7 +35,6 @@ define([
     array,
     declare,
     domClass,
-    xhr,
     template
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -72,8 +70,6 @@ define([
             MapController.init({
                 mapDiv: this.mapDiv
             });
-
-            this.getPoints();
 
             this.filterSelector = new FilterSelector({
                 tabs: [
@@ -122,29 +118,30 @@ define([
             //
             console.log('app.App::subscriptions', arguments);
 
-            // this.own(
-            //     MapController.map.on('load', function() {
-            //         MapController.addLayerAndMakeVisible({
-            //             id: 'CrashPoints',
-            //             url: config.urls.service,
-            //             serviceType: 'clustered',
-            //             distance: 75,
-            //             displayFieldName: 'objectid',
-            //             labelColor: '#fff',
-            //             maxSingles: 1000,
-            //             outFields: [
-            //                 'objectid',
-            //                 'severity',
-            //                 'date',
-            //                 'weather_condition',
-            //                 'event',
-            //                 'collision_type',
-            //                 'road_name',
-            //                 'road_condition'
-            //             ]
-            //         });
-            //     })
-            // );
+            this.own(
+                MapController.map.on('load', function() {
+                    MapController.addLayerAndMakeVisible({
+                        id: 'CrashPoints',
+                        url: config.urls.service,
+                        points: 'points.json',
+                        serviceType: 'clustered',
+                        distance: 75,
+                        displayFieldName: 'objectid',
+                        labelColor: '#fff',
+                        maxSingles: 1000,
+                        outFields: [
+                            'objectid',
+                            'severity',
+                            'date',
+                            'weather_condition',
+                            'event',
+                            'collision_type',
+                            'road_name',
+                            'road_condition'
+                        ]
+                    });
+                })
+            );
         },
         toggle: function() {
             // summary:
@@ -153,16 +150,6 @@ define([
             console.log('app.App::toggle', arguments);
 
             domClass.toggle(this.filterSelector.domNode, 'hidden');
-        },
-        getPoints: function() {
-            // summary:
-            //      description
-            console.log('app.getPoints::getPoints', arguments);
-
-            xhr.get('points.json').then(function(result){
-                console.log(result);
-            });
-
         },
         startup: function() {
             // summary:

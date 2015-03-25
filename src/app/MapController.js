@@ -14,7 +14,6 @@ define([
     'esri/graphic',
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/ArcGISTiledMapServiceLayer',
-    'esri/layers/FeatureLayer',
     'esri/symbols/SimpleLineSymbol'
 ], function(
     BaseMap,
@@ -32,7 +31,6 @@ define([
     Graphic,
     DynamicLayer,
     TiledLayer,
-    FeatureLayer,
     LineSymbol
 ) {
     return {
