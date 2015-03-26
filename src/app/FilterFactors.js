@@ -5,7 +5,8 @@ define([
     'dojo/_base/array',
     'dojo/_base/declare',
     'dojo/query',
-    'dojo/text!app/templates/FilterFactors.html'
+    'dojo/text!app/templates/FilterFactors.html',
+    'xstyle/css!app/resources/FilterFactors.css'
 ], function(
     config,
     FilterCommon,

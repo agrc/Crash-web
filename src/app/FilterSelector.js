@@ -10,7 +10,8 @@ define([
     'dojo/_base/lang',
     'dojo/dom-class',
     'dojo/text!app/templates/FilterSelector.html',
-    'dojo/topic'
+    'dojo/topic',
+    'xstyle/css!app/resources/FilterSelector.css'
 ], function(
     config,
     FilterControls,

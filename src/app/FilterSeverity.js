@@ -3,7 +3,8 @@ define([
     'app/FilterCommon',
 
     'dojo/_base/declare',
-    'dojo/text!app/templates/FilterSeverity.html'
+    'dojo/text!app/templates/FilterSeverity.html',
+    'xstyle/css!app/resources/FilterSeverity.css'
 ], function(
     config,
     FilterCommon,

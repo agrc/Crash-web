@@ -9,7 +9,8 @@ define([
 
     'dojox/charting/Chart',
     'dojox/charting/plot2d/Pie',
-    'dojox/charting/themes/PlotKit/green'
+    'dojox/charting/themes/PlotKit/green',
+    'xstyle/css!app/resources/ResultsPanel.css'
 ], function(
     _TemplatedMixin,
     _WidgetBase,

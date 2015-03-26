@@ -11,7 +11,8 @@ define([
     'dojo/date',
     'dojo/date/locale',
     'dojo/text!app/templates/FilterControls.html',
-    'dojo/topic'
+    'dojo/topic',
+    'xstyle/css!app/resources/FilterControls.css'
 ], function(
     config,
     ResultsPanel,

@@ -5,7 +5,8 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/on',
-    'dojo/text!app/templates/FilterDateTime.html'
+    'dojo/text!app/templates/FilterDateTime.html',
+    'xstyle/css!app/resources/FilterDateTime.css'
 ], function(
     config,
     FilterCommon,

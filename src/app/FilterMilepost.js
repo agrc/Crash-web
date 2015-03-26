@@ -10,7 +10,8 @@ define([
     'dojo/dom-class',
     'dojo/dom-construct',
     'dojo/text!app/templates/FilterMilepost.html',
-    'dojo/topic'
+    'dojo/topic',
+    'xstyle/css!app/resources/FilterMilepost.css'
 ], function(
     config,
     routes,
