@@ -3,9 +3,9 @@ define([
     'dojo/_base/array',
     'dojo/_base/Color',
     'dojo/_base/declare',
+    'dojo/_base/event',
     'dojo/_base/lang',
     'dojo/on',
-    'dojo/promise/all',
     'dojo/request/xhr',
 
     'dojox/lang/functional/object',
@@ -25,14 +25,16 @@ define([
     'esri/symbols/SimpleMarkerSymbol',
     'esri/symbols/TextSymbol',
     'esri/tasks/query',
-    'esri/tasks/QueryTask'
+    'esri/tasks/QueryTask',
+
+    'mustache/mustache'
 ], function(
     arrayUtils,
     Color,
     declare,
+    evt,
     lang,
     on,
-    all,
     xhr,
 
     object,
@@ -52,7 +54,9 @@ define([
     SimpleMarkerSymbol,
     TextSymbol,
     Query,
-    QueryTask
+    QueryTask,
+
+    mustache
 ) {
 
     function concat(a1, a2) {
@@ -221,6 +225,19 @@ define([
             this.detailsLoaded = false;
 
             this._query = new Query();
+            this._identifyQuery = new Query();
+            this._identifyQuery.outSpatialReference = this._sr;
+            this._identifyQuery.returnGeometry = false;
+            this._identifyQuery.outFields = this._outFields;
+
+            this.identifyTemplate = '<label>Date</label>: {{date}}<br/>' +
+                '<label>Event</label>: {{event}}<br/>' +
+                '{{#collision_type}}' +
+                '<label>Collision Type</label>: {{collision_type}}<br/>' +
+                '{{/collision_type}}' +
+                '<label>Weather</label>: {{weather_condition}}<br/>' +
+                '<label>Road</label>: {{road_name}} was {{road_condition}}';
+            mustache.parse(this.identifyTemplate);
 
             this.MODE_SNAPSHOT = options.hasOwnProperty('MODE_SNAPSHOT') ? options.MODE_SNAPSHOT : true;
 
@@ -371,9 +388,12 @@ define([
 
             this._query.outSpatialReference = map.spatialReference;
             this._query.returnGeometry = false;
-            this._query.outFields = this._outFields;
+            this._query.outFields = ['objectid'];
             // listen to extent-change so data is re-clustered when zoom level changes
-            this._extentChange = on(map, 'extent-change', lang.hitch(this, '_reCluster'));
+            this._extentChange = on(map, 'zoom', lang.hitch(this, '_reCluster'));
+            this._extentChange = on(map, 'extent-change', lang.hitch(this, function(){
+                map.infoWindow.hide();
+            }));
             // listen for popup hide/show - hide clusters when pins are shown
             map.infoWindow.on('hide', lang.hitch(this, '_popupVisibilityChange'));
             map.infoWindow.on('show', lang.hitch(this, '_popupVisibilityChange'));
@@ -691,8 +711,9 @@ define([
             this._singles.length = 0;
         },
         onClick: function(e) {
+            console.log('app.ClusterFeatureLayer::onClick', arguments);
             // Don't bubble click event to map
-            e.stopPropagation();
+            evt.stop(e);
 
             var singles = null;
 
@@ -704,16 +725,16 @@ define([
                 // Remove graphics from layer
                 this.clearSingles(this._singles);
                 singles = this._getClusterSingles(e.graphic.attributes.clusterId);
-                arrayUtils.forEach(singles, function(g) {
-                    g.setSymbol(this._getDefaultSymbol(g));
-                    g.setInfoTemplate(this._singleTemplate);
-                }, this);
+                // arrayUtils.forEach(singles, function(g) {
+                //     g.setSymbol(this._getDefaultSymbol(g));
+                //     g.setInfoTemplate(this._singleTemplate);
+                // }, this);
 
                 // Add graphic to layer
-                this._addSingleGraphics(singles);
-                this._map.infoWindow.setFeatures(singles);
-                // This hack helps show the popup to show on both sides of the dateline!
-                this._map.infoWindow.show(e.graphic.geometry);
+                // this._addSingleGraphics(singles);
+                // this._map.infoWindow.setFeatures(singles);
+                this._identify(singles);
+                this._map.infoWindow.setContent('<div style="width:100%;height:25px" aria-valuenow="1" aria-valuemin="0" aria-valuemax="1" class="progress-bar progress-bar-striped active"></div>');
                 this._map.infoWindow.show(e.graphic.geometry);
             }
             // Multi-cluster click, super zoom to cluster
@@ -751,7 +772,20 @@ define([
                 }
             }
         },
+        _identify: function(point) {
+            // summary:
+            //      description
+            // params
+            console.log('app.ClusterFeatureLayer::_identify', arguments);
 
+            this._identifyQuery.objectIds = [point[0].id];
+            this.queryTask.execute(this._identifyQuery, lang.hitch(this, function(result){
+                result.features[0].attributes.date = new Date(result.features[0].attributes.date).toLocaleString();
+                var content = mustache.render(this.identifyTemplate, result.features[0].attributes);
+                this._map.infoWindow.setTitle(result.features[0].attributes.severity);
+                this._map.infoWindow.setContent(content);
+            }));
+        },
         // Internal graphic methods
 
         // Build new cluster array from features and draw graphics
