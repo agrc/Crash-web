@@ -129,7 +129,16 @@ define([
                         displayFieldName: 'objectid',
                         labelColor: '#fff',
                         maxSingles: 1000,
-                        outFields: ['objectid']
+                        outFields: [
+                            'objectid',
+                            'severity',
+                            'date',
+                            'weather_condition',
+                            'event',
+                            'collision_type',
+                            'road_name',
+                            'road_condition'
+                        ]
                     });
                 })
             );
