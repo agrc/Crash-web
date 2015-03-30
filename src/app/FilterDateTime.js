@@ -6,6 +6,7 @@ define([
     'dojo/_base/lang',
     'dojo/on',
     'dojo/text!app/templates/FilterDateTime.html',
+
     'xstyle/css!app/resources/FilterDateTime.css'
 ], function(
     config,

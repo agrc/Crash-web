@@ -12,6 +12,7 @@ define([
     'dojo/date/locale',
     'dojo/text!app/templates/FilterControls.html',
     'dojo/topic',
+
     'xstyle/css!app/resources/FilterControls.css'
 ], function(
     config,
@@ -37,7 +38,7 @@ define([
 
         // Properties to be sent into constructor
 
-        constructor: function(){
+        constructor: function() {
             this.filters = [];
         },
 
@@ -67,6 +68,13 @@ define([
             var criteria = this._getFilterCriteria();
             criteria = this._buildDefinitionQueryFromObject(criteria);
 
+            if (!criteria.sql) {
+                return;
+            }
+
+            this.applySvg.setAttribute('class', 'sprite selected');
+            this.resetSvg.setAttribute('class', 'sprite');
+
             topic.publish(config.topics.search.filter, criteria);
         },
         reset: function() {
@@ -75,6 +83,9 @@ define([
             //      and reseting the definition expression on the feature layer
             //
             console.log('app.FilterControls::reset', arguments);
+
+            this.applySvg.setAttribute('class', 'sprite');
+            this.resetSvg.setAttribute('class', 'sprite disabled');
 
             topic.publish(config.topics.search.filter, '');
             topic.publish(config.topics.search.reset, {});
@@ -114,19 +125,24 @@ define([
             //      gets the object criteria from the filters and creates a definition query
             // criteria
             console.log('app.FilterControls::_buildDefinitionQueryFromObject', arguments);
-            var filters = [],
-                result = {};
+            var result = this._buildShape(criteria);
+            var filters = this._buildConditions(criteria);
 
-            if (criteria.factors) {
-                var factors = array.map(criteria.factors, function formatFactors(factor) {
-                    return factor + '=1';
-                });
+            filters = filters.concat(this._buildDate(criteria));
+            filters = filters.concat(this._buildFactors(criteria));
+            filters = filters.concat(this._buildSpatial(criteria));
 
-                var factorClause = factors.join(' AND ');
+            result.sql = filters.join(' OR ');
 
-                filters.push('crash_id IN (SELECT id FROM rollup WHERE ' + factorClause + ')');
-            }
+            return result;
+        },
+        _buildDate: function(criteria) {
+            // summary:
+            //      description
+            // filters
+            console.log('app.FilterControls::_buildDate', arguments);
 
+            var filters = [];
             if (criteria.date) {
                 if (criteria.date.predefined) {
                     var today = criteria.date.today || Date.now();
@@ -157,17 +173,67 @@ define([
                 }
             }
 
+            return filters;
+        },
+        _buildFactors: function(criteria) {
+            // summary:
+            //      build the factors
+            // criteria
+            console.log('app.FilterControls::_buildFactors', arguments);
+
+            var filters = [];
+            if (criteria.factors && criteria.factors.length) {
+                var factors = array.map(criteria.factors, function formatFactors(factor) {
+                    return factor + '=1';
+                });
+
+                var factorClause = factors.join(' AND ');
+
+                filters.push('crash_id IN (SELECT id FROM rollup WHERE ' + factorClause + ')');
+            }
+
+            return filters;
+        },
+        _buildSpatial: function(criteria) {
+            // summary:
+            //      description
+            // criteria
+            console.log('app.FilterControls::_buildSpatial', arguments);
+
+            var filters = [];
             if (criteria.milepost) {
                 var milepost = criteria.milepost;
                 filters.push('route_number = ' + milepost.route +
                     ' AND milepost BETWEEN ' + milepost.from + ' AND ' + milepost.to);
             }
 
+            return filters;
+        },
+        _buildConditions: function(criteria) {
+            // summary:
+            //      description
+            // criteria
+            console.log('app.FilterControls::_buildConditions', arguments);
+
+            var filters = [];
+
+            if (criteria.weatherConditions && criteria.weatherConditions.length) {
+                filters.push('weather_condition in (' + criteria.weatherConditions.join(',') + ')');
+            }
+
+            return filters;
+        },
+        _buildShape: function(criteria) {
+            // summary:
+            //      description
+            // criteria
+            console.log('app.FilterControls::_buildShape', arguments);
+
+            var result = {};
+
             if (criteria.shape) {
                 result.shape = criteria.shape;
             }
-
-            result.sql = filters.join(' OR ');
 
             return result;
         },

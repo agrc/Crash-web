@@ -1,4 +1,6 @@
 define([
+    'app/config',
+
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
@@ -12,6 +14,8 @@ define([
     'dojo/text!app/templates/FilterCommon.html',
     'dojo/topic'
 ], function(
+    config,
+
     _TemplatedMixin,
     _WidgetBase,
 
@@ -31,6 +35,7 @@ define([
 
         templateString: template,
         'class': 'filter',
+        resetTopic: config.topics.search.reset,
 
         // Properties to be sent into constructor
 
@@ -50,7 +55,8 @@ define([
 
             this.own(
                 on(this.domNode, 'input[type="checkbox"]:change', lang.hitch(this, 'updateButtonState')),
-                topic.subscribe(this.selectedTopic, lang.hitch(this, 'updateDomState'))
+                topic.subscribe(this.selectedTopic, lang.hitch(this, 'updateDomState')),
+                topic.subscribe(this.resetTopic, lang.hitch(this, '_reset'))
             );
         },
         updateButtonState: function(evt) {
@@ -88,9 +94,24 @@ define([
             // summary:
             //      updates the visbility state
             // t the {who:, type:, description:} topic
-            console.log('app.FilterRoadConditions::updateDomState', arguments);
+            console.log('app.FilterCommon::updateDomState', arguments);
 
             domClass.toggle(this.domNode, 'hidden', t.type !== this.type);
+        },
+        _reset: function() {
+            // summary:
+            //      reset filtering state
+            console.log('app.FilterCommon::_reset', arguments);
+
+            query('input', this.domNode).forEach(function(node){
+                node.value = '';
+                node.checked = false;
+
+                var checkboxDiv = node.parentNode.parentNode;
+                domClass.remove(checkboxDiv, 'selected');
+            });
+
+            this.set('data', {});
         }
     });
 });

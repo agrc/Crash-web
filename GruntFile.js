@@ -342,6 +342,7 @@ module.exports = function(grunt) {
         'if-missing:esri_slurp:dev',
         'connect',
         'stylus',
+        'csslint',
         'watch'
     ]);
     grunt.registerTask('build-prod', [

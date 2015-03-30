@@ -391,7 +391,7 @@ define([
             this._query.outFields = ['objectid'];
             // listen to extent-change so data is re-clustered when zoom level changes
             this._extentChange = on(map, 'zoom', lang.hitch(this, '_reCluster'));
-            this._extentChange = on(map, 'extent-change', lang.hitch(this, function(){
+            this._extentChange = on(map, 'extent-change', lang.hitch(this, function() {
                 map.infoWindow.hide();
             }));
             // listen for popup hide/show - hide clusters when pins are shown
@@ -733,8 +733,12 @@ define([
                 // Add graphic to layer
                 // this._addSingleGraphics(singles);
                 // this._map.infoWindow.setFeatures(singles);
+                var content = '<div style="width:100%;height:25px"' +
+                    'aria-valuenow="1" aria-valuemin="0" aria-valuemax="1"' +
+                    'class="progress-bar progress-bar-striped active"></div>';
+
                 this._identify(singles);
-                this._map.infoWindow.setContent('<div style="width:100%;height:25px" aria-valuenow="1" aria-valuemin="0" aria-valuemax="1" class="progress-bar progress-bar-striped active"></div>');
+                this._map.infoWindow.setContent(content);
                 this._map.infoWindow.show(e.graphic.geometry);
             }
             // Multi-cluster click, super zoom to cluster
@@ -779,7 +783,7 @@ define([
             console.log('app.ClusterFeatureLayer::_identify', arguments);
 
             this._identifyQuery.objectIds = [point[0].id];
-            this.queryTask.execute(this._identifyQuery, lang.hitch(this, function(result){
+            this.queryTask.execute(this._identifyQuery, lang.hitch(this, function(result) {
                 result.features[0].attributes.date = new Date(result.features[0].attributes.date).toLocaleString();
                 var content = mustache.render(this.identifyTemplate, result.features[0].attributes);
                 this._map.infoWindow.setTitle(result.features[0].attributes.severity);

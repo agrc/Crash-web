@@ -5,7 +5,7 @@ define([
     'dojo/_base/array',
     'dojo/_base/declare',
     'dojo/query',
-    'dojo/text!app/templates/FilterRoadConditions.html'
+    'dojo/text!app/templates/FilterWeatherConditions.html'
 ], function(
     config,
     FilterCommon,
@@ -31,7 +31,7 @@ define([
             //      Overrides method of same name in dijit._Widget.
             // tags:
             //      private
-            console.log('app.FilterRoadConditions::postCreate', arguments);
+            console.log('app.FilterWeatherConditions::postCreate', arguments);
 
             this.inherited(arguments);
 
@@ -41,7 +41,7 @@ define([
             // summary:
             //      wire events, and such
             //
-            console.log('app.FilterRoadConditions::setupConnections', arguments);
+            console.log('app.FilterWeatherConditions::setupConnections', arguments);
 
             this.inherited(arguments);
         },
@@ -49,19 +49,19 @@ define([
             // summary:
             //      builds the object to publish
             //
-            console.log('app.FilterRoadConditions::_gatherData', arguments);
+            console.log('app.FilterWeatherConditions::_gatherData', arguments);
 
-            var roadConditions = array.map(query('input[type="checkbox"]:checked', this.domNode),
+            var weatherConditions = array.map(query('input[type="checkbox"]:checked', this.domNode),
                 function mapCheckboxes(node) {
-                    return node.value;
+                    return '\'' + node.value + '\'';
                 }, this);
 
-            if (roadConditions.length < 1) {
-                roadConditions = [];
+            if (weatherConditions.length < 1) {
+                weatherConditions = [];
             }
 
             this.set('data', {
-                roadConditions: roadConditions
+                weatherConditions: weatherConditions
             });
         }
     });

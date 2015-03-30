@@ -3,7 +3,7 @@ define([
     'app/FilterDateTime',
     'app/FilterFactors',
     'app/FilterMilepost',
-    'app/FilterRoadConditions',
+    'app/FilterWeatherConditions',
     'app/FilterSelector',
     'app/FilterSeverity',
     'app/FilterTitleNode',
@@ -22,7 +22,7 @@ define([
     FilterDateTime,
     FilterFactors,
     FilterMilepost,
-    FilterRoadConditions,
+    FilterWeatherConditions,
     FilterSelector,
     FilterSeverity,
     FilterTitleNode,
@@ -99,7 +99,7 @@ define([
                     FilterFactors,
                     FilterSeverity,
                     FilterMilepost,
-                    FilterRoadConditions
+                    FilterWeatherConditions
                 ]
             }, this.sideBar);
 

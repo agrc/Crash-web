@@ -10,14 +10,7 @@
     <link rel="stylesheet" type="text/css" href="../../dijit/themes/claro/claro.css" />
     <link rel="stylesheet" type="text/css" href="../../esri/css/esri.css" />
     <link rel="stylesheet" href="../../bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="../resources/FilterCommon.css">
-    <link rel="stylesheet" href="../resources/FilterSelector.css">
-    <link rel="stylesheet" href="../resources/FilterFactors.css">
-    <link rel="stylesheet" href="../resources/FilterTitleNode.css">
-    <link rel="stylesheet" href="../resources/FilterControls.css">
-    <link rel="stylesheet" href="../resources/FilterMilepost.css">
-    <link rel="stylesheet" href="../resources/FilterDateTime.css">
-    <link rel="stylesheet" href="../resources/FilterSeverity.css">
+
     <style type='text/css'>
         body {
             padding: 50px;
@@ -33,14 +26,14 @@
 
         require({
             baseUrl: baseUrl,
-            packages: ['app', 'esri', 'dojo', 'dijit', 'dojox']
+            packages: ['app', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle']
         }, [
             'app/FilterSelector',
             'app/FilterFactors',
             'app/FilterTitleNode',
             'app/FilterDateTime',
             'app/FilterSeverity',
-            'app/FilterRoadConditions',
+            'app/FilterWeatherConditions',
             'app/FilterMilepost',
 
             'dojo/domReady!'
