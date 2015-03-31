@@ -2,7 +2,7 @@
   "name": "crash.web",
   "version": "0.11.1",
   "dependencies": {
-    "agrc": "agrc-widgets#2.11.0",
+    "agrc": "agrc-widgets#2.11.1",
     "bootstrap": "~3.3.4",
     "dijit": "~1.10",
     "dojo": "~1.10",
@@ -12,9 +12,9 @@
     "jasmine-jsreporter": "~0.1.2",
     "stubmodule": "0.6.1",
     "util": "dojo-util#~1.10",
-    "xstyle": "^0.3"
+    "xstyle": "09b4d603f63df3e7aa5acc04784e36710a75671d"
   },
   "resolutions": {
-    "xstyle": "^0.3"
+    "xstyle": "09b4d603f63df3e7aa5acc04784e36710a75671d"
   }
 }
