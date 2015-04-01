@@ -5,6 +5,7 @@ define([
     'dojo/_base/declare',
     'dojo/_base/event',
     'dojo/_base/lang',
+    'dojo/aspect',
     'dojo/on',
     'dojo/request/xhr',
 
@@ -34,6 +35,7 @@ define([
     declare,
     evt,
     lang,
+    aspect,
     on,
     xhr,
 
@@ -130,9 +132,20 @@ define([
                     new Color([0, 116, 217, 0.35]), 8),
                 new Color([0, 116, 217, 0.75]));
             this._singleTemplate = options.singleTemplate || new PopupTemplate({
-                'title': '',
-                'description': '{*}'
-            });
+                'title': '{severity}',
+                'description': '<label>Date</label>: {date}<br/>' +
+                                '<label>Event</label>: {event}<br/>' +
+                                '<label>Collision Type</label>: {collision_type}<br/>' +
+                                '<label>Weather</label>: {weather_condition}<br/>' +
+                                '<label>Road</label>: {road_name} was {road_condition}'
+                            });
+            this._singleTemplateWithoutCollision = new PopupTemplate({
+                'title': '{severity}',
+                'description': '<label>Date</label>: {date}<br/>' +
+                                '<label>Event</label>: {event}<br/>' +
+                                '<label>Weather</label>: {weather_condition}<br/>' +
+                                '<label>Road</label>: {road_name} was {road_condition}'
+                            });
             this._maxSingles = options.maxSingles || 10000;
 
             this._font = options.font || new Font('10pt').setFamily('Arial');
@@ -187,7 +200,16 @@ define([
             this.MODE_SNAPSHOT = options.hasOwnProperty('MODE_SNAPSHOT') ? options.MODE_SNAPSHOT : true;
 
             this._getServiceDetails();
-            // this._getObjectIds();
+
+            aspect.before(this, '_getObjectIds', function(){
+                this.emit('update-start', {});
+            });
+            aspect.before(this, '_reCluster', function(){
+                this.emit('update-start', {});
+            });
+            aspect.after(this, '_showAllClusters', function(){
+                this.emit('update-end', {});
+            });
 
             esriConfig.defaults.geometryService = '/arcgis/rest/services/Utilities/Geometry/GeometryServer';
         },
@@ -216,13 +238,16 @@ define([
             this._query.returnGeometry = false;
             this._query.outFields = ['objectid'];
             // listen to extent-change so data is re-clustered when zoom level changes
-            this._extentChange = on(map, 'zoom-end', lang.hitch(this, '_reCluster'));
-            this._extentChange = on(map, 'extent-change', lang.hitch(this, function() {
-                map.infoWindow.hide();
+            // this._extentChange = on(map, 'zoom-end', lang.hitch(this, '_reCluster'));
+            this._extentChange = on(map, 'zooom-end, pan-end', lang.hitch(this, function() {
+                this._reCluster();
             }));
             // listen for popup hide/show - hide clusters when pins are shown
             map.infoWindow.on('hide', lang.hitch(this, '_popupVisibilityChange'));
             map.infoWindow.on('show', lang.hitch(this, '_popupVisibilityChange'));
+            map.on('click', lang.hitch(this, function() {
+                map.infoWindow.hide();
+            }));
 
             var layerAdded = on(map, 'layer-add', lang.hitch(this, function(e) {
                 if (e.layer === this) {
@@ -276,6 +301,7 @@ define([
         _reCluster: function() {
             // Recluster when extent changes
             console.log('app.ClusterFeatureLayer::_reCluster', arguments);
+
 
             // // update resolution
             this._clusterResolution = this._map.extent.getWidth() / this._map.width;
@@ -401,14 +427,12 @@ define([
             var features;
             features = results.features;
             var len = features.length;
-            //this._clusterData.length = 0;
-            //this.clear();
+            this._clusterData.length = 0;
+
             // Update the cluster features for drawing
             if (len) {
                 //this._clusterData.lenght = 0;  // Bug
                 this._clusterData.length = 0;
-                // Delete all graphics in layer (not local features)
-                this.clear();
                 // Append actual feature to oid cache
                 arrayUtils.forEach(features, function(feat) {
                     if (feat) {
@@ -482,6 +506,9 @@ define([
             evt.stop(e);
 
             var singles = null;
+            var loadingContent = '<div style="width:100%;height:25px"' +
+                    'aria-valuenow="1" aria-valuemin="0" aria-valuemax="1"' +
+                    'class="progress-bar progress-bar-striped active"></div>';
 
             // Single cluster click - only good until re-cluster!
             if (e.graphic.attributes.clusterCount === 1) {
@@ -499,12 +526,10 @@ define([
                 // Add graphic to layer
                 // this._addSingleGraphics(singles);
                 // this._map.infoWindow.setFeatures(singles);
-                var content = '<div style="width:100%;height:25px"' +
-                    'aria-valuenow="1" aria-valuemin="0" aria-valuemax="1"' +
-                    'class="progress-bar progress-bar-striped active"></div>';
+
 
                 this._identify(singles);
-                this._map.infoWindow.setContent(content);
+                this._map.infoWindow.setContent(loadingContent);
                 this._map.infoWindow.show(e.graphic.geometry);
             }
             // Multi-cluster click, super zoom to cluster
@@ -534,11 +559,24 @@ define([
                     this._setClickedClusterGraphics(e.graphic);
                     this._showClickedCluster(false);
                     // Add graphics to layer
-                    this._addSingleGraphics(singles);
-                    this._map.infoWindow.setFeatures(this._singles);
-                    // This hack helps show the popup to show on both sides of the dateline!
-                    this._map.infoWindow.show(e.graphic.geometry);
-                    this._map.infoWindow.show(e.graphic.geometry);
+                    var g = this._addSingleGraphics(singles);
+
+
+
+                    // var identifyPromise = new Deferred(this._identify(singles));
+
+                    this._map.infoWindow.setContent(loadingContent);
+                    this._map.infoWindow.show(g.geometry);
+
+                    // identifyPromise = arrayUtils.map(singles, lang.hitch(this, function(p){
+                        // return new Deferred(this._identify(p));
+                    // }));
+
+                    this._identify(singles);
+                    // deferred.resolve();
+                    // this._map.infoWindow.setFeatures([deferred]);
+                    // this._identify(singles);
+                    // this._map.infoWindow.show(e.graphic.geometry);
                 }
             }
         },
@@ -556,19 +594,54 @@ define([
                 }
             }
         },
-        _identify: function(point) {
+        _identify: function(points) {
             // summary:
             //      description
             // params
             console.log('app.ClusterFeatureLayer::_identify', arguments);
 
-            this._identifyQuery.objectIds = [point[0].id];
-            this.queryTask.execute(this._identifyQuery, lang.hitch(this, function(result) {
-                result.features[0].attributes.date = new Date(result.features[0].attributes.date).toLocaleString();
-                var content = mustache.render(this.identifyTemplate, result.features[0].attributes);
-                this._map.infoWindow.setTitle(result.features[0].attributes.severity);
-                this._map.infoWindow.setContent(content);
+            this._identifyQuery.objectIds = arrayUtils.map(points, function(p){
+                return p.id;
+            });
+
+            if(points.length === 1)
+            {
+                this.queryTask.execute(this._identifyQuery, lang.hitch(this, function(result) {
+                    result.features[0].attributes.date = new Date(result.features[0].attributes.date).toLocaleString();
+                    var content = mustache.render(this.identifyTemplate, result.features[0].attributes);
+                    this._map.infoWindow.setTitle(result.features[0].attributes.severity);
+                    this._map.infoWindow.setContent(content);
+                }));
+
+                return;
+            }
+
+            this._identifyQuery.returnGeometry = true;
+            this.queryTask.execute(this._identifyQuery, lang.hitch(this, function(featureSet){
+                arrayUtils.forEach(featureSet.features, function(feature){
+                    feature.attributes.date = new Date(feature.attributes.date).toLocaleString();
+
+                    /* jshint -W106 */
+                    if(!feature.attributes.collision_type){
+                    /* jshint +W106 */
+                        feature.infoTemplate = this._singleTemplateWithoutCollision;
+                        return;
+                    }
+
+                    feature.infoTemplate = this._singleTemplate;
+                }, this);
+
+                this._map.infoWindow.setFeatures(featureSet.features);
+                this._identifyQuery.returnGeometry = false;
             }));
+
+
+            // var def = new Deferred();
+            // def.then(this.queryTask.execute(this._identifyQuery).then(function(featureSet) {
+            //     def.resolve(featureSet.features);
+            // }));
+
+            // return def;
         },
 
 
@@ -651,6 +724,7 @@ define([
             var show = this._map.infoWindow.isShowing;
             // Popup hidden, show cluster
             this._showClickedCluster(!show);
+            this._map.infoWindow.clearFeatures();
             // Remove singles from layer
             if (!show) {
                 //if (this._currentClusterGraphic && this._currentClusterLabel) {
@@ -877,7 +951,7 @@ define([
                 this._showCluster(this._clusters[i]);
             }
             this.emit('clusters-shown', this._clusters);
-
+            // this.emit('update-end');
             // debug
             // var end = new Date().valueOf();
             //
@@ -953,15 +1027,25 @@ define([
         },
         _addSingleGraphics: function(singles) {
             // add single graphics to the cluster layer
+            var aGraphic = null;
             arrayUtils.forEach(singles, function(g) {
-                g.setSymbol(this._getDefaultSymbol(g));
-                g.setInfoTemplate(this._singleTemplate);
+                g.attributes.clusterCount = 1;
+                g = new Graphic(new Point(g.x, g.y, this._sr),
+                                this._singleSym,
+                                g.attributes);
+                if(!aGraphic){
+                    aGraphic = g;
+                }
+                // g.setSymbol(this._getDefaultSymbol(g));
+                // g.setInfoTemplate(this._singleTemplate);
                 this._singles.push(g);
                 // Add to layer
                 if (this._showSingles) {
                     this.add(g);
                 }
             }, this);
+
+            return aGraphic;
             //this._map.infoWindow.setFeatures(this._singles);
         },
         _updateClusterGeometry: function(c) {
