@@ -132,7 +132,7 @@ define([
             filters = filters.concat(this._buildFactors(criteria));
             filters = filters.concat(this._buildSpatial(criteria));
 
-            result.sql = filters.join(' OR ');
+            result.sql = filters.join(' AND ');
 
             return result;
         },
