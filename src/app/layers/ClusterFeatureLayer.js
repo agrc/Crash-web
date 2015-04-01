@@ -187,6 +187,7 @@ define([
             this.MODE_SNAPSHOT = options.hasOwnProperty('MODE_SNAPSHOT') ? options.MODE_SNAPSHOT : true;
 
             this._getServiceDetails();
+            // this._getObjectIds();
 
             esriConfig.defaults.geometryService = '/arcgis/rest/services/Utilities/Geometry/GeometryServer';
         },
@@ -215,7 +216,7 @@ define([
             this._query.returnGeometry = false;
             this._query.outFields = ['objectid'];
             // listen to extent-change so data is re-clustered when zoom level changes
-            this._extentChange = on(map, 'zoom', lang.hitch(this, '_reCluster'));
+            this._extentChange = on(map, 'zoom-end', lang.hitch(this, '_reCluster'));
             this._extentChange = on(map, 'extent-change', lang.hitch(this, function() {
                 map.infoWindow.hide();
             }));
@@ -255,7 +256,8 @@ define([
                                 renderer.addBreak(2500, Infinity, xlarge);
                                 this.setRenderer(renderer);
                             }
-                            this._reCluster();
+                            // this._reCluster();
+                            this._getObjectIds();
                         }));
                     }
                 }
@@ -276,17 +278,17 @@ define([
             console.log('app.ClusterFeatureLayer::_reCluster', arguments);
 
             // // update resolution
-            // this._clusterResolution = this._map.extent.getWidth() / this._map.width;
+            this._clusterResolution = this._map.extent.getWidth() / this._map.width;
             // // Smarter cluster, only query when we have to
             // // Fist time
             // if (!this._visitedExtent) {
             //     this._getObjectIds();
             //     // New extent
             // } else if (!this._visitedExtent.contains(this._map.extent)) {
-            this._getObjectIds();
+            // this._getObjectIds();
             //     // Been there, but is this a pan or zoom level change?
             // } else {
-            //     this._clusterGraphics();
+            this._clusterGraphics();
             // }
             // // update clustered extent
             // this._visitedExtent = this._visitedExtent ?
@@ -394,6 +396,7 @@ define([
             // Add features to cluster cache and refine cluster data to draw - clears all graphics!
             console.log('app.ClusterFeatureLayer::_onFeaturesReturned', arguments);
 
+            this._clusterResolution = this._map.extent.getWidth() / this._map.width;
             var inExtent = this._inExtent();
             var features;
             features = results.features;
@@ -567,7 +570,6 @@ define([
                 this._map.infoWindow.setContent(content);
             }));
         },
-
 
 
 
