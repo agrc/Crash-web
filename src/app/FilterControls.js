@@ -243,6 +243,11 @@ define([
             // d
             console.log('app.FilterControls::_formatDateForArcGis', arguments);
 
+            if(Object.prototype.toString.call(d) !== '[object Date]')
+            {
+                d = new Date(d);
+            }
+
             return locale.format(d, {
                 datePattern: 'yyyy-MM-dd',
                 selector: 'date'
