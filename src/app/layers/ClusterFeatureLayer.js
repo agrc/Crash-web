@@ -204,9 +204,6 @@ define([
             aspect.before(this, '_getObjectIds', function(){
                 this.emit('update-start', {});
             });
-            aspect.before(this, '_reCluster', function(){
-                this.emit('update-start', {});
-            });
             aspect.after(this, '_showAllClusters', function(){
                 this.emit('update-end', {});
             });
@@ -238,9 +235,12 @@ define([
             this._query.returnGeometry = false;
             this._query.outFields = ['objectid'];
             // listen to extent-change so data is re-clustered when zoom level changes
-            // this._extentChange = on(map, 'zoom-end', lang.hitch(this, '_reCluster'));
-            this._extentChange = on(map, 'zooom-end, pan-end', lang.hitch(this, function() {
+            this._extentChange = on(map, 'zoom-end, pan-end', lang.hitch(this, function() {
                 this._reCluster();
+                this.emit('update-end', {});
+            }));
+            this._extentChange = on(map, 'zoom-start, pan-start', lang.hitch(this, function() {
+                this.emit('update-start', {});
             }));
             // listen for popup hide/show - hide clusters when pins are shown
             map.infoWindow.on('hide', lang.hitch(this, '_popupVisibilityChange'));
