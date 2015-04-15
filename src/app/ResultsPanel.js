@@ -1,7 +1,6 @@
 define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
-    'dijit/_WidgetsInTemplateMixin',
 
     'dojo/_base/array',
     'dojo/_base/declare',
@@ -10,11 +9,11 @@ define([
     'dojox/charting/Chart',
     'dojox/charting/plot2d/Pie',
     'dojox/charting/themes/PlotKit/green',
+
     'xstyle/css!app/resources/ResultsPanel.css'
 ], function(
     _TemplatedMixin,
     _WidgetBase,
-    _WidgetsInTemplateMixin,
 
     array,
     declare,
@@ -24,13 +23,12 @@ define([
     Pie,
     green
 ) {
-    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+    return declare([_WidgetBase, _TemplatedMixin], {
         // description:
         //      The panel to show graphs charts results from the query
 
         templateString: template,
         baseClass: 'results-panel',
-        widgetsInTemplate: true,
 
         // Properties to be sent into constructor
 
