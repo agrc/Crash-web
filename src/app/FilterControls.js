@@ -96,7 +96,7 @@ define([
             //
             console.log('app.FilterControls::toggleCharts', arguments);
 
-            if (this.resultsPanel) {
+            if (this.resultsPanel && !this.resultsPanel._destroyed) {
                 this.resultsPanel.destroyRecursive();
                 this.resultsPanel = null;
                 return;
@@ -104,7 +104,7 @@ define([
 
             this.resultsPanel = new ResultsPanel({}, 'div');
             // place at calls startup
-            this.resultsPanel.placeAt(this.getParent().centerContainer, 'first');
+            this.resultsPanel.placeAt('app_center', 'first');
         },
         _getFilterCriteria: function() {
             // summary:
