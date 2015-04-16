@@ -21,6 +21,10 @@
             'put-selector',
             'xstyle',
             {
+                name: 'chartist',
+                location: './chartist',
+                main: 'dist/chartist'
+            },{
                 name: 'bootstrap',
                 location: './bootstrap',
                 main: 'dist/js/bootstrap'

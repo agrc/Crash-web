@@ -1,20 +1,23 @@
 .results-panel
+    @media screen and (min-width: 767px) {
+        height auto
+        .panel-body {
+            max-height 800px
+        }
+    }
     height 100%
+    width 100%
+    position inherit
     background-color #fff
     z-index 100
     padding 15px
-    position relative
-    .chart
-        height 200px
-        width 50%
+    .ct-chart
+        max-height: 400px
     .panel
         margin-bottom 0px
     .panel-default
         height 100%
-        width 100%
         overflow hidden
     .panel-body
-        height 100%
-        width 100%
+        height: 100%
         overflow-y auto
-        overflow-x hidden

@@ -1,27 +1,30 @@
 define([
+    'chartist',
+
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
     'dojo/_base/array',
     'dojo/_base/declare',
+    'dojo/_base/lang',
+    'dojo/keys',
+    'dojo/on',
     'dojo/text!app/templates/ResultsPanel.html',
 
-    'dojox/charting/Chart',
-    'dojox/charting/plot2d/Pie',
-    'dojox/charting/themes/PlotKit/green',
-
-    'xstyle/css!app/resources/ResultsPanel.css'
+    'xstyle/css!app/resources/ResultsPanel.css',
+    'xstyle/css!chartist/dist/chartist.min.css'
 ], function(
+    Chartist,
+
     _TemplatedMixin,
     _WidgetBase,
 
     array,
     declare,
-    template,
-
-    Chart,
-    Pie,
-    green
+    lang,
+    keys,
+    on,
+    template
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -42,9 +45,12 @@ define([
             this.setupConnections();
 
             this.charts = [
-                this.buildChart(this.report1Node),
-                this.buildChart(this.report2Node),
-                this.buildChart(this.report3Node)
+                this.buildChart(this.report1Node, 'Pie'),
+                this.buildChart(this.report2Node, 'Pie'),
+                this.buildChart(this.report3Node, 'Bar'),
+                this.buildChart(this.report4Node, 'Pie'),
+                this.buildChart(this.report5Node, 'Line'),
+                this.buildChart(this.report6Node, 'Line')
             ];
 
             this.inherited(arguments);
@@ -54,64 +60,38 @@ define([
             //      wire events, and such
             //
             console.log('app.ResultsPanel::setupConnections', arguments);
+
+            this.own(on(document, 'keyup', lang.hitch(this, 'hide')));
         },
-        showCharts: function() {
+        hide: function(evt) {
             // summary:
             //      description
             // params
-            console.log('app.ResultsPanel::showCharts', arguments);
+            console.log('app.ResultsPanel::hide', arguments);
+            var charOrCode = evt.charCode || evt.keyCode;
+
+            if(charOrCode !== keys.ESCAPE){
+                return;
+            }
+
+            this.destroyRecursive();
         },
-        buildChart: function(node) {
+        buildChart: function(node, type) {
             // summary:
             //      builds a chart around a node
             // node
             console.log('app.ResulstPanel::buildChart', arguments);
 
             // Create the chart within it's 'holding' node
+            var series = [[5, 2, 4, 2, 1]];
+            if(type === 'Pie'){
+                series = series[0];
+            }
 
-            var chartData = [{
-                x: 1,
-                y: 19021
-            }, {
-                x: 1,
-                y: 12837
-            }, {
-                x: 1,
-                y: 12378
-            }, {
-                x: 1,
-                y: 21882
-            }, {
-                x: 1,
-                y: 17654
-            }, {
-                x: 1,
-                y: 15833
-            }, {
-                x: 1,
-                y: 16122
-            }];
-
-            var pieChart = new Chart(node);
-
-            // Set the theme
-            green.chart.fill = green.plotarea.fill = '#fff';
-            pieChart.setTheme(green);
-
-            // Add the only/default plot
-            pieChart.addPlot('default', {
-                type: Pie, // our plot2d/Pie module reference as type value
-                radius: 200,
-                fontColor: 'black',
-                labelOffset: -20
+            new Chartist[type](node, {
+              labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+              series: series
             });
-
-            // Add the series of data
-            pieChart.addSeries('January', chartData);
-
-            this.own(pieChart);
-
-            return pieChart;
         },
         startup: function() {
             // summary:
@@ -119,9 +99,6 @@ define([
             //
             console.log('app.ResultsPanel::startup', arguments);
 
-            array.forEach(this.charts, function(chart){
-                chart.render();
-            }, this);
         }
     });
 });
