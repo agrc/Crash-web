@@ -32,4 +32,8 @@ src/spinjs/
 src/stubmodule/
 src/util/
 src/xstyle/
-string
+api/crash-statistics/packages
+api/crash-statistics/bin
+api/crash-statistics/obj
+*.suo
+*.user
