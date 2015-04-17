@@ -1,4 +1,6 @@
 define([
+    'app/config',
+
     'chartist',
 
     'dijit/_TemplatedMixin',
@@ -10,10 +12,13 @@ define([
     'dojo/keys',
     'dojo/on',
     'dojo/text!app/templates/ResultsPanel.html',
+    'dojo/topic',
 
     'xstyle/css!app/resources/ResultsPanel.css',
     'xstyle/css!chartist/dist/chartist.min.css'
 ], function(
+    config,
+
     Chartist,
 
     _TemplatedMixin,
@@ -24,7 +29,8 @@ define([
     lang,
     keys,
     on,
-    template
+    template,
+    topic
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -62,6 +68,8 @@ define([
             console.log('app.ResultsPanel::setupConnections', arguments);
 
             this.own(on(document, 'keyup', lang.hitch(this, 'hide')));
+
+            topic.subscribe(config.topics.search.filter, lang.hitch(this, 'setCurrentCriteria'))a;
         },
         hide: function(evt) {
             // summary:
