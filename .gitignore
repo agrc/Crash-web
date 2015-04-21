@@ -3,8 +3,13 @@
 *.pyc
 *.sde
 *.sublime-workspace
+*.suo
+*.user
 .DS_Store
 .grunt/
+api/crash-statistics/bin
+api/crash-statistics/obj
+api/crash-statistics/packages
 deploy
 dist/
 node_modules/
@@ -19,6 +24,7 @@ src/dojo/
 src/dojox/
 src/esri/
 src/favico.js/
+src/highcharts-release/
 src/ijit/
 src/jasmine-favicon-reporter/
 src/jasmine-jsreporter/
@@ -32,8 +38,3 @@ src/spinjs/
 src/stubmodule/
 src/util/
 src/xstyle/
-api/crash-statistics/packages
-api/crash-statistics/bin
-api/crash-statistics/obj
-*.suo
-*.user

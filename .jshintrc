@@ -1,18 +1,21 @@
 {
+    "globals": {
+        "Highcharts": true
+    },
     "predef": [
-        "afterEach", 
+        "afterEach",
         "AGRC",
-        "beforeEach", 
+        "beforeEach",
         "define",
         "describe",
-        "expect", 
-        "it", 
-        "jasmine", 
+        "expect",
+        "it",
+        "jasmine",
         "module",
         "process",
         "require",
-        "runs", 
-        "spyOn", 
+        "runs",
+        "spyOn",
         "waitsFor",
         "xdescribe",
         "xit"
