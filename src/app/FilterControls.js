@@ -39,6 +39,7 @@ define([
         // Properties to be sent into constructor
 
         constructor: function() {
+            this.childWidgets = [];
             this.filters = [];
         },
 
@@ -50,6 +51,12 @@ define([
             console.log('app.FilterControls::postCreate', arguments);
 
             this.setupConnections();
+
+            this.resultsPanel = new ResultsPanel({}, 'div');
+            // place at calls startup
+            this.resultsPanel.placeAt('app_center', 'first');
+
+            this.childWidgets.push(this.resultsPanel);
 
             this.inherited(arguments);
         },
@@ -96,15 +103,7 @@ define([
             //
             console.log('app.FilterControls::toggleCharts', arguments);
 
-            if (this.resultsPanel && !this.resultsPanel._destroyed) {
-                this.resultsPanel.destroyRecursive();
-                this.resultsPanel = null;
-                return;
-            }
-
-            this.resultsPanel = new ResultsPanel({}, 'div');
-            // place at calls startup
-            this.resultsPanel.placeAt('app_center', 'first');
+            this.resultsPanel.show();
         },
         _getFilterCriteria: function() {
             // summary:
@@ -252,6 +251,20 @@ define([
                 datePattern: 'yyyy-MM-dd',
                 selector: 'date'
             });
+        },
+        startup: function() {
+            // summary:
+            //      startup stuff
+            //
+            console.log('app.FilterControls::startup', arguments);
+
+            var that = this;
+            array.forEach(this.childWidgets, function (widget) {
+                that.own(widget);
+                widget.startup();
+            });
+
+            this.inherited(arguments);
         }
     });
 });

@@ -1,52 +1,41 @@
-﻿using System.Configuration;
+﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
-using Nancy;
+using System.Linq;
 using Dapper;
+using Nancy;
 using Newtonsoft.Json;
+using crash_statistics.Models;
 
 namespace crash_statistics {
 
     public class Statistics : NancyModule {
-
         public Statistics()
         {
             Get["/stats/{criteria?}", true] = async (_, ctx) =>
                 {
-                    string weather =
-                        string.Format(
-                            "select weather_condition, count(*) from crashlocation where {0} group by weather_condition",
-                            _.criteria);
+                    const string sql = "(select 'weather' as type, weather_condition as label, count(*) as occurances from crashlocation where {0} group by weather_condition)  union (select 'road' as type, road_condition as label, count(*) as occurances from crashlocation where {0} group by road_condition) union (select 'day' as type, cast(day as varchar) as label, count(*) as occurances from crashlocation where {0} group by day) union (select 'hour' as type, cast(hour as varchar) as label, count(*) as occurances from crashlocation where {0} group by hour) union (select 'cause' as type, driver.contributing_cause as label, count(*) as occurances from Driver inner join crashlocation on crashlocation.crash_id = driver.driver_id where {0} group by driver.contributing_cause) union (select 'distraction' as type, driver.driver_distraction as label, count(*) as occurances from Driver inner join crashlocation on crashlocation.crash_id = driver.driver_id where {0} group by driver.driver_distraction)";
 
-                    var roads =
-                        string.Format(
-                            "select road_condition, count(*) from crash_points where {0} group by road_condition",
-                            _.criteria);
+                    IEnumerable<Row> results;
 
-                    var days =
-                        string.Format(
-                            "select day, count(*) from crash_points where {0} group by day",
-                            _.criteria);
+                    using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["dev"].ConnectionString))
+                    {
+                        results = await connection.QueryAsync<Row>((string) string.Format(sql, _.criteria));
+                    }
 
-                    var hours =
-                        string.Format(
-                            "select hour, count(*) from crash_points where {0} group by hour",
-                            _.criteria);
+                    results = results.ToArray();
 
-                    var cause =
-                        string.Format(
-                            "select driver.contributing_cause, count(*) from Driver inner join crash_points on crash_points.crash_id = driver.driver_id where {0} group by driver.contributing_cause",
-                            _.criteria);
+                    var result = new Result
+                        {
+                            Weather =  new PieChart(results.Where(x => x.Type == "weather" && x.Label != null).ToArray(), "weather"),
+                            Cause = new PieChart(results.Where(x => x.Type == "cause" && x.Label != null), "factors"),
+                            Days = new DayChart(results.Where(x => x.Type == "day" && x.Label != null), "days"),
+                            Distractions = new BarChart(results.Where(x => x.Type == "distraction" && x.Label != null), "distractions"),
+                            Time = new TimeChart(results.Where(x => x.Type == "hour" && x.Label != null), "time"),
+                            Road = new PieChart(results.Where(x => x.Type == "road" && x.Label != null), "road")
+                        };
 
-                    var distractions =
-                        string.Format(
-                            "select driver.driver_distraction, count(*) from Driver inner join crash_points on crash_points.crash_id = driver.driver_id where {0} group by driver.driver_distraction",
-                            _.criteria);
-
-
-                    var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["dev"].ConnectionString);
-                    var weatherData = await connection.QueryAsync(weather);
-
-                    return JsonConvert.SerializeObject(weatherData);
+                    return JsonConvert.SerializeObject(result);
                 };
         }
     }
