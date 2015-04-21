@@ -104,7 +104,7 @@ define([
             console.log('app.FilterCommon::_reset', arguments);
 
             query('input', this.domNode).forEach(function(node){
-                node.value = '';
+                // node.value = '';
                 node.checked = false;
 
                 var checkboxDiv = node.parentNode.parentNode;

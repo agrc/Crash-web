@@ -15,14 +15,15 @@ define(['dojo/has', 'esri/config'], function(has, esriConfig) {
 
         // version.: String
         //      The version number.
-        version: '0.12.0',
+        version: '0.13.0',
 
         // apiKey: String
         //      The api key used for services on api.mapserv.utah.gov
         apiKey: '', // acquire at developer.mapserv.utah.gov
 
         urls: {
-            service: '/arcgis/rest/services/Crash/Crashes/FeatureServer/0'
+            service: '/arcgis/rest/services/Crash/Crashes/FeatureServer/0',
+            stats: location.pathname.replace(/\/(src|dist)/, '') + 'api/stats/'
         },
 
         topics: {

@@ -6,9 +6,11 @@ define([
 
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/aspect',
     'dojo/dom-class',
     'dojo/keys',
     'dojo/on',
+    'dojo/query',
     'dojo/request',
     'dojo/text!app/templates/ResultsPanel.html',
     'dojo/topic',
@@ -23,9 +25,11 @@ define([
 
     declare,
     lang,
+    aspect,
     domClass,
     keys,
     on,
+    query,
     request,
     template,
     topic
@@ -38,7 +42,9 @@ define([
         baseClass: 'results-panel',
 
         // Properties to be sent into constructor
-
+        constructor: function(){
+            this.charts = [];
+        },
         postCreate: function() {
             // summary:
             //      Overrides method of same name in dijit._Widget.
@@ -56,7 +62,11 @@ define([
             //
             console.log('app.ResultsPanel::setupConnections', arguments);
 
-            this.own(on(document, 'keyup', lang.hitch(this, 'hide')));
+            this.own(
+                on(document, 'keyup', lang.hitch(this, 'hide')),
+                aspect.before(this, 'show', lang.hitch(this, lang.partial(this.showProgress, true))),
+                aspect.before(this, 'buildChart', lang.hitch(this, lang.partial(this.showProgress, false)))
+            );
 
             topic.subscribe(config.topics.search.filter, lang.hitch(this, 'setCurrentCriteria'));
         },
@@ -73,10 +83,13 @@ define([
             //      description
             // params
             console.log('app.ResultsPanel::hide', arguments);
-            var charOrCode = evt.charCode || evt.keyCode;
 
-            if(charOrCode !== keys.ESCAPE){
-                return;
+            if(evt.type !== 'click'){
+                var charOrCode = evt.charCode || evt.keyCode;
+
+                if(charOrCode !== keys.ESCAPE){
+                    return;
+                }
             }
 
             domClass.add(this.domNode, 'hidden');
@@ -87,7 +100,31 @@ define([
             console.log('app.ResultsPanel::show', arguments);
 
             domClass.remove(this.domNode, 'hidden');
-            this.getChartData(this.currentCriteria).then(this.buildChart, this.errorHandler);
+            this.getChartData(this.currentCriteria).then(
+                lang.hitch(this, 'buildChart'), this.errorHandler);
+        },
+        showProgress: function(show) {
+            // summary:
+            //      reset the current charts and show activity
+            //
+            console.log('app.ResultsPanel::showProgress', arguments);
+
+            if(show){
+                domClass.remove(this.activity, 'hidden');
+
+                this.charts.forEach(function(chart){
+                    chart.destroy();
+                });
+
+                query('.row', this.chartContainer).addClass('hidden');
+
+                this.charts = [];
+
+                return;
+            }
+
+            domClass.add(this.activity, 'hidden');
+            query('.row', this.chartContainer).removeClass('hidden');
         },
         getChartData: function(criteria) {
             // summary:
@@ -95,7 +132,7 @@ define([
             //
             console.log('app.ResultsPanel::getChartData', arguments);
 
-            return request('../api/stats/' + criteria.sql, {
+            return request(config.urls.stats + criteria.sql, {
                 handleAs: 'json'
             });
         },
@@ -113,7 +150,7 @@ define([
                     category = data.categories;
                 }
 
-                new Highcharts.Chart({
+                var chart = new Highcharts.Chart({
                     chart: {
                         renderTo: data.selector
                     },
@@ -151,7 +188,9 @@ define([
                         enabled: false
                     }
                 });
-            });
+
+                this.charts.push(chart);
+            }, this);
         },
         startup: function() {
             // summary:
