@@ -81,6 +81,7 @@ define([
 
             this.applySvg.setAttribute('class', 'sprite selected');
             this.resetSvg.setAttribute('class', 'sprite');
+            this.chartSvg.setAttribute('class', 'sprite');
 
             topic.publish(config.topics.search.filter, criteria);
         },
@@ -91,8 +92,13 @@ define([
             //
             console.log('app.FilterControls::reset', arguments);
 
+            if(this._svgHasClass(this.resetSvg, 'disabled')){
+                return;
+            }
+
             this.applySvg.setAttribute('class', 'sprite');
             this.resetSvg.setAttribute('class', 'sprite disabled');
+            this.chartSvg.setAttribute('class', 'sprite disabled');
 
             topic.publish(config.topics.search.filter, '');
             topic.publish(config.topics.search.reset, {});
@@ -102,6 +108,10 @@ define([
             //      shows the charts
             //
             console.log('app.FilterControls::toggleCharts', arguments);
+
+            if(this._svgHasClass(this.chartSvg, 'disabled')){
+                return;
+            }
 
             this.resultsPanel.show();
         },
@@ -265,6 +275,14 @@ define([
             });
 
             this.inherited(arguments);
+        },
+        _svgHasClass: function(svg, css) {
+            // summary:
+            //      returns true if svg node has the class
+            // svg, class
+            console.log('app.FilterControls::_svgHasClass', arguments);
+
+            return ((' ' + svg.className.baseVal + ' ').indexOf(' ' + css + ' ') >= 0);
         }
     });
 });
