@@ -1,34 +1,32 @@
 define([
     'app/config',
 
-    'chartist',
-
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
-    'dojo/_base/array',
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/dom-class',
     'dojo/keys',
     'dojo/on',
+    'dojo/request',
     'dojo/text!app/templates/ResultsPanel.html',
     'dojo/topic',
 
-    'xstyle/css!app/resources/ResultsPanel.css',
-    'xstyle/css!chartist/dist/chartist.min.css'
+    'highcharts',
+    'xstyle/css!app/resources/ResultsPanel.css'
 ], function(
     config,
-
-    Chartist,
 
     _TemplatedMixin,
     _WidgetBase,
 
-    array,
     declare,
     lang,
+    domClass,
     keys,
     on,
+    request,
     template,
     topic
 ) {
@@ -50,15 +48,6 @@ define([
 
             this.setupConnections();
 
-            this.charts = [
-                this.buildChart(this.report1Node, 'Pie'),
-                this.buildChart(this.report2Node, 'Pie'),
-                this.buildChart(this.report3Node, 'Bar'),
-                this.buildChart(this.report4Node, 'Pie'),
-                this.buildChart(this.report5Node, 'Line'),
-                this.buildChart(this.report6Node, 'Line')
-            ];
-
             this.inherited(arguments);
         },
         setupConnections: function() {
@@ -69,7 +58,15 @@ define([
 
             this.own(on(document, 'keyup', lang.hitch(this, 'hide')));
 
-            topic.subscribe(config.topics.search.filter, lang.hitch(this, 'setCurrentCriteria'))a;
+            topic.subscribe(config.topics.search.filter, lang.hitch(this, 'setCurrentCriteria'));
+        },
+        setCurrentCriteria: function(criteria) {
+            // summary:
+            //      sets the current filtering criteria
+            // criteria
+            console.log('app.ResultsPanel::setCurrentCriteria', arguments);
+
+            this.currentCriteria = criteria;
         },
         hide: function(evt) {
             // summary:
@@ -82,23 +79,78 @@ define([
                 return;
             }
 
-            this.destroyRecursive();
+            domClass.add(this.domNode, 'hidden');
         },
-        buildChart: function(node, type) {
+        show: function() {
             // summary:
-            //      builds a chart around a node
-            // node
-            console.log('app.ResulstPanel::buildChart', arguments);
+            //      shows the panel
+            console.log('app.ResultsPanel::show', arguments);
 
-            // Create the chart within it's 'holding' node
-            var series = [[5, 2, 4, 2, 1]];
-            if(type === 'Pie'){
-                series = series[0];
-            }
+            domClass.remove(this.domNode, 'hidden');
+            this.getChartData(this.currentCriteria).then(this.buildChart, this.errorHandler);
+        },
+        getChartData: function(criteria) {
+            // summary:
+            //      xhr
+            //
+            console.log('app.ResultsPanel::getChartData', arguments);
 
-            new Chartist[type](node, {
-              labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-              series: series
+            return request('../api/stats/' + criteria.sql, {
+                handleAs: 'json'
+            });
+        },
+        buildChart: function(response) {
+            // summary:
+            //      builds a chart from a response from an api
+            // the response object
+            console.log('app.ResultsPanel::buildChart', arguments);
+
+            Object.keys(response).forEach(function(key){
+                var data = response[key];
+                var category = null;
+                if(data.categories)
+                {
+                    category = data.categories;
+                }
+
+                new Highcharts.Chart({
+                    chart: {
+                        renderTo: data.selector
+                    },
+                    tooltip: {
+                        formatter: function () {
+                            return this.y;
+                        },
+                        shared: true
+                    },
+                    xAxis: {
+                        categories: category
+                    },
+                    yAxis: {
+                        type: 'logarithmic'
+                    },
+                    title: {
+                        text: '',
+
+                        style: {
+                            display: 'none'
+                        }
+                    },
+                    subtitle: {
+                        text: '',
+                        style: {
+                            display: 'none'
+                        }
+                    },
+                    series:[{
+                        name: key,
+                        type: data.type,
+                        data: data.data
+                    }],
+                    credits: {
+                        enabled: false
+                    }
+                });
             });
         },
         startup: function() {

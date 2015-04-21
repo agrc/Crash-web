@@ -17,8 +17,13 @@
     </style>
 
     <!-- JAVASCRIPT -->
-    <script type="text/javascript" src="../../jquery/dist/jquery.js"></script>
-    <script type='text/javascript' src="../../bootstrap/dist/js/bootstrap.js"></script>
+    <script>
+        dojoConfig = {
+            async: false
+        };
+    </script>
+    <script type="text/javascript" src="../../highcharts-release/adapters/standalone-framework.js"></script>
+    <!-- <script type="text/javascript" src="../../highcharts-release/highcharts.js"></script> -->
     <script type='text/javascript' src="../../dojo/dojo.js"></script>
     <script type="text/javascript">
         var baseUrl = window.location.pathname.replace(/\/[^\/]+$/, '') + '/' + '../../';
@@ -27,19 +32,387 @@
         require({
             baseUrl: baseUrl,
             packages: ['app', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle', {
-                name: 'chartist',
-                location: './chartist',
-                main: 'dist/chartist'
+                name: 'highcharts',
+                location: './highcharts-release',
+                main: 'highcharts'
             }]
         }, [
             'app/ResultsPanel',
 
+            'dojo/on',
+
+            'dojo/query',
+
+            'dojo/dom-class',
+
             'dojo/domReady!'
-        ], function(Module) {
+        ], function(Module, on, query, domClass) {
             widgetUnderTest = new Module({
             }, 'node');
 
             widgetUnderTest.startup();
+
+            query('#fetch').on('click', function(){
+                domClass.remove(widgetUnderTest.domNode, 'hidden');
+                widgetUnderTest.buildChart({
+    "weather": {
+        "type": "pie",
+        "data": [
+            [
+                "Blowing Sand, Soil, Dirt",
+                29
+            ],
+            [
+                "Blowing Snow",
+                342
+            ],
+            [
+                "Clear",
+                66624
+            ],
+            [
+                "Cloudy",
+                14656
+            ],
+            [
+                "Fog, Smog",
+                330
+            ],
+            [
+                "Rain",
+                4359
+            ],
+            [
+                "Severe Crosswinds",
+                133
+            ],
+            [
+                "Sleet, Hail",
+                268
+            ],
+            [
+                "Snowing",
+                5496
+            ]
+        ],
+        "selector": "weather"
+    },
+    "road": {
+        "type": "pie",
+        "data": [
+            [
+                "Dry",
+                75766
+            ],
+            [
+                "Ice",
+                2991
+            ],
+            [
+                "Mud",
+                40
+            ],
+            [
+                "Oil",
+                9
+            ],
+            [
+                "Sand, Dirt, Gravel",
+                403
+            ],
+            [
+                "Slush",
+                1277
+            ],
+            [
+                "Snow",
+                4008
+            ],
+            [
+                "Water (standing,moving)",
+                107
+            ],
+            [
+                "Wet",
+                7678
+            ]
+        ],
+        "selector": "road"
+    },
+    "cause": {
+        "type": "pie",
+        "data": [
+            [
+                "Disregard Road Markings",
+                121
+            ],
+            [
+                "Disregard Traffic Signals",
+                3071
+            ],
+            [
+                "Disregard Traffic Signs",
+                1024
+            ],
+            [
+                "Exceeded Posted Speed Limit",
+                864
+            ],
+            [
+                "Failed to Keep in Proper Lane",
+                7565
+            ],
+            [
+                "Failed to Yield Right-of-Way",
+                15284
+            ],
+            [
+                "Followed Too Closely",
+                21681
+            ],
+            [
+                "Hit and Run",
+                2004
+            ],
+            [
+                "Improper Backing",
+                2165
+            ],
+            [
+                "Improper Lane Change",
+                3211
+            ],
+            [
+                "Improper Parking/Stopping",
+                1111
+            ],
+            [
+                "Improper Passing",
+                602
+            ],
+            [
+                "Improper Signal",
+                107
+            ],
+            [
+                "Improper Turn",
+                3351
+            ],
+            [
+                "None",
+                79667
+            ],
+            [
+                "Over-Correcting/Over-Steering",
+                871
+            ],
+            [
+                "Ran Off Road",
+                1692
+            ],
+            [
+                "Reckless/Aggressive",
+                611
+            ],
+            [
+                "Street Racing",
+                14
+            ],
+            [
+                "Swerved or Evassive Action",
+                1626
+            ],
+            [
+                "Too Fast for Conditions",
+                8613
+            ],
+            [
+                "Wrong Side/Wrong Way",
+                286
+            ]
+        ],
+        "selector": "factors"
+    },
+    "distraction": {
+        "categories": [
+            "Cell Phone",
+            "None",
+            "Other Electronic Device",
+            "Other External",
+            "Other Inside",
+            "Passengers",
+            "Radio / CD / DVD etc.",
+            "Texting",
+            "TV / Monitor"
+        ],
+        "type": "bar",
+        "data": [
+            [
+                "Cell Phone",
+                1329
+            ],
+            [
+                "None",
+                136619
+            ],
+            [
+                "Other Electronic Device",
+                241
+            ],
+            [
+                "Other External",
+                1036
+            ],
+            [
+                "Other Inside",
+                1133
+            ],
+            [
+                "Passengers",
+                1113
+            ],
+            [
+                "Radio / CD / DVD etc.",
+                737
+            ],
+            [
+                "Texting",
+                25
+            ],
+            [
+                "TV / Monitor",
+                4
+            ]
+        ],
+        "selector": "distractions"
+    },
+    "day": {
+        "data": [
+            [
+                "Monday",
+                29268
+            ],
+            [
+                "Thursday",
+                31542
+            ],
+            [
+                "Friday",
+                33111
+            ]
+        ],
+        "categories": [
+            "Monday",
+            "Thursday",
+            "Friday"
+        ],
+        "type": "bar",
+        "selector": "days"
+    },
+    "time": {
+        "data": [
+            [
+                0,
+                1086
+            ],
+            [
+                1,
+                821
+            ],
+            [
+                2,
+                608
+            ],
+            [
+                3,
+                465
+            ],
+            [
+                4,
+                631
+            ],
+            [
+                5,
+                1340
+            ],
+            [
+                6,
+                2433
+            ],
+            [
+                7,
+                5062
+            ],
+            [
+                8,
+                5520
+            ],
+            [
+                9,
+                4100
+            ],
+            [
+                10,
+                3655
+            ],
+            [
+                11,
+                4324
+            ],
+            [
+                12,
+                5358
+            ],
+            [
+                13,
+                5390
+            ],
+            [
+                14,
+                6139
+            ],
+            [
+                15,
+                7391
+            ],
+            [
+                16,
+                7812
+            ],
+            [
+                17,
+                9517
+            ],
+            [
+                18,
+                7034
+            ],
+            [
+                19,
+                4521
+            ],
+            [
+                20,
+                3246
+            ],
+            [
+                21,
+                3200
+            ],
+            [
+                22,
+                2512
+            ],
+            [
+                23,
+                1756
+            ]
+        ],
+        "type": "line",
+        "selector": "time"
+    }
+});
+            })
         });
 </script>
 </head>
@@ -47,5 +420,6 @@
     <div class="center-container">
     <div id="node" class='container-fluid'></div>
     </div>
+    <button id="fetch">Fetch Data</button>
 </body>
 </html>

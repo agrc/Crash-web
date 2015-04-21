@@ -21,9 +21,9 @@
             'put-selector',
             'xstyle',
             {
-                name: 'chartist',
-                location: './chartist',
-                main: 'dist/chartist'
+                name: 'highcharts',
+                location: './highcharts-release',
+                main: 'highcharts'
             },{
                 name: 'bootstrap',
                 location: './bootstrap',
