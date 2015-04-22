@@ -198,7 +198,7 @@ define([
 
                 var factorClause = factors.join(' AND ');
 
-                filters.push('crash_id IN (SELECT id FROM rollup WHERE ' + factorClause + ')');
+                filters.push('crash_id IN (SELECT id FROM DDACTS.DDACTSadmin.Rollup WHERE ' + factorClause + ')');
             }
 
             return filters;
