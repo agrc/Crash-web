@@ -265,7 +265,8 @@ module.exports = function(grunt) {
                 srcBasePath: 'deploy/',
                 username: '<%= secrets.username %>',
                 password: '<%= secrets.password %>',
-                showProgress: true
+                showProgress: true,
+                readyTimeout: 30000
             }
         },
         stylus: {
@@ -285,7 +286,8 @@ module.exports = function(grunt) {
         sshexec: {
             options: {
                 username: '<%= secrets.username %>',
-                password: '<%= secrets.password %>'
+                password: '<%= secrets.password %>',
+                readyTimeout: 30000
             },
             stage: {
                 command: ['cd ' + deployDir, 'unzip -oq deploy.zip', 'rm deploy.zip'].join(';'),
