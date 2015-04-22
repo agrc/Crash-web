@@ -12,15 +12,17 @@ namespace crash_statistics {
     public class Statistics : NancyModule {
         public Statistics()
         {
-            Get["/stats/{criteria?}", true] = async (_, ctx) =>
+            Get["/stats", true] = async (_, ctx) =>
                 {
                     const string sql = "(select 'weather' as type, weather_condition as label, count(*) as occurances from DDACTS.DDACTSadmin.CRASHLOCATION where {0} group by weather_condition) union (select 'road' as type, road_condition as label, count(*) as occurances from DDACTS.DDACTSadmin.CRASHLOCATION where {0} group by road_condition) union (select 'day' as type, cast(day as varchar) as label, count(*) as occurances from DDACTS.DDACTSadmin.CRASHLOCATION where {0} group by day) union (select 'hour' as type, cast(hour as varchar) as label, count(*) as occurances from DDACTS.DDACTSadmin.CRASHLOCATION where {0} group by hour) union (select 'cause' as type, DDACTS.DDACTSadmin.Driver.contributing_cause as label, count(*) as occurances from DDACTS.DDACTSadmin.Driver inner join DDACTS.DDACTSadmin.CRASHLOCATION on DDACTS.DDACTSadmin.CRASHLOCATION.crash_id = DDACTS.DDACTSadmin.Driver.driver_id where {0} group by DDACTS.DDACTSadmin.Driver.contributing_cause) union (select 'distraction' as type, DDACTS.DDACTSadmin.Driver.driver_distraction as label, count(*) as occurances from DDACTS.DDACTSadmin.Driver inner join DDACTS.DDACTSadmin.CRASHLOCATION on DDACTS.DDACTSadmin.CRASHLOCATION.crash_id = DDACTS.DDACTSadmin.Driver.driver_id where {0} group by DDACTS.DDACTSadmin.Driver.driver_distraction)";
+                    string criteria = Request.Query["q"];
+
 
                     IEnumerable<Row> results;
 
                     using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["dev"].ConnectionString))
                     {
-                        results = await connection.QueryAsync<Row>((string) string.Format(sql, _.criteria));
+                        results = await connection.QueryAsync<Row>(string.Format(sql, criteria));
                     }
 
                     results = results.ToArray();
