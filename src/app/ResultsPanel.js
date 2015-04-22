@@ -168,7 +168,6 @@ define([
                     },
                     title: {
                         text: '',
-
                         style: {
                             display: 'none'
                         }
