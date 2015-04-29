@@ -33,21 +33,23 @@
         }, [
             'app/FilterMilepost',
 
+            'dojo/on',
+
             'dojo/domReady!'
-        ], function(Module) {
+        ], function(Module, on) {
             widgetUnderTest = new Module({
             }, 'node');
 
             widgetUnderTest.startup();
+            var widget = widgetUnderTest;
+            on(document.getElementById('reset'), 'click', function(){
+                widget._reset();
+            });
         });
-
-        function reset(){
-            widgetUnderTest._reset();
-        }
 </script>
 </head>
 <body class='claro'>
     <div id="node"></div>
-    <button data-dojo-attach-event="click: reset">Reset</button>
+    <button id="reset">Reset</button>
 </body>
 </html>

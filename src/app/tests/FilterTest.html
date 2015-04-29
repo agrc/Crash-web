@@ -19,6 +19,7 @@
     </style>
 
     <!-- JAVASCRIPT -->
+    <script type="text/javascript" src="../../highcharts-release/adapters/standalone-framework.js"></script>
     <script type='text/javascript' src="../../dojo/dojo.js"></script>
     <script type="text/javascript">
         var baseUrl = window.location.pathname.replace(/\/[^\/]+$/, '') + '/' + '../../';
@@ -26,7 +27,11 @@
 
         require({
             baseUrl: baseUrl,
-            packages: ['app', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle']
+            packages: ['app', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle', {
+                name: 'highcharts',
+                location: './highcharts-release',
+                main: 'highcharts'
+            }]
         }, [
             'app/FilterSelector',
             'app/FilterFactors',
@@ -72,5 +77,6 @@
 </head>
 <body class='claro'>
     <div id="node"></div>
+    <div id="app_center"></div>
 </body>
 </html>

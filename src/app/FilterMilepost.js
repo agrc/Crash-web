@@ -1,32 +1,31 @@
 define([
     'app/config',
     'app/data/routes',
-
-    'dijit/_TemplatedMixin',
-    'dijit/_WidgetBase',
+    'app/FilterCommon',
 
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/dom-class',
     'dojo/dom-construct',
+    'dojo/query',
     'dojo/text!app/templates/FilterMilepost.html',
     'dojo/topic',
+
     'xstyle/css!app/resources/FilterMilepost.css'
 ], function(
     config,
     routes,
-
-    _TemplatedMixin,
-    _WidgetBase,
+    FilterCommon,
 
     declare,
     lang,
     domClass,
     domConstruct,
+    query,
     template,
     topic
 ) {
-    return declare([_WidgetBase, _TemplatedMixin], {
+    return declare([FilterCommon], {
         // description:
         //      filters the layer by milepost to and from
 
@@ -63,6 +62,8 @@ define([
             this.own(
                 topic.subscribe(this.selectedTopic, lang.hitch(this, 'updateDomState'))
             );
+
+            this.inherited(arguments);
         },
         _gatherData: function() {
             // summary:
@@ -86,6 +87,17 @@ define([
             console.log('app.FilterMilepost::updateDomState', arguments);
 
             domClass.toggle(this.domNode, 'hidden', t.type !== this.type);
+        },
+        _reset: function() {
+            // summary:
+            //      reset filtering state
+            console.log('app.FilterMilepost::_reset', arguments);
+
+            query('input, select', this.domNode).forEach(function(node){
+                node.value = '';
+            });
+
+            this.set('data', {});
         }
     });
 });

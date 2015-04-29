@@ -178,7 +178,8 @@ define([
                     var fromTime = criteria.date.fromTime,
                         toTime = criteria.date.toTime;
 
-                    filters.push('CAST(CRASHLOCATION.date as TIME) BETWEEN \'' + fromTime + '\' AND \'' + toTime + '\'');
+                    filters.push('CAST(CRASHLOCATION.date as TIME) BETWEEN \'' + fromTime +
+                                 '\' AND \'' + toTime + '\'');
                 }
             }
 
