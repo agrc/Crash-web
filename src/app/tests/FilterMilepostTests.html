@@ -40,9 +40,14 @@
 
             widgetUnderTest.startup();
         });
+
+        function reset(){
+            widgetUnderTest._reset();
+        }
 </script>
 </head>
 <body class='claro'>
     <div id="node"></div>
+    <button data-dojo-attach-event="click: reset">Reset</button>
 </body>
 </html>
