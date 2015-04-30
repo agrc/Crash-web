@@ -1,7 +1,7 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-    <title>FilterMilepost Tests</title>
+    <title>FilterCounty Tests</title>
 
     <!-- META TAGS -->
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -24,28 +24,40 @@
     <!-- JAVASCRIPT -->
     <script type='text/javascript' src="../../dojo/dojo.js"></script>
     <script type="text/javascript">
-        var baseUrl = window.location.pathname.replace(/\/[^\/]+$/, '') + '/' + '../../';
-        var widgetUnderTest;
+var baseUrl = window.location.pathname.replace(/\/[^\/]+$/, '') + '/' + '../../';
+var widgetUnderTest;
 
-        require({
-            baseUrl: baseUrl,
-            packages: ['app', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle']
-        }, [
-            'app/FilterMilepost',
+require({
+    baseUrl: baseUrl,
+    packages: ['app', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle',
+    {
+        name: 'jquery',
+        location: 'jquery/dist',
+        main: 'jquery'
+    }, {
+        name: 'bootstrap',
+        location: 'bootstrap',
+        main: 'dist/js/bootstrap'
+    }]
+}, [
+    'app/FilterCounty',
+    'app/config',
 
-            'dojo/on',
+    'dojo/on',
 
-            'dojo/domReady!'
-        ], function (Module, on) {
-            widgetUnderTest = new Module({
-            }, 'node');
+    'dojo/domReady!'
+], function (Module, config, on) {
+    widgetUnderTest = new Module({
+        items: config.counties
+    }, 'node');
 
-            widgetUnderTest.startup();
-            var widget = widgetUnderTest;
-            on(document.getElementById('reset'), 'click', function () {
-                widget._reset();
-            });
-        });
+    widgetUnderTest.startup();
+    var widget = widgetUnderTest;
+
+    on(document.getElementById('reset'), 'click', function () {
+        widget._reset();
+    });
+});
 </script>
 </head>
 <body class='claro'>

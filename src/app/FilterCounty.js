@@ -2,28 +2,41 @@ define([
     'app/config',
     'app/FilterCommon',
 
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
+
     'dojo/_base/array',
     'dojo/_base/declare',
+    'dojo/_base/lang',
+    'dojo/dom-class',
+    'dojo/dom-construct',
     'dojo/query',
-    'dojo/text!app/templates/FilterFactors.html',
-    'xstyle/css!app/resources/FilterFactors.css'
+    'dojo/text!app/templates/FilterCounty.html',
+
+    'xstyle/css!app/resources/FilterCounty.css'
 ], function (
     config,
     FilterCommon,
 
+    _TemplatedMixin,
+    _WidgetBase,
+
     array,
     declare,
+    lang,
+    domClass,
+    domConstruct,
     query,
     template
 ) {
     return declare([FilterCommon], {
         // description:
-        //      Filter crashes based on the factors that went into the collision
+        //      Filter results by county
 
         templateString: template,
-        baseClass: 'filter-factors',
+        baseClass: 'filter filter-county',
         selectedTopic: config.topics.events.title.selected,
-        type: 'factors',
+        type: 'spatial',
 
         // Properties to be sent into constructor
 
@@ -32,7 +45,7 @@ define([
             //      Overrides method of same name in dijit._Widget.
             // tags:
             //      private
-            console.log('app.FilterFactors::postCreate', arguments);
+            console.log('app.FilterCounty::postCreate', arguments);
 
             this.setupConnections();
 
@@ -42,27 +55,26 @@ define([
             // summary:
             //      wire events, and such
             //
-            console.log('app.FilterFactors::setupConnections', arguments);
+            console.log('app.FilterCounty::setupConnections', arguments);
 
             this.inherited(arguments);
         },
         _gatherData: function () {
             // summary:
-            //      builds the object to publish
-            //
-            console.log('app.FilterFactors::_gatherData', arguments);
+            //      gets the data from the widget
+            console.log('app.FilterCounty::_gatherData', arguments);
 
-            var factors = array.map(query('input[type="checkbox"]:checked', this.domNode),
+            var counties = array.map(query('input[type="checkbox"]:checked', this.domNode),
                 function mapCheckboxes(node) {
                     return node.value;
                 }, this);
 
-            if (factors.length < 1) {
-                factors = [];
+            if (counties.length < 1) {
+                counties = [];
             }
 
             this.set('data', {
-                factors: factors
+                counties: counties
             });
         }
     });

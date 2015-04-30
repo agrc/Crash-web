@@ -9,10 +9,9 @@ define([
     'dojo/dom-construct',
     'dojo/query',
     'dojo/text!app/templates/FilterMilepost.html',
-    'dojo/topic',
 
     'xstyle/css!app/resources/FilterMilepost.css'
-], function(
+], function (
     config,
     routes,
     FilterCommon,
@@ -22,8 +21,7 @@ define([
     domClass,
     domConstruct,
     query,
-    template,
-    topic
+    template
 ) {
     return declare([FilterCommon], {
         // description:
@@ -36,7 +34,7 @@ define([
 
         // Properties to be sent into constructor
 
-        postCreate: function() {
+        postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
             // tags:
@@ -53,19 +51,15 @@ define([
 
             this.inherited(arguments);
         },
-        setupConnections: function() {
+        setupConnections: function () {
             // summary:
             //      wire events, and such
             //
             console.log('app.FilterMilepost::setupConnections', arguments);
 
-            this.own(
-                topic.subscribe(this.selectedTopic, lang.hitch(this, 'updateDomState'))
-            );
-
             this.inherited(arguments);
         },
-        _gatherData: function() {
+        _gatherData: function () {
             // summary:
             //      updates the values from the widget
             // evt
@@ -80,7 +74,7 @@ define([
                 }
             });
         },
-        updateDomState: function(t) {
+        updateDomState: function (t) {
             // summary:
             //      updates the visbility state
             // t the {who:, type:, description:} topic
@@ -88,12 +82,12 @@ define([
 
             domClass.toggle(this.domNode, 'hidden', t.type !== this.type);
         },
-        _reset: function() {
+        _reset: function () {
             // summary:
             //      reset filtering state
             console.log('app.FilterMilepost::_reset', arguments);
 
-            query('input, select', this.domNode).forEach(function(node){
+            query('input, select', this.domNode).forEach(function (node) {
                 node.value = '';
             });
 

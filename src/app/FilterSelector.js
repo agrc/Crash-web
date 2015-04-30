@@ -12,7 +12,7 @@ define([
     'dojo/text!app/templates/FilterSelector.html',
     'dojo/topic',
     'xstyle/css!app/resources/FilterSelector.css'
-], function(
+], function (
     config,
     FilterControls,
 
@@ -35,7 +35,7 @@ define([
 
         // Properties to be sent into constructor
 
-        postCreate: function() {
+        postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
             // tags:
@@ -46,7 +46,7 @@ define([
 
             this.childWidgets = this.childWidgets || [];
 
-            array.forEach(this.tabs, function(Tab) {
+            array.forEach(this.tabs, function (Tab) {
                 this.childWidgets.push(Tab.placeAt(this.titleNode, 'last'));
             }, this);
 
@@ -54,7 +54,7 @@ define([
 
             this.childWidgets.push(filterControls);
 
-            array.forEach(this.filters, function(Filter) {
+            array.forEach(this.filters, function (Filter) {
                 var filter = new Filter().placeAt(this.filterNode, 'last');
                 domClass.add(filter.domNode, 'hidden');
                 this.childWidgets.push(filter);
@@ -64,7 +64,7 @@ define([
 
             this.inherited(arguments);
         },
-        setupConnections: function() {
+        setupConnections: function () {
             // summary:
             //      wire events, and such
             //
@@ -75,7 +75,7 @@ define([
             );
 
         },
-        updateDomState: function(t) {
+        updateDomState: function (t) {
             // summary:
             //      updates the text published from the filter title node
             // t the {who:, type:, description:} topic

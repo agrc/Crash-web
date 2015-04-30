@@ -22,57 +22,57 @@
     <script type="text/javascript" src="../../highcharts-release/adapters/standalone-framework.js"></script>
     <script type='text/javascript' src="../../dojo/dojo.js"></script>
     <script type="text/javascript">
-        var baseUrl = window.location.pathname.replace(/\/[^\/]+$/, '') + '/' + '../../';
-        var widgetUnderTest;
+var baseUrl = window.location.pathname.replace(/\/[^\/]+$/, '') + '/' + '../../';
+var widgetUnderTest;
 
-        require({
-            baseUrl: baseUrl,
-            packages: ['app', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle', {
-                name: 'highcharts',
-                location: './highcharts-release',
-                main: 'highcharts'
-            }]
-        }, [
-            'app/FilterSelector',
-            'app/FilterFactors',
-            'app/FilterTitleNode',
-            'app/FilterDateTime',
-            'app/FilterSeverity',
-            'app/FilterWeatherConditions',
-            'app/FilterMilepost',
+require({
+    baseUrl: baseUrl,
+    packages: ['app', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle', {
+        name: 'highcharts',
+        location: './highcharts-release',
+        main: 'highcharts'
+    }]
+}, [
+    'app/FilterSelector',
+    'app/FilterTitleNode',
+    'app/FilterDateTime',
+    'app/FilterSpatial',
+    'app/FilterFactors',
+    'app/FilterSeverity',
+    'app/FilterWeatherConditions',
 
-            'dojo/domReady!'
-        ], function(Module, Dep, Dep2, Dep3, Dep4, Dep5, Dep6) {
-            widgetUnderTest = new Module({
-                tabs: [
-                    new Dep2({
-                        type: 'calendar',
-                        description: 'Date and Time Factors'
-                    }),
-                    new Dep2({
-                        type: 'spatial',
-                        description: 'Spatial Factors'
-                    }),
-                    new Dep2({
-                        type: 'factors',
-                        description: 'Contributing Factors'
-                    }),
-                    new Dep2({
-                        type: 'severity',
-                        description: 'Crash Severity'
-                    }),
-                    new Dep2({
-                        type: 'weather',
-                        description: 'Weather Condition Factors'
-                    })
-                ],
-                filters:[
-                    Dep, Dep3, Dep4, Dep5, Dep6
-                ]
-            }, 'node');
+    'dojo/domReady!'
+], function (Module, Dep, Dep2, Dep3, Dep4, Dep5, Dep6) {
+    widgetUnderTest = new Module({
+        tabs: [
+            new Dep({
+                type: 'calendar',
+                description: 'Date and Time Factors'
+            }),
+            new Dep({
+                type: 'spatial',
+                description: 'Spatial Factors'
+            }),
+            new Dep({
+                type: 'factors',
+                description: 'Contributing Factors'
+            }),
+            new Dep({
+                type: 'severity',
+                description: 'Crash Severity'
+            }),
+            new Dep({
+                type: 'weather',
+                description: 'Weather Condition Factors'
+            })
+        ],
+        filters: [
+            Dep2, Dep3, Dep4, Dep5, Dep6
+        ]
+    }, 'node');
 
-            widgetUnderTest.startup();
-        });
+    widgetUnderTest.startup();
+});
 </script>
 </head>
 <body class='claro'>

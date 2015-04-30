@@ -2,11 +2,11 @@ define([
     'app/config',
     'app/FilterDateTime',
     'app/FilterFactors',
-    'app/FilterMilepost',
-    'app/FilterWeatherConditions',
     'app/FilterSelector',
     'app/FilterSeverity',
+    'app/FilterSpatial',
     'app/FilterTitleNode',
+    'app/FilterWeatherConditions',
     'app/MapController',
 
     'dijit/_TemplatedMixin',
@@ -17,15 +17,15 @@ define([
     'dojo/_base/declare',
     'dojo/dom-class',
     'dojo/text!app/templates/App.html'
-], function(
+], function (
     config,
     FilterDateTime,
     FilterFactors,
-    FilterMilepost,
-    FilterWeatherConditions,
     FilterSelector,
     FilterSeverity,
+    FilterSpatial,
     FilterTitleNode,
+    FilterWeatherConditions,
     MapController,
 
     _TemplatedMixin,
@@ -49,7 +49,7 @@ define([
         //      container for holding custom child widgets
         childWidgets: null,
 
-        constructor: function() {
+        constructor: function () {
             // summary:
             //      first function to fire after page loads
             console.info('app.App::constructor', arguments);
@@ -59,7 +59,7 @@ define([
 
             this.inherited(arguments);
         },
-        postCreate: function() {
+        postCreate: function () {
             // summary:
             //      Fires when
             console.log('app.App::postCreate', arguments);
@@ -98,7 +98,7 @@ define([
                     FilterDateTime,
                     FilterFactors,
                     FilterSeverity,
-                    FilterMilepost,
+                    FilterSpatial,
                     FilterWeatherConditions
                 ]
             }, this.sideBar);
@@ -112,14 +112,14 @@ define([
 
             this.inherited(arguments);
         },
-        subscriptions: function() {
+        subscriptions: function () {
             // summary:
             //      description
             //
             console.log('app.App::subscriptions', arguments);
 
             this.own(
-                MapController.map.on('load', function() {
+                MapController.map.on('load', function () {
                     MapController.addLayerAndMakeVisible({
                         id: 'CrashPoints',
                         url: config.urls.service,
@@ -143,7 +143,7 @@ define([
                 })
             );
         },
-        toggle: function() {
+        toggle: function () {
             // summary:
             //      hide and show the menu
             //
@@ -151,13 +151,13 @@ define([
 
             domClass.toggle(this.filterSelector.domNode, 'hidden');
         },
-        startup: function() {
+        startup: function () {
             // summary:
             //      Fires after postCreate when all of the child widgets are finished laying out.
             console.log('app.App::startup', arguments);
 
             var that = this;
-            array.forEach(this.childWidgets, function(widget) {
+            array.forEach(this.childWidgets, function (widget) {
                 console.log(widget.declaredClass);
                 that.own(widget);
                 widget.startup();

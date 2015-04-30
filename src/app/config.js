@@ -1,5 +1,5 @@
 /* jshint maxlen:false */
-define(['dojo/has', 'esri/config'], function(has, esriConfig) {
+define(['dojo/has', 'esri/config'], function (has, esriConfig) {
     // force api to use CORS on mapserv thus removing the test request on app load
     // e.g. http://mapserv.utah.gov/ArcGIS/rest/info?f=json
     esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
@@ -39,7 +39,39 @@ define(['dojo/has', 'esri/config'], function(has, esriConfig) {
                 zoom: 'z',
                 fullExtent: 'e'
             }
-        }
+        },
+
+        counties: [
+            ['Beaver', 1],
+            ['Box Elder', 3],
+            ['Cache', 5],
+            ['Carbon', 7],
+            ['Daggett', 9],
+            ['Davis', 11],
+            ['Duchesne', 13],
+            ['Emery', 15],
+            ['Garfield', 17],
+            ['Grand', 19],
+            ['Iron', 21],
+            ['Juab', 23],
+            ['Kane', 25],
+            ['Millard', 27],
+            ['Morgan', 29],
+            ['Piute', 31],
+            ['Rich', 33],
+            ['Salt Lake', 35],
+            ['San Juan', 37],
+            ['Sanpete', 39],
+            ['Sevier', 41],
+            ['Summit', 43],
+            ['Tooele', 45],
+            ['Uintah', 47],
+            ['Utah', 49],
+            ['Wasatch', 51],
+            ['Washington', 53],
+            ['Wayne', 55],
+            ['Weber', 57]
+        ]
     };
 
     if (has('agrc-build') === 'prod') {

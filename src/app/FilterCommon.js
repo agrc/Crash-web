@@ -13,7 +13,7 @@ define([
     'dojo/query',
     'dojo/text!app/templates/FilterCommon.html',
     'dojo/topic'
-], function(
+], function (
     config,
 
     _TemplatedMixin,
@@ -39,7 +39,7 @@ define([
 
         // Properties to be sent into constructor
 
-        postCreate: function() {
+        postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
             // tags:
@@ -47,7 +47,7 @@ define([
             console.log('app.FilterCommon::postCreate', arguments);
 
         },
-        setupConnections: function() {
+        setupConnections: function () {
             // summary:
             //      wire events, and such
             //
@@ -59,7 +59,7 @@ define([
                 topic.subscribe(this.resetTopic, lang.hitch(this, '_reset'))
             );
         },
-        updateButtonState: function(evt) {
+        updateButtonState: function (evt) {
             // summary:
             //      click handler
             // evt: the click event
@@ -73,24 +73,24 @@ define([
             domClass.toggle(factor, 'selected');
             this._gatherData();
         },
-        _getValues: function(node) {
+        _getValues: function (node) {
             // summary:
             //      gets the selected nodes from the checkboxes
             // node: the dom node
             console.log('app.FilterCommon::_getValues', arguments);
 
             node = node || this.domNode;
-            var items = array.map(query('input[type="checkbox"]:checked', node), function mapCheckboxes(n){
+            var items = array.map(query('input[type="checkbox"]:checked', node), function mapCheckboxes(n) {
                 return n.value;
             }, this);
 
-            if(items.length < 1){
+            if (items.length < 1) {
                 items = [];
             }
 
             return items;
         },
-        updateDomState: function(t) {
+        updateDomState: function (t) {
             // summary:
             //      updates the visbility state
             // t the {who:, type:, description:} topic
@@ -98,12 +98,12 @@ define([
 
             domClass.toggle(this.domNode, 'hidden', t.type !== this.type);
         },
-        _reset: function() {
+        _reset: function () {
             // summary:
             //      reset filtering state
             console.log('app.FilterCommon::_reset', arguments);
 
-            query('input', this.domNode).forEach(function(node){
+            query('input', this.domNode).forEach(function (node) {
                 // node.value = '';
                 node.checked = false;
 

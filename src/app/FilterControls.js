@@ -93,10 +93,6 @@ define([
             //
             console.log('app.FilterControls::reset', arguments);
 
-            if (this._svgHasClass(this.resetSvg, 'disabled')) {
-                return;
-            }
-
             this.applySvg.setAttribute('class', 'sprite');
             this.resetSvg.setAttribute('class', 'sprite disabled');
             this.chartSvg.setAttribute('class', 'sprite disabled');
@@ -219,6 +215,13 @@ define([
                              ' AND milepost BETWEEN ' + milepost.from + ' AND ' + milepost.to);
             }
 
+            if (criteria.counties) {
+                var counties = array.map(criteria.counties, function (county) {
+                    return '\'' + county + '\'';
+                });
+
+                filters.push('county in (' + counties.join(',') + ')');
+            }
             return filters;
         },
         _buildConditions: function (criteria) {
