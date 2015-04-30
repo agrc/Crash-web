@@ -35,7 +35,9 @@ define(['dojo/has', 'esri/config'], function(has, esriConfig) {
             events: {
                 title: {
                     selected: 's'
-                }
+                },
+                zoom: 'z',
+                fullExtent: 'e'
             }
         }
     };

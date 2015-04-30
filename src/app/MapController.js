@@ -8,14 +8,18 @@ define([
     'dojo/_base/Color',
     'dojo/_base/lang',
     'dojo/dom-construct',
+    'dojo/on',
     'dojo/query',
     'dojo/topic',
 
+    'esri/dijit/geoenrichment/InfographicsCarousel',
+    'esri/geometry/Extent',
     'esri/graphic',
+    'esri/graphicsUtils',
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/ArcGISTiledMapServiceLayer',
     'esri/symbols/SimpleLineSymbol'
-], function(
+], function (
     BaseMap,
 
     config,
@@ -25,10 +29,14 @@ define([
     Color,
     lang,
     domConstruct,
+    on,
     query,
     topic,
 
+    InfographicsCarousel,
+    Extent,
     Graphic,
+    graphicsUtils,
     DynamicLayer,
     TiledLayer,
     LineSymbol
@@ -46,11 +54,16 @@ define([
         //      holds child widgets
         childWidgets: null,
 
+        // activeLayer: layer
+        // summary:
+        //      the active layer
+        activeLayer: null,
+
         // Properties to be sent into constructor
         // map: agrc/widgets/map/BaseMap
         map: null,
 
-        init: function(params) {
+        init: function (params) {
             // summary:
             //      description
             console.log('app.MapController::init', arguments);
@@ -73,25 +86,27 @@ define([
 
             this.subscriptions();
         },
-        subscriptions: function() {
+        subscriptions: function () {
             // summary:
             //      subscribes to topics
             console.log('app.MapController::subscriptions', arguments);
 
             this.handles.push(
-                topic.subscribe(config.topics.search.filter, lang.hitch(this, 'setQueryFilter'))
+                topic.subscribe(config.topics.search.filter, lang.hitch(this, 'setQueryFilter')),
+                topic.subscribe(config.topics.events.zoom, lang.hitch(this, 'zoom')),
+                topic.subscribe(config.topics.events.fullExtent, lang.hitch(this, 'fullExtent'))
             );
         },
-        startup: function() {
+        startup: function () {
             // summary:
             //      startup once app is attached to dom
             console.log('app.MapController::startup', arguments);
 
-            array.forEach(this.childWidgets, function(widget) {
+            array.forEach(this.childWidgets, function (widget) {
                 widget.startup();
             }, this);
         },
-        setQueryFilter: function(filterCriteria) {
+        setQueryFilter: function (filterCriteria) {
             // summary:
             //      formats and sets the query filter
             // filterCriteria
@@ -99,7 +114,7 @@ define([
 
             this.activeLayer.setDefinitionExpression(filterCriteria);
         },
-        addLayerAndMakeVisible: function(props) {
+        addLayerAndMakeVisible: function (props) {
             // summary:
             //      description
             // props: object
@@ -108,7 +123,7 @@ define([
 
             // check to see if layer has already been added to the map
             var lyr;
-            var alreadyAdded = array.some(this.map.graphicsLayerIds, function(id) {
+            var alreadyAdded = array.some(this.map.graphicsLayerIds, function (id) {
                 console.log('app.MapController::addLayerAndMakeVisible||looping ids ', id);
                 return id === props.id;
             }, this);
@@ -119,23 +134,20 @@ define([
                 var LayerClass;
 
                 switch (props.serviceType || 'dynamic') {
-                    case 'clustered':
-                        {
-                            LayerClass = ClusterFeatureLayer;
-                            props.resolution = this.map.extent.getWidth() / this.map.width;
-                            props.spatialReference = this.map.spatialReference;
-                            break;
-                        }
-                    case 'tiled':
-                        {
-                            LayerClass = TiledLayer;
-                            break;
-                        }
-                    default:
-                        {
-                            LayerClass = DynamicLayer;
-                            break;
-                        }
+                    case 'clustered': {
+                        LayerClass = ClusterFeatureLayer;
+                        props.resolution = this.map.extent.getWidth() / this.map.width;
+                        props.spatialReference = this.map.spatialReference;
+                        break;
+                    }
+                    case 'tiled': {
+                        LayerClass = TiledLayer;
+                        break;
+                    }
+                    default: {
+                        LayerClass = DynamicLayer;
+                        break;
+                    }
                 }
 
                 lyr = new LayerClass(props);
@@ -151,7 +163,7 @@ define([
                 this.activeLayer = lyr;
             }
         },
-        updateOpacity: function(opacity) {
+        updateOpacity: function (opacity) {
             // summary:
             //      changes a layers opacity
             // opacity
@@ -168,7 +180,7 @@ define([
 
             this.activeLayer.layer.setOpacity(this.currentOpacity);
         },
-        highlight: function(evt) {
+        highlight: function (evt) {
             // summary:
             //      adds the clicked shape geometry to the graphics layer
             //      highlighting it
@@ -180,7 +192,7 @@ define([
             this.graphic = new Graphic(evt.graphic.geometry, this.symbol);
             this.map.graphics.add(this.graphic);
         },
-        clearGraphic: function(graphic) {
+        clearGraphic: function (graphic) {
             // summary:
             //      removes the graphic from the map
             // graphic
@@ -191,7 +203,53 @@ define([
                 this.graphic = null;
             }
         },
-        showPopup: function(mouseEvent) {
+        zoom: function () {
+            // summary:
+            //      zoom to graphics
+            //
+            console.log('app.MapController::zoom', arguments);
+
+            var self = this;
+            on.once(this.activeLayer, 'update-end', function (args) {
+                var extent;
+                var graphics = args.target.graphics;
+
+                if (Object.prototype.toString.call(graphics) === '[object Array]') {
+                    if (graphics.length === 2) {
+                        extent = self.activeLayer._getClusterExtent(graphics[0]);
+                    } else {
+                        extent = graphicsUtils.graphicsExtent(graphics);
+                    }
+                } else {
+                    extent = self.activeLayer._getClusterExtent(graphics);
+                    // extent = graphics.getExtent();
+                }
+
+                self.map.setExtent(extent, true);
+            });
+        },
+        fullExtent: function () {
+            // summary:
+            //      zoom to the full extent
+            console.log('app.MapController::fullExtent', arguments);
+
+            var defaultExtent = new Extent({
+                    xmax: 696328,
+                    xmin: 207131,
+                    ymax: 4785283,
+                    ymin: 3962431,
+                    spatialReference: {
+                        wkid: 26912
+                    }
+                });
+
+            if (defaultExtent.center) {
+                this.map.setScale(defaultExtent.scale);
+                return this.map.centerAt(defaultExtent.center);
+            }
+            return this.map.setExtent(defaultExtent);
+        },
+        showPopup: function (mouseEvent) {
             // summary:
             //      shows the popup content for the graphic on the mouse over event
             // mouseEvent - mouse over event
@@ -203,13 +261,13 @@ define([
                 return;
             }
         },
-        buildContent: function() {
+        buildContent: function () {
             // summary:
             //      build the popup content text based on the attribute values
             // attributes
             console.log('app.MapController::buildContent', arguments);
         },
-        appendLogo: function(css) {
+        appendLogo: function (css) {
             // summary:
             //      adds css to map
             //
@@ -220,16 +278,16 @@ define([
 
             domConstruct.place(logo, node, 'first');
         },
-        destroy: function() {
+        destroy: function () {
             // summary:
             //      destroys all handles
             console.log('app.MapControl::destroy', arguments);
 
-            array.forEach(this.handles, function(handle) {
+            array.forEach(this.handles, function (handle) {
                 handle.remove();
             });
 
-            array.forEach(this.childWidgets, function(widget) {
+            array.forEach(this.childWidgets, function (widget) {
                 widget.destroy();
             }, this);
         }

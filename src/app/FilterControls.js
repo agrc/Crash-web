@@ -14,7 +14,7 @@ define([
     'dojo/topic',
 
     'xstyle/css!app/resources/FilterControls.css'
-], function(
+], function (
     config,
     ResultsPanel,
 
@@ -38,12 +38,12 @@ define([
 
         // Properties to be sent into constructor
 
-        constructor: function() {
+        constructor: function () {
             this.childWidgets = [];
             this.filters = [];
         },
 
-        postCreate: function() {
+        postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
             // tags:
@@ -60,13 +60,13 @@ define([
 
             this.inherited(arguments);
         },
-        setupConnections: function() {
+        setupConnections: function () {
             // summary:
             //      wire events, and such
             //
             console.log('app.FilterControls::setupConnections', arguments);
         },
-        filter: function() {
+        filter: function () {
             // summary:
             //      handles gathering the filter criteria and sending the request
             //
@@ -84,15 +84,16 @@ define([
             this.chartSvg.setAttribute('class', 'sprite');
 
             topic.publish(config.topics.search.filter, criteria);
+            topic.publish(config.topics.events.zoom);
         },
-        reset: function() {
+        reset: function () {
             // summary:
             //      handles invoking the reset code for all of the filters
             //      and reseting the definition expression on the feature layer
             //
             console.log('app.FilterControls::reset', arguments);
 
-            if(this._svgHasClass(this.resetSvg, 'disabled')){
+            if (this._svgHasClass(this.resetSvg, 'disabled')) {
                 return;
             }
 
@@ -102,20 +103,21 @@ define([
 
             topic.publish(config.topics.search.filter, '');
             topic.publish(config.topics.search.reset, {});
+            topic.publish(config.topics.events.fullExtent, {});
         },
-        toggleCharts: function() {
+        toggleCharts: function () {
             // summary:
             //      shows the charts
             //
             console.log('app.FilterControls::toggleCharts', arguments);
 
-            if(this._svgHasClass(this.chartSvg, 'disabled')){
+            if (this._svgHasClass(this.chartSvg, 'disabled')) {
                 return;
             }
 
             this.resultsPanel.show();
         },
-        _getFilterCriteria: function() {
+        _getFilterCriteria: function () {
             // summary:
             //      gets the filter criteria from the filters array
             //
@@ -129,7 +131,7 @@ define([
 
             return criteria;
         },
-        _buildDefinitionQueryFromObject: function(criteria) {
+        _buildDefinitionQueryFromObject: function (criteria) {
             // summary:
             //      gets the object criteria from the filters and creates a definition query
             // criteria
@@ -145,7 +147,7 @@ define([
 
             return result;
         },
-        _buildDate: function(criteria) {
+        _buildDate: function (criteria) {
             // summary:
             //      description
             // filters
@@ -157,35 +159,35 @@ define([
                     var today = criteria.date.today || Date.now();
                     var predefined = date.add(today, 'day', criteria.date.predefined);
 
-                    filters.push('CRASHLOCATION.date >= \'' + this._formatDateForArcGis(predefined) + '\'');
+                    filters.push('date >= \'' + this._formatDateForArcGis(predefined) + '\'');
                 }
 
                 if (criteria.date.toDate && criteria.date.fromDate) {
-                    var from = criteria.date.fromDate,
-                        to = criteria.date.toDate;
+                    var from = criteria.date.fromDate;
+                    var to = criteria.date.toDate;
 
-                    filters.push('CRASHLOCATION.date BETWEEN \'' + this._formatDateForArcGis(from) +
+                    filters.push('date BETWEEN \'' + this._formatDateForArcGis(from) +
                         '\' AND \'' + this._formatDateForArcGis(to) + '\'');
                 }
 
                 if (criteria.date.specificDays) {
                     var days = criteria.date.specificDays;
 
-                    filters.push('CRASHLOCATION.day IN (' + days.join(',') + ')');
+                    filters.push('day IN (' + days.join(',') + ')');
                 }
 
                 if (criteria.date.fromTime && criteria.date.toTime) {
-                    var fromTime = criteria.date.fromTime,
-                        toTime = criteria.date.toTime;
+                    var fromTime = criteria.date.fromTime;
+                    var toTime = criteria.date.toTime;
 
-                    filters.push('CAST(CRASHLOCATION.date as TIME) BETWEEN \'' + fromTime +
+                    filters.push('CAST(date as TIME) BETWEEN \'' + fromTime +
                                  '\' AND \'' + toTime + '\'');
                 }
             }
 
             return filters;
         },
-        _buildFactors: function(criteria) {
+        _buildFactors: function (criteria) {
             // summary:
             //      build the factors
             // criteria
@@ -199,12 +201,12 @@ define([
 
                 var factorClause = factors.join(' AND ');
 
-                filters.push('crash_id IN (SELECT id FROM DDACTS.DDACTSadmin.Rollup WHERE ' + factorClause + ')');
+                filters.push('crash_id IN (SELECT id FROM DDACTSadmin.Rollup WHERE ' + factorClause + ')');
             }
 
             return filters;
         },
-        _buildSpatial: function(criteria) {
+        _buildSpatial: function (criteria) {
             // summary:
             //      description
             // criteria
@@ -214,12 +216,12 @@ define([
             if (criteria.milepost) {
                 var milepost = criteria.milepost;
                 filters.push('route_number = ' + milepost.route +
-                    ' AND milepost BETWEEN ' + milepost.from + ' AND ' + milepost.to);
+                             ' AND milepost BETWEEN ' + milepost.from + ' AND ' + milepost.to);
             }
 
             return filters;
         },
-        _buildConditions: function(criteria) {
+        _buildConditions: function (criteria) {
             // summary:
             //      description
             // criteria
@@ -233,7 +235,7 @@ define([
 
             return filters;
         },
-        _buildShape: function(criteria) {
+        _buildShape: function (criteria) {
             // summary:
             //      description
             // criteria
@@ -247,14 +249,13 @@ define([
 
             return result;
         },
-        _formatDateForArcGis: function(d) {
+        _formatDateForArcGis: function (d) {
             // summary:
             //      formates the date for definition queries
             // d
             console.log('app.FilterControls::_formatDateForArcGis', arguments);
 
-            if(Object.prototype.toString.call(d) !== '[object Date]')
-            {
+            if (Object.prototype.toString.call(d) !== '[object Date]') {
                 d = new Date(d);
             }
 
@@ -263,7 +264,7 @@ define([
                 selector: 'date'
             });
         },
-        startup: function() {
+        startup: function () {
             // summary:
             //      startup stuff
             //
@@ -277,7 +278,7 @@ define([
 
             this.inherited(arguments);
         },
-        _svgHasClass: function(svg, css) {
+        _svgHasClass: function (svg, css) {
             // summary:
             //      returns true if svg node has the class
             // svg, class
