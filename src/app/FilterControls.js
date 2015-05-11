@@ -138,6 +138,7 @@ define([
             filters = filters.concat(this._buildDate(criteria));
             filters = filters.concat(this._buildFactors(criteria));
             filters = filters.concat(this._buildSpatial(criteria));
+            filters = filters.concat(this._buildSeverity(criteria));
 
             result.sql = filters.join(' AND ');
 
@@ -251,6 +252,24 @@ define([
             }
 
             return result;
+        },
+        _buildSeverity: function (criteria) {
+            // summary:
+            //      the crash fatality filter
+            // criteria
+            console.log('app.FilterControls::_buildSeverity', arguments);
+
+            var filters = [];
+
+            if (criteria.severity && criteria.severity.length) {
+                var severity = array.map(criteria.severity, function (severity) {
+                    return '\'' + severity + '\'';
+                });
+
+                filters.push('severity in (' + severity.join(',') + ')');
+            }
+
+            return filters;
         },
         _formatDateForArcGis: function (d) {
             // summary:

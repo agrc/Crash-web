@@ -2,14 +2,8 @@ define([
     'app/config',
     'app/FilterCommon',
 
-    'dijit/_TemplatedMixin',
-    'dijit/_WidgetBase',
-
     'dojo/_base/array',
     'dojo/_base/declare',
-    'dojo/_base/lang',
-    'dojo/dom-class',
-    'dojo/dom-construct',
     'dojo/query',
     'dojo/text!app/templates/FilterCounty.html',
 
@@ -18,14 +12,8 @@ define([
     config,
     FilterCommon,
 
-    _TemplatedMixin,
-    _WidgetBase,
-
     array,
     declare,
-    lang,
-    domClass,
-    domConstruct,
     query,
     template
 ) {

@@ -12,7 +12,6 @@ define([
     'dojo/query',
     'dojo/topic',
 
-    'esri/dijit/geoenrichment/InfographicsCarousel',
     'esri/geometry/Extent',
     'esri/graphic',
     'esri/graphicsUtils',
@@ -33,7 +32,6 @@ define([
     query,
     topic,
 
-    InfographicsCarousel,
     Extent,
     Graphic,
     graphicsUtils,
