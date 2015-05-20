@@ -156,28 +156,28 @@ define([
                     var today = criteria.date.today || Date.now();
                     var predefined = date.add(today, 'day', criteria.date.predefined);
 
-                    filters.push('date >= \'' + this._formatDateForArcGis(predefined) + '\'');
+                    filters.push('crash_date >= \'' + this._formatDateForArcGis(predefined) + '\'');
                 }
 
                 if (criteria.date.toDate && criteria.date.fromDate) {
                     var from = criteria.date.fromDate;
                     var to = criteria.date.toDate;
 
-                    filters.push('date BETWEEN \'' + this._formatDateForArcGis(from) +
+                    filters.push('crash_date BETWEEN \'' + this._formatDateForArcGis(from) +
                         '\' AND \'' + this._formatDateForArcGis(to) + '\'');
                 }
 
                 if (criteria.date.specificDays) {
                     var days = criteria.date.specificDays;
 
-                    filters.push('day IN (' + days.join(',') + ')');
+                    filters.push('crash_day IN (' + days.join(',') + ')');
                 }
 
                 if (criteria.date.fromTime && criteria.date.toTime) {
                     var fromTime = criteria.date.fromTime;
                     var toTime = criteria.date.toTime;
 
-                    filters.push('CAST(date as TIME) BETWEEN \'' + fromTime +
+                    filters.push('CAST(crash_date as TIME) BETWEEN \'' + fromTime +
                                  '\' AND \'' + toTime + '\'');
                 }
             }
