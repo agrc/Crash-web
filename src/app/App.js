@@ -132,7 +132,7 @@ define([
                         outFields: [
                             'objectid',
                             'severity',
-                            'date',
+                            'crash_date',
                             'weather_condition',
                             'event',
                             'collision_type',

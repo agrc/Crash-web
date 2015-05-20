@@ -132,7 +132,7 @@ define([
                     new Color([0, 116, 217, 0.35]), 8),
                 new Color([0, 116, 217, 0.75]));
             this._singleTemplate = options.singleTemplate || new PopupTemplate({
-                'title': '{severity}',
+                'title': 'Injuries: {severity}',
                 'description': '<label>Date</label>: {date}<br/>' +
                                 '<label>Event</label>: {event}<br/>' +
                                 '<label>Collision Type</label>: {collision_type}<br/>' +
@@ -140,8 +140,8 @@ define([
                                 '<label>Road</label>: {road_name} was {road_condition}'
             });
             this._singleTemplateWithoutCollision = new PopupTemplate({
-                'title': '{severity}',
-                'description': '<label>Date</label>: {date}<br/>' +
+                'title': 'Injuries: {severity}',
+                'description': '<label>Date</label>: {crash_date}<br/>' +
                                 '<label>Event</label>: {event}<br/>' +
                                 '<label>Weather</label>: {weather_condition}<br/>' +
                                 '<label>Road</label>: {road_name} was {road_condition}'
@@ -188,7 +188,7 @@ define([
             this._identifyQuery.returnGeometry = false;
             this._identifyQuery.outFields = this._outFields;
 
-            this.identifyTemplate = '<label>Date</label>: {{date}}<br/>' +
+            this.identifyTemplate = '<label>Date</label>: {{crash_date}}<br/>' +
                 '<label>Event</label>: {{event}}<br/>' +
                 '{{#collision_type}}' +
                 '<label>Collision Type</label>: {{collision_type}}<br/>' +
