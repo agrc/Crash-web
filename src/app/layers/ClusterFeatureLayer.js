@@ -605,9 +605,9 @@ define([
 
             if (points.length === 1) {
                 this.queryTask.execute(this._identifyQuery, lang.hitch(this, function (result) {
-                    result.features[0].attributes.date = new Date(result.features[0].attributes.date).toLocaleString();
+                    result.features[0].attributes.crash_date = new Date(result.features[0].attributes.crash_date).toLocaleString();
                     var content = mustache.render(this.identifyTemplate, result.features[0].attributes);
-                    this._map.infoWindow.setTitle(result.features[0].attributes.severity);
+                    this._map.infoWindow.setTitle('Injuries: ' + result.features[0].attributes.severity);
                     this._map.infoWindow.setContent(content);
                 }));
 

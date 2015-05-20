@@ -303,11 +303,23 @@ module.exports = function(grunt) {
             }
         },
         shell: {
+            options: {
+                stdout: true
+            },
             bootstrapMapServices: {
-                options: {
-                    stdout: true
-                },
                 command: 'python scripts/publish_mxd.py'
+            },
+            dev:
+            {
+                command: 'python scripts/create_points_json.py dev'
+            },
+            stage:
+            {
+                command: 'python scripts/create_points_json.py stage'
+            },
+            prod:
+            {
+                command: 'python scripts/create_points_json.py prod'
             }
         },
         watch: {
@@ -338,6 +350,7 @@ module.exports = function(grunt) {
     // Default task.
     grunt.registerTask('default', [
         //'shell:bootstrapMapServices',
+        'shell:dev',
         'jasmine:main:build',
         'jshint:main',
         'amdcheck:main',
@@ -349,6 +362,7 @@ module.exports = function(grunt) {
     ]);
     grunt.registerTask('build-prod', [
         'clean:build',
+        'shell:prod',
         'if-missing:esri_slurp:dev',
         'newer:imagemin:main',
         'stylus',
@@ -358,6 +372,7 @@ module.exports = function(grunt) {
     ]);
     grunt.registerTask('build-stage', [
         'clean:build',
+        'shell:stage',
         'if-missing:esri_slurp:dev',
         'newer:imagemin:main',
         'stylus',
