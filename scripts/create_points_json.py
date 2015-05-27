@@ -11,9 +11,10 @@ configuration = sys.argv[1]
 
 script_dir = os.path.dirname(__file__)
 file = os.path.join(script_dir, '..', 'src', 'points.json')
+table = os.path.join(script_dir, '{}.sde'.format(configuration), 'CRASHLOCATION')
 
 with open(file, 'w') as f:
-    with SearchCursor('scripts\{}.sde\CrashLocation'.format(configuration), ['OID@', 'SHAPE@XY']) as cursor:
+    with SearchCursor(table, ['OID@', 'SHAPE@XY']) as cursor:
         for row in cursor:
             if row[1][0] > 0 and row[1][1] > 0:
                 x = round(row[1][0], 2)
