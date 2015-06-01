@@ -23,7 +23,7 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
 
         urls: {
             service: '/arcgis/rest/services/Crash/Crashes/FeatureServer/0',
-            stats: location.pathname.replace(/\/(src|dist)/, '') + 'api/stats?q='
+            stats: location.pathname.replace(/\/(src|dist)/, '') + 'api/stats'
         },
 
         topics: {

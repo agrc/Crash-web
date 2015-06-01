@@ -17,7 +17,7 @@ define([
 
     'highcharts',
     'xstyle/css!app/resources/ResultsPanel.css'
-], function(
+], function (
     config,
 
     _TemplatedMixin,
@@ -42,10 +42,10 @@ define([
         baseClass: 'results-panel',
 
         // Properties to be sent into constructor
-        constructor: function(){
+        constructor: function () {
             this.charts = [];
         },
-        postCreate: function() {
+        postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
             // tags:
@@ -56,7 +56,7 @@ define([
 
             this.inherited(arguments);
         },
-        setupConnections: function() {
+        setupConnections: function () {
             // summary:
             //      wire events, and such
             //
@@ -70,7 +70,7 @@ define([
 
             topic.subscribe(config.topics.search.filter, lang.hitch(this, 'setCurrentCriteria'));
         },
-        setCurrentCriteria: function(criteria) {
+        setCurrentCriteria: function (criteria) {
             // summary:
             //      sets the current filtering criteria
             // criteria
@@ -78,23 +78,23 @@ define([
 
             this.currentCriteria = criteria;
         },
-        hide: function(evt) {
+        hide: function (evt) {
             // summary:
             //      description
             // params
             console.log('app.ResultsPanel::hide', arguments);
 
-            if(evt.type !== 'click'){
+            if (evt.type !== 'click') {
                 var charOrCode = evt.charCode || evt.keyCode;
 
-                if(charOrCode !== keys.ESCAPE){
+                if (charOrCode !== keys.ESCAPE) {
                     return;
                 }
             }
 
             domClass.add(this.domNode, 'hidden');
         },
-        show: function() {
+        show: function () {
             // summary:
             //      shows the panel
             console.log('app.ResultsPanel::show', arguments);
@@ -103,16 +103,16 @@ define([
             this.getChartData(this.currentCriteria).then(
                 lang.hitch(this, 'buildChart'), this.errorHandler);
         },
-        showProgress: function(show) {
+        showProgress: function (show) {
             // summary:
             //      reset the current charts and show activity
             //
             console.log('app.ResultsPanel::showProgress', arguments);
 
-            if(show){
+            if (show) {
                 domClass.remove(this.activity, 'hidden');
 
-                this.charts.forEach(function(chart){
+                this.charts.forEach(function (chart) {
                     chart.destroy();
                 });
 
@@ -126,27 +126,28 @@ define([
             domClass.add(this.activity, 'hidden');
             query('.row', this.chartContainer).removeClass('hidden');
         },
-        getChartData: function(criteria) {
+        getChartData: function (criteria) {
             // summary:
             //      xhr
             //
             console.log('app.ResultsPanel::getChartData', arguments);
 
-            return request(config.urls.stats + criteria.sql, {
-                handleAs: 'json'
+            return request(config.urls.stats, {
+                handleAs: 'json',
+                method: 'POST',
+                data: { sql: criteria.sql }
             });
         },
-        buildChart: function(response) {
+        buildChart: function (response) {
             // summary:
             //      builds a chart from a response from an api
             // the response object
             console.log('app.ResultsPanel::buildChart', arguments);
 
-            Object.keys(response).forEach(function(key){
+            Object.keys(response).forEach(function (key) {
                 var data = response[key];
                 var category = null;
-                if(data.categories)
-                {
+                if (data.categories) {
                     category = data.categories;
                 }
 
@@ -178,7 +179,7 @@ define([
                             display: 'none'
                         }
                     },
-                    series:[{
+                    series: [{
                         name: key,
                         type: data.type,
                         data: data.data
@@ -191,7 +192,7 @@ define([
                 this.charts.push(chart);
             }, this);
         },
-        startup: function() {
+        startup: function () {
             // summary:
             //      startup for rendering
             //
