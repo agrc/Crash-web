@@ -1,36 +1,38 @@
 require([
     'app/FilterDateTime',
 
-    'dojo/dom-construct'
-], function(
+    'dojo/dom-construct',
+    'dojo/query'
+], function (
     WidgetUnderTest,
 
-    domConstruct
+    domConstruct,
+    query
 ) {
-    describe('app/FilterDateTime', function() {
+    describe('app/FilterDateTime', function () {
         var widget;
-        var destroy = function(widget) {
+        var destroy = function (widget) {
             widget.destroyRecursive();
             widget = null;
         };
 
-        beforeEach(function() {
+        beforeEach(function () {
             widget = new WidgetUnderTest(null, domConstruct.create('div', null, document.body));
         });
 
-        afterEach(function() {
+        afterEach(function () {
             if (widget) {
                 destroy(widget);
             }
         });
 
-        describe('Sanity', function() {
-            it('should create a FilterDateTime', function() {
+        describe('Sanity', function () {
+            it('should create a FilterDateTime', function () {
                 expect(widget).toEqual(jasmine.any(WidgetUnderTest));
             });
         });
-        describe('Gather values', function() {
-            it('gathers custom ranges', function() {
+        describe('Gather values', function () {
+            it('gathers custom ranges', function () {
                 widget.fromDateNode.value = '2015-01-01';
                 widget.toDateNode.value = '2015-02-11';
 
@@ -44,15 +46,14 @@ require([
                 });
             });
             it('gathers days of the week', function () {
-                var options = widget.daysNode.children;
-                options[0].selected = true; // monday
-                options[5].selected = true; // saturday
+                query('[value=2]')[0].checked = true;
+                query('[value=7]')[0].checked = true;
 
                 widget._gatherData();
                 var actual = widget.get('data');
                 expect(actual).toEqual({
                     date: {
-                        specificDays: [2,7]
+                        specificDays: ['2', '7']
                     }
                 });
             });
@@ -82,9 +83,8 @@ require([
                 widget.fromTimeNode.value = '00:00';
                 widget.toTimeNode.value = '01:23';
 
-                var options = widget.daysNode.children;
-                options[0].selected = true; // monday
-                options[5].selected = true; // saturday
+                query('[value=2]')[0].checked = true;
+                query('[value=7]')[0].checked = true;
 
                 widget._gatherData();
                 var actual = widget.get('data');
@@ -94,7 +94,7 @@ require([
                         toDate: '2015-02-11',
                         fromTime: '00:00',
                         toTime: '01:23',
-                        specificDays: [2,7]
+                        specificDays: ['2', '7']
                     }
                 });
             });

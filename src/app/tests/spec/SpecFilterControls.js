@@ -3,45 +3,50 @@ require([
 
     'dojo/dom-construct',
     'dojo/Stateful'
-], function(
+], function (
     WidgetUnderTest,
 
     domConstruct,
     Stateful
 ) {
-    describe('app/FilterControls', function() {
+    describe('app/FilterControls', function () {
         var widget;
+        var appNode;
 
-        var destroy = function(widget) {
+        var destroy = function (widget) {
             widget.destroyRecursive();
             widget = null;
         };
 
-        beforeEach(function() {
-            widget = new WidgetUnderTest(null, domConstruct.create('div', null, document.body));
+        beforeEach(function () {
+            appNode = domConstruct.place('<div id="app_center"></div>', document.body);
+            widget = new WidgetUnderTest({}, domConstruct.create('div', null, document.body));
         });
 
-        afterEach(function() {
+        afterEach(function () {
+            if (appNode) {
+                domConstruct.destroy(appNode);
+            }
             if (widget) {
                 destroy(widget);
             }
         });
 
-        describe('Sanity', function() {
-            it('should create a FilterControls', function() {
+        describe('Sanity', function () {
+            it('should create a FilterControls', function () {
                 expect(widget).toEqual(jasmine.any(WidgetUnderTest));
             });
         });
 
-        describe('Definition Query', function() {
-            it('returns empty if no criteria', function() {
+        describe('Definition Query', function () {
+            it('returns empty if no criteria', function () {
                 var actual = widget._buildDefinitionQueryFromObject({});
-                expect(actual).toEqual('');
+                expect(actual.sql).toEqual('');
             });
-            describe('date and time criteria', function() {
+            describe('date and time criteria', function () {
                 var today = new Date(2015, 0, 1, 0, 0, 0, 0); //  Thu Jan 01 2015 00:00:00 GMT-0700 (MST)
                 var past = new Date(2014, 0, 2, 0, 0, 0, 0);
-                it('formats predefined dates', function() {
+                it('formats predefined dates', function () {
                     var criteria = {
                         date: {
                             predefined: -7,
@@ -50,9 +55,9 @@ require([
                     };
 
                     var actual = widget._buildDefinitionQueryFromObject(criteria);
-                    expect(actual).toEqual('date >= \'2014-12-25\'');
+                    expect(actual.sql).toEqual('DDACTS.DDACTSadmin.CRASHLOCATION.crash_date >= \'2014-12-25\'');
                 });
-                it('formats custom ranges', function() {
+                it('formats custom ranges', function () {
                     var criteria = {
                         date: {
                             fromDate: past,
@@ -61,9 +66,9 @@ require([
                     };
 
                     var actual = widget._buildDefinitionQueryFromObject(criteria);
-                    expect(actual).toEqual('date BETWEEN \'2014-01-02\' AND \'2015-01-01\'');
+                    expect(actual.sql).toEqual('DDACTS.DDACTSadmin.CRASHLOCATION.crash_date BETWEEN \'2014-01-02\' AND \'2015-01-01\'');
                 });
-                it('is empty on partial custom date range', function() {
+                it('is empty on partial custom date range', function () {
                     var criteria = {
                         date: {
                             fromDate: null,
@@ -72,9 +77,9 @@ require([
                     };
 
                     var actual = widget._buildDefinitionQueryFromObject(criteria);
-                    expect(actual).toEqual('');
+                    expect(actual.sql).toEqual('');
                 });
-                it('formats days of the week', function() {
+                it('formats days of the week', function () {
                     var criteria = {
                         date: {
                             specificDays: [1, 7]
@@ -82,9 +87,9 @@ require([
                     };
 
                     var actual = widget._buildDefinitionQueryFromObject(criteria);
-                    expect(actual).toEqual('day IN (1,7)');
+                    expect(actual.sql).toEqual('DDACTS.DDACTSadmin.CRASHLOCATION.crash_day IN (1,7)');
                 });
-                it('formats time spans', function() {
+                it('formats time spans', function () {
                     var criteria = {
                         date: {
                             fromTime: '10:11',
@@ -93,9 +98,9 @@ require([
                     };
 
                     var actual = widget._buildDefinitionQueryFromObject(criteria);
-                    expect(actual).toEqual('CAST(date as TIME) BETWEEN \'10:11\' AND \'22:12\'');
+                    expect(actual.sql).toEqual('CAST(DDACTS.DDACTSadmin.CRASHLOCATION.crash_date as TIME) BETWEEN \'10:11\' AND \'22:12\'');
                 });
-                it('is empty on partial custom time', function() {
+                it('is empty on partial custom time', function () {
                     var criteria = {
                         date: {
                             fromTime: '10:11',
@@ -104,13 +109,13 @@ require([
                     };
 
                     var actual = widget._buildDefinitionQueryFromObject(criteria);
-                    expect(actual).toEqual('');
+                    expect(actual.sql).toEqual('');
                 });
             });
-            describe('combined criteria', function() {
+            describe('combined criteria', function () {
                 var today = new Date(2015, 0, 1, 0, 0, 0, 0); //  Thu Jan 01 2015 00:00:00 GMT-0700 (MST)
                 var past = new Date(2014, 0, 2, 0, 0, 0, 0);
-                it('formats custom range and day of week', function() {
+                it('formats custom range and day of week', function () {
                     var criteria = {
                         date: {
                             fromDate: past,
@@ -120,9 +125,9 @@ require([
                     };
 
                     var actual = widget._buildDefinitionQueryFromObject(criteria);
-                    expect(actual).toEqual('date BETWEEN \'2014-01-02\' AND \'2015-01-01\' AND day IN (1,7)');
+                    expect(actual.sql).toEqual('DDACTS.DDACTSadmin.CRASHLOCATION.crash_date BETWEEN \'2014-01-02\' AND \'2015-01-01\' AND DDACTS.DDACTSadmin.CRASHLOCATION.crash_day IN (1,7)');
                 });
-                it('formats custom range and day of week and time', function() {
+                it('formats custom range and day of week and time', function () {
                     var criteria = {
                         date: {
                             fromDate: past,
@@ -134,11 +139,11 @@ require([
                     };
 
                     var actual = widget._buildDefinitionQueryFromObject(criteria);
-                    expect(actual).toEqual('date BETWEEN \'2014-01-02\' AND \'2015-01-01\' AND ' +
-                        'day IN (1,2,3,4,5) AND ' +
-                        'CAST(date as TIME) BETWEEN \'12:00\' AND \'13:00\'');
+                    expect(actual.sql).toEqual('DDACTS.DDACTSadmin.CRASHLOCATION.crash_date BETWEEN \'2014-01-02\' AND \'2015-01-01\' AND ' +
+                        'DDACTS.DDACTSadmin.CRASHLOCATION.crash_day IN (1,2,3,4,5) AND ' +
+                        'CAST(DDACTS.DDACTSadmin.CRASHLOCATION.crash_date as TIME) BETWEEN \'12:00\' AND \'13:00\'');
                 });
-                it('formats custom range and day of week and time and crash factors', function() {
+                it('formats custom range and day of week and time and crash factors', function () {
                     var criteria = {
                         date: {
                             fromDate: past,
@@ -151,10 +156,10 @@ require([
                     };
 
                     var actual = widget._buildDefinitionQueryFromObject(criteria);
-                    expect(actual).toEqual('crash_id IN (SELECT id FROM rollup WHERE dui=1 AND pedestrian=1) AND ' +
-                        'date BETWEEN \'2014-01-02\' AND \'2015-01-01\' AND ' +
-                        'day IN (1,2,3,4,5) AND ' +
-                        'CAST(date as TIME) BETWEEN \'12:00\' AND \'13:00\'');
+                    expect(actual.sql).toEqual('DDACTS.DDACTSadmin.CRASHLOCATION.crash_date BETWEEN \'2014-01-02\' AND \'2015-01-01\' AND ' +
+                        'DDACTS.DDACTSadmin.CRASHLOCATION.crash_day IN (1,2,3,4,5) AND ' +
+                        'CAST(DDACTS.DDACTSadmin.CRASHLOCATION.crash_date as TIME) BETWEEN \'12:00\' AND \'13:00\' AND ' +
+                        'crash_id IN (SELECT id FROM DDACTSadmin.Rollup WHERE dui=1 AND pedestrian=1)');
                 });
             });
             describe('filter factor criteria', function () {
@@ -164,7 +169,7 @@ require([
                     };
 
                     var actual = widget._buildDefinitionQueryFromObject(criteria);
-                    expect(actual).toEqual('crash_id IN (SELECT id FROM rollup WHERE dui=1)');
+                    expect(actual.sql).toEqual('crash_id IN (SELECT id FROM DDACTSadmin.Rollup WHERE dui=1)');
                 });
                 it('formats multiple crash factors', function () {
                     var criteria = {
@@ -172,14 +177,14 @@ require([
                     };
 
                     var actual = widget._buildDefinitionQueryFromObject(criteria);
-                    expect(actual).toEqual('crash_id IN (SELECT id FROM rollup WHERE dui=1 AND pedestrian=1)');
+                    expect(actual.sql).toEqual('crash_id IN (SELECT id FROM DDACTSadmin.Rollup WHERE dui=1 AND pedestrian=1)');
                 });
             });
         });
 
-        describe('Data Gathering', function() {
-            it('gathers data from its child widgets', function() {
-                widget.childWidgets = [
+        describe('Data Gathering', function () {
+            it('gathers data from its child widgets', function () {
+                widget.filters = [
                     new Stateful({
                         data: {
                             a: 1
@@ -199,9 +204,9 @@ require([
 
                 var actual = widget._getFilterCriteria();
                 expect(actual).toEqual({
-                        a: 1,
-                        b: 2,
-                        c: 3
+                    a: 1,
+                    b: 2,
+                    c: 3
                 });
             });
         });

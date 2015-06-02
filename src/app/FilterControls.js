@@ -73,6 +73,11 @@ define([
             console.log('app.FilterControls::filter', arguments);
 
             var criteria = this._getFilterCriteria();
+
+            if (criteria) {
+                topic.publish(config.topics.search.filterSource, criteria);
+            }
+
             criteria = this._buildDefinitionQueryFromObject(criteria);
 
             if (!criteria.sql) {

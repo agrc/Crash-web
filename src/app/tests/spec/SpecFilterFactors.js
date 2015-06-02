@@ -4,67 +4,63 @@ require([
     'dojo/dom-class',
     'dojo/dom-construct',
     'dojo/query'
-], function(
+], function (
     WidgetUnderTest,
 
     domClass,
     domConstruct,
     query
 ) {
-    describe('app/FilterFactors', function() {
+    describe('app/FilterFactors', function () {
         var widget;
-        var destroy = function(widget) {
+        var destroy = function (widget) {
             widget.destroyRecursive();
             widget = null;
         };
 
-        beforeEach(function() {
+        beforeEach(function () {
             widget = new WidgetUnderTest(null, domConstruct.create('div', null, document.body));
         });
 
-        afterEach(function() {
+        afterEach(function () {
             if (widget) {
                 destroy(widget);
             }
         });
 
-        describe('Sanity', function() {
-            it('should create a FilterFactors', function() {
+        describe('Sanity', function () {
+            it('should create a FilterFactors', function () {
                 expect(widget).toEqual(jasmine.any(WidgetUnderTest));
             });
         });
-        describe('presentation', function() {
-            it('adds a css class when clicked on (checkbox checked)', function() {
+        describe('presentation', function () {
+            it('adds a css class when clicked on (checkbox checked)', function () {
                 var node = query('input[type="checkbox"][value="pedestrian"]', widget.domNode)[0];
-                widget.clicked({
-                    target: {
-                        parentNode: node
-                    },
-                    preventDefault: function(){},
-                    stopPropagation: function(){},
+                widget.updateButtonState({
+                    target: node,
+                    preventDefault: function () {},
+                    stopPropagation: function () {},
                     cancelBubble: false
                 });
 
-                expect(domClass.contains(node.parentNode, 'btn-success')).toEqual(true);
+                expect(domClass.contains(node.parentNode.parentNode, 'selected')).toEqual(true);
             });
-            it('removes a css class when clicked on (checkbox unchecked)', function() {
+            it('removes a css class when clicked on (checkbox unchecked)', function () {
                 var node = query('input[type="checkbox"][value="pedestrian"]', widget.domNode)[0];
-                domClass.add(node.parentNode, 'btn-success');
+                domClass.add(node.parentNode.parentNode, 'selected');
 
-                widget.clicked({
-                    target: {
-                        parentNode: node
-                    },
-                    preventDefault: function(){},
-                    stopPropagation: function(){},
+                widget.updateButtonState({
+                    target: node,
+                    preventDefault: function () {},
+                    stopPropagation: function () {},
                     cancelBubble: false
                 });
 
-                expect(domClass.contains(node.parentNode, 'btn-success')).toEqual(false);
+                expect(domClass.contains(node.parentNode.parentNode, 'selected')).toEqual(false);
             });
         });
-        describe('Gather values', function() {
-            it('gathers single value', function() {
+        describe('Gather values', function () {
+            it('gathers single value', function () {
                 query('input[type="checkbox"][value="pedestrian"]', widget.domNode)[0].checked = true;
 
                 widget._gatherData();
@@ -73,7 +69,7 @@ require([
                     factors: ['pedestrian']
                 });
             });
-            it('gathers multiple values', function() {
+            it('gathers multiple values', function () {
                 query('input[type="checkbox"][value="pedestrian"]', widget.domNode)[0].checked = true;
                 query('input[type="checkbox"][value="dui"]', widget.domNode)[0].checked = true;
 
@@ -83,11 +79,11 @@ require([
                     factors: ['pedestrian', 'dui']
                 });
             });
-            it('gathers no values', function() {
+            it('gathers no values', function () {
                 widget._gatherData();
                 var actual = widget.get('data');
                 expect(actual).toEqual({
-                    factors: null
+                    factors: []
                 });
             });
         });

@@ -78,6 +78,14 @@ define([
 
             this.currentCriteria = criteria;
         },
+        setCurrentSourceCriteria: function (criteria) {
+            // summary:
+            //      sets the current filtering criteria
+            // criteria
+            console.log('app.ResultsPanel::setCurrentSourceCriteria', arguments);
+
+            this.currentSourceCriteria = criteria;
+        },
         hide: function (evt) {
             // summary:
             //      description

@@ -1,5 +1,5 @@
 require([
-    'app/FilterRoadConditions',
+    'app/FilterWeatherConditions',
 
     'dojo/dom-construct'
 ], function(
@@ -7,7 +7,7 @@ require([
 
     domConstruct
 ) {
-    describe('app/FilterRoadConditions', function() {
+    describe('app/FilterWeatherConditions', function() {
         var widget;
         var destroy = function (widget) {
             widget.destroyRecursive();
@@ -25,7 +25,7 @@ require([
         });
 
         describe('Sanity', function() {
-            it('should create a FilterRoadConditions', function() {
+            it('should create a FilterWeatherConditions', function() {
                 expect(widget).toEqual(jasmine.any(WidgetUnderTest));
             });
         });

@@ -29,6 +29,7 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
         topics: {
             search: {
                 filter: 'f',
+                filterSource: 'fs',
                 reset: 'r',
                 gather: 'g'
             },

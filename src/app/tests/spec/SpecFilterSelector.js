@@ -2,30 +2,34 @@ require([
     'app/FilterSelector',
 
     'dojo/dom-construct'
-], function(
+], function (
     WidgetUnderTest,
 
     domConstruct
 ) {
-    describe('app/FilterSelector', function() {
+    describe('app/FilterSelector', function () {
         var widget;
         var destroy = function (widget) {
             widget.destroyRecursive();
             widget = null;
         };
 
-        beforeEach(function() {
+        beforeEach(function () {
+            appNode = domConstruct.place('<div id="app_center"></div>', document.body);
             widget = new WidgetUnderTest(null, domConstruct.create('div', null, document.body));
         });
 
-        afterEach(function() {
+        afterEach(function () {
             if (widget) {
                 destroy(widget);
             }
+            if (appNode) {
+                domConstruct.destroy(appNode);
+            }
         });
 
-        describe('Sanity', function() {
-            it('should create a FilterSelector', function() {
+        describe('Sanity', function () {
+            it('should create a FilterSelector', function () {
                 expect(widget).toEqual(jasmine.any(WidgetUnderTest));
             });
         });
