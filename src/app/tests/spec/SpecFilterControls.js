@@ -66,7 +66,8 @@ require([
                     };
 
                     var actual = widget._buildDefinitionQueryFromObject(criteria);
-                    expect(actual.sql).toEqual('DDACTS.DDACTSadmin.CRASHLOCATION.crash_date BETWEEN \'2014-01-02\' AND \'2015-01-01\'');
+                    expect(actual.sql).toEqual('DDACTS.DDACTSadmin.CRASHLOCATION.crash_date' +
+                                               ' BETWEEN \'2014-01-02\' AND \'2015-01-01\'');
                 });
                 it('is empty on partial custom date range', function () {
                     var criteria = {
@@ -98,7 +99,8 @@ require([
                     };
 
                     var actual = widget._buildDefinitionQueryFromObject(criteria);
-                    expect(actual.sql).toEqual('CAST(DDACTS.DDACTSadmin.CRASHLOCATION.crash_date as TIME) BETWEEN \'10:11\' AND \'22:12\'');
+                    expect(actual.sql).toEqual('CAST(DDACTS.DDACTSadmin.CRASHLOCATION.crash_date as TIME)' +
+                                               ' BETWEEN \'10:11\' AND \'22:12\'');
                 });
                 it('is empty on partial custom time', function () {
                     var criteria = {
@@ -125,7 +127,9 @@ require([
                     };
 
                     var actual = widget._buildDefinitionQueryFromObject(criteria);
-                    expect(actual.sql).toEqual('DDACTS.DDACTSadmin.CRASHLOCATION.crash_date BETWEEN \'2014-01-02\' AND \'2015-01-01\' AND DDACTS.DDACTSadmin.CRASHLOCATION.crash_day IN (1,7)');
+                    expect(actual.sql).toEqual('DDACTS.DDACTSadmin.CRASHLOCATION.crash_date' +
+                                               ' BETWEEN \'2014-01-02\' AND \'2015-01-01\' ' +
+                                               'AND DDACTS.DDACTSadmin.CRASHLOCATION.crash_day IN (1,7)');
                 });
                 it('formats custom range and day of week and time', function () {
                     var criteria = {
@@ -139,7 +143,8 @@ require([
                     };
 
                     var actual = widget._buildDefinitionQueryFromObject(criteria);
-                    expect(actual.sql).toEqual('DDACTS.DDACTSadmin.CRASHLOCATION.crash_date BETWEEN \'2014-01-02\' AND \'2015-01-01\' AND ' +
+                    expect(actual.sql).toEqual('DDACTS.DDACTSadmin.CRASHLOCATION.crash_date' +
+                        ' BETWEEN \'2014-01-02\' AND \'2015-01-01\' AND ' +
                         'DDACTS.DDACTSadmin.CRASHLOCATION.crash_day IN (1,2,3,4,5) AND ' +
                         'CAST(DDACTS.DDACTSadmin.CRASHLOCATION.crash_date as TIME) BETWEEN \'12:00\' AND \'13:00\'');
                 });
@@ -156,9 +161,11 @@ require([
                     };
 
                     var actual = widget._buildDefinitionQueryFromObject(criteria);
-                    expect(actual.sql).toEqual('DDACTS.DDACTSadmin.CRASHLOCATION.crash_date BETWEEN \'2014-01-02\' AND \'2015-01-01\' AND ' +
+                    expect(actual.sql).toEqual('DDACTS.DDACTSadmin.CRASHLOCATION.crash_date' +
+                        ' BETWEEN \'2014-01-02\' AND \'2015-01-01\' AND ' +
                         'DDACTS.DDACTSadmin.CRASHLOCATION.crash_day IN (1,2,3,4,5) AND ' +
-                        'CAST(DDACTS.DDACTSadmin.CRASHLOCATION.crash_date as TIME) BETWEEN \'12:00\' AND \'13:00\' AND ' +
+                        'CAST(DDACTS.DDACTSadmin.CRASHLOCATION.crash_date as TIME) ' +
+                        'BETWEEN \'12:00\' AND \'13:00\' AND ' +
                         'crash_id IN (SELECT id FROM DDACTSadmin.Rollup WHERE dui=1 AND pedestrian=1)');
                 });
             });
@@ -177,7 +184,8 @@ require([
                     };
 
                     var actual = widget._buildDefinitionQueryFromObject(criteria);
-                    expect(actual.sql).toEqual('crash_id IN (SELECT id FROM DDACTSadmin.Rollup WHERE dui=1 AND pedestrian=1)');
+                    expect(actual.sql).toEqual('crash_id IN (SELECT id FROM ' +
+                        'DDACTSadmin.Rollup WHERE dui=1 AND pedestrian=1)');
                 });
             });
         });

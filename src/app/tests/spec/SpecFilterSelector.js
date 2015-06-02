@@ -9,6 +9,8 @@ require([
 ) {
     describe('app/FilterSelector', function () {
         var widget;
+        var appNode;
+        
         var destroy = function (widget) {
             widget.destroyRecursive();
             widget = null;
