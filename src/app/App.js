@@ -1,5 +1,6 @@
 define([
     'app/config',
+    'app/FilterControls',
     'app/FilterDateTime',
     'app/FilterFactors',
     'app/FilterSelector',
@@ -19,6 +20,7 @@ define([
     'dojo/text!app/templates/App.html'
 ], function (
     config,
+    FilterControls,
     FilterDateTime,
     FilterFactors,
     FilterSelector,
@@ -100,7 +102,8 @@ define([
                     FilterSeverity,
                     FilterSpatial,
                     FilterWeatherConditions
-                ]
+                ],
+                FilterControls: FilterControls
             }, this.sideBar);
 
             this.childWidgets.push(

@@ -51,6 +51,457 @@
 
             widgetUnderTest.startup();
 
+            query('#compare').on('click', function(){
+                domClass.remove(widgetUnderTest.domNode, 'hidden');
+                var x = new Deferred();
+
+                widgetUnderTest.getChartData = function(){
+                   return x.promise;
+                };
+
+                widgetUnderTest.show();
+                widgetUnderTest.displayChartsFor({
+                    source : {
+                        date: {
+
+                            fromTime: '13:04',
+                            toTime: '16:04'
+                        }
+                    },
+                    compare : {
+                        date: {
+                            fromTime: '13:04',
+                            toTime: '16:04'
+                        }
+                    }
+                });
+
+                setTimeout(function(){
+                    x.resolve({
+                        "weather": {
+                            "categories": [
+                                    "Blowing Sand, Soil, Dirt",
+                                    "Blowing Snow",
+                                    "Clear",
+                                    "Cloudy",
+                                    "Fog, Smog",
+                                    "Rain"
+                            ],
+                            "series": [{
+                                "type": "bar",
+                                "data": [
+                                    [
+                                        29
+                                    ],
+                                    [
+                                        342
+                                    ],
+                                    [
+                                        66624
+                                    ],
+                                    [
+                                        14656
+                                    ],
+                                    [
+                                        330
+                                    ],
+                                    [
+                                        4359
+                                    ]
+                                ]},{
+                                    "type": "bar",
+                                    "data": [
+                                        [
+                                            9
+                                        ],
+                                        [
+                                            1342
+                                        ],
+                                        [
+                                            56624
+                                        ],
+                                        [
+                                            4656
+                                        ],
+                                        [
+                                            1330
+                                        ],
+                                        [
+                                            359
+                                        ]
+                                    ]}
+                                ],
+                                "selector": "weather"
+                        },
+                        "road": {
+                            "categories":[
+                                    "Dry",
+                                    "Ice",
+                                    "Mud",
+                                    "Oil"
+                            ],
+                            "series": [{
+                            "type": "bar",
+                            "data": [
+                                [
+                                    75766
+                                ],
+                                [
+                                    2991
+                                ],
+                                [
+                                    40
+                                ],
+                                [
+                                    9
+                                ]
+                            ]},{
+                            "type": "bar",
+                            "data": [
+                                [
+                                    175766
+                                ],
+                                [
+                                    1991
+                                ],
+                                [
+                                    4
+                                ],
+                                [
+                                    19
+                                ]
+                            ]}],
+                            "selector": "road"
+                        },
+                        "cause": {
+                            "categories": [
+                                    "Disregard Road Markings",
+                                    "Disregard Traffic Signals",
+                                    "Disregard Traffic Signs",
+                                    "Exceeded Posted Speed Limit"
+                            ],
+                            "series":[{
+                            "type": "bar",
+                            "name": "Original",
+                            "center": ["20%"],
+                            "data": [
+                                [
+                                    "Disregard Road Markings",
+                                    121
+                                ],
+                                [
+                                    3071
+                                ],
+                                [
+                                    1024
+                                ],
+                                [
+                                    864
+                                ]
+                            ]},{
+                            "type": "bar",
+                            "name": "Comparison",
+                            "center": ["80%"],
+                            "data": [
+                                [
+                                    "Disregard Road Markings",
+                                    1211
+                                ],
+                                [
+                                    2071
+                                ],
+                                [
+                                    5024
+                                ],
+                                [
+                                    64
+                                ]
+                            ]}],
+                            "selector": "factors"
+                        },
+                        "distraction": {
+                            "categories": [
+                                "Cell Phone",
+                                "None",
+                                "Other Electronic Device",
+                                "Other External",
+                                "Other Inside",
+                                "Passengers",
+                                "Radio / CD / DVD etc.",
+                                "Texting",
+                                "TV / Monitor"
+                            ],
+                            "series": [{
+                                    "name": "distraction",
+                                    "type": "bar",
+                                        "data": [
+                                        [
+                                            132
+                                        ],
+                                        [
+                                            13619
+                                        ],
+                                        [
+                                            24
+                                        ],
+                                        [
+                                            136
+                                        ],
+                                        [
+                                            133
+                                        ],
+                                        [
+                                            113
+                                        ],
+                                        [
+                                            77
+                                        ],
+                                        [
+                                            5
+                                        ],
+                                        [
+                                            2
+                                        ]
+                                    ]},{
+                                    "name": "comparison",
+                                    "type": "bar",
+                                    "data": [
+                                        [
+                                            1329
+                                        ],
+                                        [
+                                            136619
+                                        ],
+                                        [
+                                            241
+                                        ],
+                                        [
+                                            1036
+                                        ],
+                                        [
+                                            1133
+                                        ],
+                                        [
+                                            1113
+                                        ],
+                                        [
+                                            737
+                                        ],
+                                        [
+                                            25
+                                        ],
+                                        [
+                                            4
+                                        ]
+                                    ]}
+                            ],
+                            "selector": "distractions"
+                        },
+                        "time": {
+                            "categories":[
+                                0,1,2,3,4,5,6,7,8,9,10,11,12,14,15,16,17,18,19,20,21,22,23
+                            ],
+                            "series": [{
+                            "data": [
+                                [
+                                    0,
+                                    1086
+                                ],
+                                [
+                                    1,
+                                    821
+                                ],
+                                [
+                                    2,
+                                    608
+                                ],
+                                [
+                                    3,
+                                    465
+                                ],
+                                [
+                                    4,
+                                    631
+                                ],
+                                [
+                                    5,
+                                    1340
+                                ],
+                                [
+                                    6,
+                                    2433
+                                ],
+                                [
+                                    7,
+                                    5062
+                                ],
+                                [
+                                    8,
+                                    5520
+                                ],
+                                [
+                                    9,
+                                    4100
+                                ],
+                                [
+                                    10,
+                                    3655
+                                ],
+                                [
+                                    11,
+                                    4324
+                                ],
+                                [
+                                    12,
+                                    5358
+                                ],
+                                [
+                                    13,
+                                    5390
+                                ],
+                                [
+                                    14,
+                                    6139
+                                ],
+                                [
+                                    15,
+                                    7391
+                                ],
+                                [
+                                    16,
+                                    7812
+                                ],
+                                [
+                                    17,
+                                    9517
+                                ],
+                                [
+                                    18,
+                                    7034
+                                ],
+                                [
+                                    19,
+                                    4521
+                                ],
+                                [
+                                    20,
+                                    3246
+                                ],
+                                [
+                                    21,
+                                    3200
+                                ],
+                                [
+                                    22,
+                                    2512
+                                ],
+                                [
+                                    23,
+                                    1756
+                                ]
+                            ]},{
+                            "data": [
+                                [
+                                    0,
+                                    186
+                                ],
+                                [
+                                    2,
+                                    808
+                                ],
+                                [
+                                    3,
+                                    265
+                                ],
+                                [
+                                    4,
+                                    1631
+                                ],
+                                [
+                                    5,
+                                    340
+                                ],
+                                [
+                                    6,
+                                    233
+                                ],
+                                [
+                                    7,
+                                    7062
+                                ],
+                                [
+                                    8,
+                                    520
+                                ],
+                                [
+                                    9,
+                                    400
+                                ],
+                                [
+                                    10,
+                                    3655
+                                ],
+                                [
+                                    11,
+                                    4324
+                                ],
+                                [
+                                    12,
+                                    5358
+                                ],
+                                [
+                                    13,
+                                    5390
+                                ],
+                                [
+                                    14,
+                                    6139
+                                ],
+                                [
+                                    15,
+                                    7391
+                                ],
+                                [
+                                    16,
+                                    7812
+                                ],
+                                [
+                                    17,
+                                    9517
+                                ],
+                                [
+                                    18,
+                                    7034
+                                ],
+                                [
+                                    19,
+                                    4521
+                                ],
+                                [
+                                    20,
+                                    3246
+                                ],
+                                [
+                                    21,
+                                    3200
+                                ],
+                                [
+                                    22,
+                                    2512
+                                ],
+                                [
+                                    23,
+                                    1756
+                                ]
+                            ]}],
+                            "type": "line",
+                            "selector": "time"
+                        }
+
+                    });
+                    }, 1000);
+
+                });
 
             query('#fetch').on('click', function(){
                 domClass.remove(widgetUnderTest.domNode, 'hidden');
@@ -61,50 +512,63 @@
                 };
 
                 widgetUnderTest.show();
+                widgetUnderTest.displayChartsFor({
+                    source : {
+                        date: {
+                            fromDate: '2013-01-23',
+                            toDate: '2014-02-23',
+                            fromTime: '13:04',
+                            toTime: '16:04'
+                        }
+                    }
+                });
+
                 setTimeout(function(){x.resolve({
                     "weather": {
-                        "type": "pie",
-                        "data": [
-                            [
-                                "Blowing Sand, Soil, Dirt",
-                                29
-                            ],
-                            [
-                                "Blowing Snow",
-                                342
-                            ],
-                            [
-                                "Clear",
-                                66624
-                            ],
-                            [
-                                "Cloudy",
-                                14656
-                            ],
-                            [
-                                "Fog, Smog",
-                                330
-                            ],
-                            [
-                                "Rain",
-                                4359
-                            ],
-                            [
-                                "Severe Crosswinds",
-                                133
-                            ],
-                            [
-                                "Sleet, Hail",
-                                268
-                            ],
-                            [
-                                "Snowing",
-                                5496
-                            ]
-                        ],
-                        "selector": "weather"
+                        "series": [{
+                            "type": "pie",
+                            "data": [
+                                [
+                                    "Blowing Sand, Soil, Dirt",
+                                    29
+                                ],
+                                [
+                                    "Blowing Snow",
+                                    342
+                                ],
+                                [
+                                    "Clear",
+                                    66624
+                                ],
+                                [
+                                    "Cloudy",
+                                    14656
+                                ],
+                                [
+                                    "Fog, Smog",
+                                    330
+                                ],
+                                [
+                                    "Rain",
+                                    4359
+                                ],
+                                [
+                                    "Severe Crosswinds",
+                                    133
+                                ],
+                                [
+                                    "Sleet, Hail",
+                                    268
+                                ],
+                                [
+                                    "Snowing",
+                                    5496
+                                ]
+                            ]}],
+                            "selector": "weather"
                     },
                     "road": {
+                        "series": [{
                         "type": "pie",
                         "data": [
                             [
@@ -143,10 +607,11 @@
                                 "Wet",
                                 7678
                             ]
-                        ],
+                        ]}],
                         "selector": "road"
                     },
                     "cause": {
+                        "series":[{
                         "type": "pie",
                         "data": [
                             [
@@ -237,7 +702,7 @@
                                 "Wrong Side/Wrong Way",
                                 286
                             ]
-                        ],
+                        ]}],
                         "selector": "factors"
                     },
                     "distraction": {
@@ -252,6 +717,7 @@
                             "Texting",
                             "TV / Monitor"
                         ],
+                        "series": [{
                         "type": "bar",
                         "data": [
                             [
@@ -290,10 +756,12 @@
                                 "TV / Monitor",
                                 4
                             ]
-                        ],
+                        ]}],
                         "selector": "distractions"
                     },
                     "day": {
+                        "series": [{
+                        "type": "bar",
                         "data": [
                             [
                                 "Monday",
@@ -307,16 +775,17 @@
                                 "Friday",
                                 33111
                             ]
-                        ],
+                        ]}],
                         "categories": [
                             "Monday",
                             "Thursday",
                             "Friday"
                         ],
-                        "type": "bar",
                         "selector": "days"
                     },
                     "time": {
+                        "series": [{
+                        "type": "line",
                         "data": [
                             [
                                 0,
@@ -414,7 +883,7 @@
                                 23,
                                 1756
                             ]
-                        ],
+                        ]}],
                         "type": "line",
                         "selector": "time"
                     }
@@ -427,6 +896,7 @@
     <div class="center-container">
     <div id="node" class='container-fluid'></div>
     </div>
-    <button id="fetch">Fetch Data</button>
+    <button id="fetch">Show first chart</button>
+    <button id="compare">Compare Charts</button>
 </body>
 </html>

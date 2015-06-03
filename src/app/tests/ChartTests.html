@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chart Tests</title>
+
+    <!-- META TAGS -->
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../resources/App.css">
+    <style type='text/css'>
+        body {
+            padding: 50px;
+        }
+    </style>
+
+    <!-- JAVASCRIPT -->
+    <script type="text/javascript" src="../../highcharts-release/adapters/standalone-framework.js"></script>
+    <!-- <script type="text/javascript" src="../../highcharts-release/highcharts.js"></script> -->
+    <script type='text/javascript' src="../../dojo/dojo.js"></script>
+    <script type="text/javascript">
+        var baseUrl = window.location.pathname.replace(/\/[^\/]+$/, '') + '/' + '../../';
+        var widgetUnderTest;
+
+        require({
+            baseUrl: baseUrl,
+            packages: ['app', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle', {
+                name: 'highcharts',
+                location: './highcharts-release',
+                main: 'highcharts'
+            }]
+        }, [
+            'app/Chart',
+
+            'dojo/domReady!'
+        ], function(Module) {
+            widgetUnderTest = new Module({
+                category: [
+                    "Blowing Sand, Soil, Dirt",
+                    "Blowing Snow",
+                    "Clear",
+                    "Cloudy",
+                    "Fog, Smog",
+                    "Rain",
+                    "Severe Crosswinds",
+                    "Sleet, Hail",
+                    "Snowing"
+                ],
+                data: {
+                    series: [{
+                        type: "bar",
+                        data: [
+                            [
+                                "Blowing Sand, Soil, Dirt",
+                                29
+                            ],
+                            [
+                                "Blowing Snow",
+                                342
+                            ],
+                            [
+                                "Clear",
+                                66624
+                            ],
+                            [
+                                "Cloudy",
+                                14656
+                            ],
+                            [
+                                "Fog, Smog",
+                                330
+                            ],
+                            [
+                                "Rain",
+                                4359
+                            ],
+                            [
+                                "Severe Crosswinds",
+                                133
+                            ],
+                            [
+                                "Sleet, Hail",
+                                268
+                            ],
+                            [
+                                "Snowing",
+                                5496
+                            ]
+                        ]}],
+                        selector: "weather"
+            }
+            }, 'node');
+
+            widgetUnderTest2 = new Module({
+                category: [
+                    "Blowing Sand, Soil, Dirt",
+                    "Blowing Snow",
+                    "Clear",
+                    "Cloudy",
+                    "Fog, Smog",
+                    "Rain",
+                    "Severe Crosswinds",
+                    "Sleet, Hail",
+                    "Snowing"
+                ],
+                data: {
+                    series: [{
+                        type: "pie",
+                        center: ['20%'],
+                        data: [
+                            [
+                                "Blowing Sand, Soil, Dirt",
+                                1
+                            ],
+                            [
+                                "Blowing Snow",
+                                10
+                            ]
+                        ]},{
+                            type: "pie",
+                            center: ['80%'],
+                            data: [
+                                [
+                                    "Blowing Sand, Soil, Dirt",
+                                    45
+                                ],
+                                [
+                                    "Blowing Snow",
+                                    50
+                                ]
+                            ]}],
+                        selector: "weather"
+            }
+        }, 'node2');
+
+            widgetUnderTest.render();
+            widgetUnderTest2.render();
+            widgetUnderTest.startup();
+            widgetUnderTest2.startup();
+        });
+</script>
+</head>
+<body>
+    <div id="node"></div>
+    <div id="node2"></div>
+</body>
+</html>

@@ -84,15 +84,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HomeModule.cs" />
-    <Compile Include="Models\BarChart.cs" />
     <Compile Include="Models\Chart.cs" />
-    <Compile Include="Models\DayChart.cs" />
-    <Compile Include="Models\LineChart.cs" />
-    <Compile Include="Models\PieChart.cs" />
     <Compile Include="Models\PostData.cs" />
     <Compile Include="Models\Result.cs" />
     <Compile Include="Models\Row.cs" />
-    <Compile Include="Models\TimeChart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Statistics.cs" />
   </ItemGroup>

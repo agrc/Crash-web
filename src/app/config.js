@@ -33,7 +33,11 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
                 reset: 'r',
                 gather: 'g'
             },
+            charts: {
+                display: 'c'
+            },
             events: {
+                hideComparisonFilter: 'h',
                 title: {
                     selected: 's'
                 },

@@ -1,6 +1,5 @@
 define([
     'app/config',
-    'app/FilterControls',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -14,7 +13,6 @@ define([
     'xstyle/css!app/resources/FilterSelector.css'
 ], function (
     config,
-    FilterControls,
 
     _TemplatedMixin,
     _WidgetBase,
@@ -35,6 +33,11 @@ define([
 
         // Properties to be sent into constructor
 
+        // FilterControls: app/FilterControls
+        // summary:
+        //      the controls to place in the control node
+        FilterControls:  null,
+
         postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
@@ -50,16 +53,16 @@ define([
                 this.childWidgets.push(Tab.placeAt(this.titleNode, 'last'));
             }, this);
 
-            var filterControls = new FilterControls({}, this.controlNode);
+            this.filterControls = new this.FilterControls({}, this.controlNode);
 
-            this.childWidgets.push(filterControls);
+            this.childWidgets.push(this.filterControls);
 
             array.forEach(this.filters, function (Filter) {
                 var filter = new Filter().placeAt(this.filterNode, 'last');
                 domClass.add(filter.domNode, 'hidden');
                 this.childWidgets.push(filter);
 
-                filterControls.filters.push(filter);
+                this.filterControls.filters.push(filter);
             }, this);
 
             this.inherited(arguments);

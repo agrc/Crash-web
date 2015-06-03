@@ -779,7 +779,7 @@ define([
             // where
             console.log('app.ClusterFeatureLayer::setDefinitionExpression', arguments);
 
-            this._getObjectIds(where.sql);
+            this._getObjectIds(where);
         },
         // Return a cache of features in the current extent
         _inExtent: function () {

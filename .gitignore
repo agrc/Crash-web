@@ -7,9 +7,9 @@
 *.user
 .DS_Store
 .grunt/
-api/crash-statistics/bin
-api/crash-statistics/obj
-api/crash-statistics/packages
+api/*/bin
+api/*/obj
+api/*/packages
 deploy
 dist/
 node_modules/

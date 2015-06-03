@@ -10,7 +10,7 @@ require([
     describe('app/FilterSelector', function () {
         var widget;
         var appNode;
-        
+
         var destroy = function (widget) {
             widget.destroyRecursive();
             widget = null;
@@ -18,7 +18,12 @@ require([
 
         beforeEach(function () {
             appNode = domConstruct.place('<div id="app_center"></div>', document.body);
-            widget = new WidgetUnderTest(null, domConstruct.create('div', null, document.body));
+            widget = new WidgetUnderTest({
+                FilterControls: function () {
+                    return {};
+                }
+            },
+            domConstruct.create('div', null, document.body));
         });
 
         afterEach(function () {
