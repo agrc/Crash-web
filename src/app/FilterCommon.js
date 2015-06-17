@@ -104,11 +104,16 @@ define([
             console.log('app.FilterCommon::_reset', arguments);
 
             query('input', this.domNode).forEach(function (node) {
-                // node.value = '';
-                node.checked = false;
+                if (['text', 'date', 'time'].indexOf(node.type) >= 0) {
+                    node.value = '';
+                }
 
-                var checkboxDiv = node.parentNode.parentNode;
-                domClass.remove(checkboxDiv, 'selected');
+                if (['checkbox'].indexOf(node.type) >= 0) {
+                    node.checked = false;
+
+                    var checkboxDiv = node.parentNode.parentNode;
+                    domClass.remove(checkboxDiv, 'selected');
+                }
             });
 
             this.set('data', {});

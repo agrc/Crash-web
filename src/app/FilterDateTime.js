@@ -8,7 +8,7 @@ define([
     'dojo/text!app/templates/FilterDateTime.html',
 
     'xstyle/css!app/resources/FilterDateTime.css'
-], function(
+], function (
     config,
     FilterCommon,
 
@@ -28,7 +28,7 @@ define([
 
         // Properties to be sent into constructor
 
-        postCreate: function() {
+        postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
             // tags:
@@ -41,7 +41,7 @@ define([
 
             this.inherited(arguments);
         },
-        setupConnections: function() {
+        setupConnections: function () {
             // summary:
             //      wire events, and such
             //
@@ -57,7 +57,7 @@ define([
 
             this.inherited(arguments);
         },
-        _gatherData: function() {
+        _gatherData: function () {
             // summary:
             //      builds the object to publish
             //
