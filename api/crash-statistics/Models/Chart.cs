@@ -30,7 +30,7 @@ namespace crash_statistics.Models
                 return str;
             };
 
-            Categories = row.Select(x => convertToNumber(x.Label.Trim())).OrderBy(x => x);
+            Categories = row.Select(x => x.Label.Trim()).OrderBy(x => convertToNumber(x));
 
             Data = new List<Series>
             {
@@ -104,19 +104,14 @@ public class Series
     {
         get
         {
-            Func<string, object> convertToNumber = str =>
+            Func<object, object> convertToNumber = str =>
             {
                 int number;
 
-                if (int.TryParse(str, out number))
-                {
-                    return number;
-                }
-
-                return str;
+                return int.TryParse(str.ToString(), out number) ? number : str;
             };
 
-            return _rows.Select(x => new ArrayList {convertToNumber(x.Label.Trim()), x.Occurances}).OrderBy(x => x[0]);
+            return _rows.Select(x => new ArrayList {x.Label.Trim(), x.Occurances}).OrderBy(x => convertToNumber(x[0]));
         }
     }
 

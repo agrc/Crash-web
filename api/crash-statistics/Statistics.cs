@@ -115,7 +115,7 @@ namespace crash_statistics
                     time = new Chart(new[]
                     {
                         results.Where(x => x.Type == "hour" && x.Label != null),
-                        results.Where(x => x.Type == "hour" && x.Label != null)
+                        comparison.Where(x => x.Type == "hour" && x.Label != null)
                     }, "time", "line");
 
                     road = new Chart(new[]

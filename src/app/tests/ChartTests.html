@@ -35,59 +35,113 @@
             'dojo/domReady!'
         ], function(Module) {
             widgetUnderTest = new Module({
-                category: [
-                    "Blowing Sand, Soil, Dirt",
-                    "Blowing Snow",
-                    "Clear",
-                    "Cloudy",
-                    "Fog, Smog",
-                    "Rain",
-                    "Severe Crosswinds",
-                    "Sleet, Hail",
-                    "Snowing"
+                categories: [
+                    "0",
+                    "2",
+                    "6",
+                    "7",
+                    "8",
+                    "9",
+                    "10",
+                    "11",
+                    "12",
+                    "13",
+                    "14",
+                    "15",
+                    "16",
+                    "17",
+                    "18",
+                    "19",
+                    "20",
+                    "21",
+                    "22"
                 ],
-                data: {
-                    series: [{
-                        type: "bar",
+                 data: {
+                    selector: "time",
+                    series: [
+                    {
+                        type: "line",
+                        name: "Original",
                         data: [
                             [
-                                "Blowing Sand, Soil, Dirt",
-                                29
+                                "0",
+                                2
                             ],
                             [
-                                "Blowing Snow",
-                                342
+                                "2",
+                                1
                             ],
                             [
-                                "Clear",
-                                66624
+                                "6",
+                                1
                             ],
                             [
-                                "Cloudy",
-                                14656
+                                "7",
+                                2
                             ],
                             [
-                                "Fog, Smog",
-                                330
+                                "8",
+                                4
                             ],
                             [
-                                "Rain",
-                                4359
+                                "9",
+                                4
                             ],
                             [
-                                "Severe Crosswinds",
-                                133
+                                "10",
+                                4
                             ],
                             [
-                                "Sleet, Hail",
-                                268
+                                "11",
+                                6
                             ],
                             [
-                                "Snowing",
-                                5496
+                                "12",
+                                7
+                            ],
+                            [
+                                "13",
+                                4
+                            ],
+                            [
+                                "14",
+                                5
+                            ],
+                            [
+                                "15",
+                                3
+                            ],
+                            [
+                                "16",
+                                8
+                            ],
+                            [
+                                "17",
+                                9
+                            ],
+                            [
+                                "18",
+                                8
+                            ],
+                            [
+                                "19",
+                                2
+                            ],
+                            [
+                                "20",
+                                4
+                            ],
+                            [
+                                "21",
+                                3
+                            ],
+                            [
+                                "22",
+                                1
                             ]
-                        ]}],
-                        selector: "weather"
+                        ]
+                    }
+                ]
             }
             }, 'node');
 
