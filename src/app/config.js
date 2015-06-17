@@ -17,6 +17,16 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
         //      The version number.
         version: '0.16.1',
 
+        // minDate: String
+        // summary:
+        //      the oldest date of crashes in the system
+        minDate: '01/01/2011',
+
+        // maxDate: String
+        // summary:
+        //      the most current crash data in the system
+        maxDate: '12/01/2014',
+
         // apiKey: String
         //      The api key used for services on api.mapserv.utah.gov
         apiKey: '', // acquire at developer.mapserv.utah.gov

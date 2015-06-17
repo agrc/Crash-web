@@ -68,6 +68,7 @@ define([
 
             // set version number
             this.version.innerHTML = config.version;
+            this.date.innerHTML = 'data available from ' + config.minDate + ' through ' + config.maxDate;
 
             MapController.init({
                 mapDiv: this.mapDiv
