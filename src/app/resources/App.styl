@@ -112,3 +112,26 @@ html
         -ms-filter unquote('"progidDXImageTransform.Microsoft.Alpha(Opacity=100)"')
         filter unquote('alpha(opacity=100)')
         opacity 1
+
+@media print
+    *, *:before, *:after
+        text-shadow none !important
+        background transparent !important
+        box-shadow none !important
+    .app
+        .title-container
+            background-color $background !important
+            color white !important
+            .title
+                color white !important
+            .dateRange
+                color white !important
+                position static
+            h1
+                margin 0
+            .highlight
+                color white !important
+            .version, .menu
+                display none
+        .map, .mapContainer
+            display none

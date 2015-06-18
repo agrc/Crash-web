@@ -21,3 +21,19 @@
         position absolute
         right 60px
         top 26px
+@media print
+    body
+    html
+    .app
+        overflow visible !important
+    .results-panel
+        position static
+        .panel-default
+        .panel-body
+            overflow-y auto !important
+            overflow-x hidden !important
+        .comparison
+            display none
+    .center-container
+        overflow visible !important
+        position static !important
