@@ -101,6 +101,13 @@ define([
                 },
                 tooltip: {
                     formatter: function () {
+                        var value = this.y;
+                        var percent = this.percentage || '';
+
+                        if (percent) {
+                            return value + ', ' + Math.round(percent, -2) + '%';
+                        }
+
                         return this.y;
                     },
                     shared: true
