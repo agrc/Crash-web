@@ -133,7 +133,7 @@ define([
                 new Color([0, 116, 217, 0.75]));
             this._singleTemplate = options.singleTemplate || new PopupTemplate({
                 'title': 'Injuries: {severity}',
-                'description': '<label>Date</label>: {date}<br/>' +
+                'description': '<label>Date</label>: {crash_date}<br/>' +
                                 '<label>Event</label>: {event}<br/>' +
                                 '<label>Collision Type</label>: {collision_type}<br/>' +
                                 '<label>Weather</label>: {weather_condition}<br/>' +
@@ -620,9 +620,9 @@ define([
             this._identifyQuery.returnGeometry = true;
             this.queryTask.execute(this._identifyQuery, lang.hitch(this, function (featureSet) {
                 arrayUtils.forEach(featureSet.features, function (feature) {
-                    feature.attributes.date = new Date(feature.attributes.date).toLocaleString();
-
                     /* jshint -W106 */
+                    feature.attributes.date = new Date(feature.attributes.date_date).toLocaleString();
+
                     if (!feature.attributes.collision_type) {
                         /* jshint +W106 */
                         feature.infoTemplate = this._singleTemplateWithoutCollision;
