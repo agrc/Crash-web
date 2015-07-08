@@ -1,5 +1,6 @@
 define([
     'agrc/widgets/map/BaseMap',
+    'agrc/widgets/map/BaseMapSelector',
 
     'app/config',
     'app/layers/ClusterFeatureLayer',
@@ -20,6 +21,7 @@ define([
     'esri/symbols/SimpleLineSymbol'
 ], function (
     BaseMap,
+    BaseMapSelector,
 
     config,
     ClusterFeatureLayer,
@@ -72,7 +74,15 @@ define([
 
             this.map = new BaseMap(this.mapDiv, {
                 showAttribution: false,
-                defaultBaseMap: 'Hybrid'
+                useDefaultBaseMap: false,
+                sliderOrientation: 'horizontal'
+            });
+
+            new BaseMapSelector({
+                map: this.map,
+                id: 'tundra',
+                position: 'TL',
+                defaultThemeLabel: 'Lite'
             });
 
             this.appendLogo('logo-alt');
