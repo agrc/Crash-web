@@ -136,15 +136,51 @@ define([
             // criteria
             console.log('app.ControlCommon::_buildFactors', arguments);
 
+            /* jshint -W121 */
+            // polyfill startsWith
+            if (!String.prototype.startsWith) {
+                String.prototype.startsWith = function (searchString, position) {
+                    position = position || 0;
+                    return this.indexOf(searchString, position) === position;
+                };
+            }
+            /* jshint +W121 */
+
             var filters = [];
             if (criteria.factors && criteria.factors.length) {
                 var factors = array.map(criteria.factors, function formatFactors(factor) {
+                    if (factor.startsWith('*')) {
+                        return factor;
+                    }
                     return factor + '=1';
                 });
 
-                var factorClause = factors.join(' AND ');
+                var contributingFactors = [];
+                var causes = [];
 
-                filters.push('crash_id IN (SELECT id FROM DDACTSadmin.Rollup WHERE ' + factorClause + ')');
+                factors.forEach(function (factor) {
+                    if (factor.startsWith('*')) {
+                        var factorList = factor.slice(1).split(',');
+                        factorList = factorList.map(function (f) {
+                            return '\'' + f + '\'';
+                        });
+
+                        causes = factorList.concat(causes);
+                    } else {
+                        contributingFactors.push(factor);
+                    }
+                });
+
+                if (contributingFactors.length > 0) {
+                    var factorClause = contributingFactors.join(' AND ');
+
+                    filters.push('crash_id IN (SELECT id FROM DDACTSadmin.Rollup WHERE ' + factorClause + ')');
+                }
+                if (causes.length > 0) {
+                    var causeClause = causes.join(',');
+                    filters.push('crash_id IN (SELECT driver_id FROM DDACTSadmin.Driver WHERE ' +
+                    'contributing_cause in (' + causeClause + ') or alternate_cause in (' + causeClause + '))');
+                }
             }
 
             return filters;

@@ -50,25 +50,25 @@ require({
                 type: 'calendar',
                 description: 'Date and Time Factors'
             }),
-            // new Dep({
-            //     type: 'spatial',
-            //     description: 'Spatial Factors'
-            // }),
-            // new Dep({
-            //     type: 'factors',
-            //     description: 'Contributing Factors'
-            // }),
-            // new Dep({
-            //     type: 'severity',
-            //     description: 'Crash Severity'
-            // }),
-            // new Dep({
-            //     type: 'weather',
-            //     description: 'Weather Condition Factors'
-            // })
+            new Dep({
+                type: 'spatial',
+                description: 'Spatial Factors'
+            }),
+            new Dep({
+                type: 'factors',
+                description: 'Contributing Factors'
+            }),
+            new Dep({
+                type: 'severity',
+                description: 'Crash Severity'
+            }),
+            new Dep({
+                type: 'weather',
+                description: 'Weather Condition Factors'
+            })
         ],
         filters: [
-            Dep2//, Dep3, Dep4, Dep5, Dep6
+            Dep2, Dep3, Dep4, Dep5, Dep6
         ],
         FilterControls: Dep7
     }, 'node');

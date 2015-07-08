@@ -33,16 +33,22 @@
         }, [
             'app/FilterFactors',
 
+            'dojo/on',
+
             'dojo/domReady!'
-        ], function(Module) {
+        ], function(Module, on) {
             widgetUnderTest = new Module({
             }, 'node');
 
             widgetUnderTest.startup();
+            on(document.getElementById('collect'), 'click', function () {
+                console.log(widgetUnderTest.data.factors);
+            })
         });
 </script>
 </head>
 <body class='claro'>
     <div id="node"></div>
+    <button id="collect">Collect</button>
 </body>
 </html>

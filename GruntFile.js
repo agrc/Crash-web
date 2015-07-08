@@ -24,7 +24,7 @@ var browsers = [{
     version: '9'
 }];
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     var jsFiles = 'src/app/**/*.js',
         otherFiles = [
             'src/app/**/*.html',
