@@ -94,6 +94,15 @@ define([
 
             this.syncSelectorNode(chartType);
 
+            var series = lang.clone(this.data.series);
+            if (chartType === 'pie') {
+                for (var i = 0; i < series.length; i++) {
+                    series[i].data = series[i].data.filter(function (row) {
+                        return row[1] !== 0;
+                    });
+                }
+            }
+
             this.charts = new Highcharts.Chart({
                 chart: {
                     renderTo: this.chartNode,
@@ -130,7 +139,7 @@ define([
                         display: 'none'
                     }
                 },
-                series: lang.clone(this.data.series),
+                series: series,
                 credits: {
                     enabled: false
                 }

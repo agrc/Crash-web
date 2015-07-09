@@ -150,12 +150,7 @@
                     "Blowing Sand, Soil, Dirt",
                     "Blowing Snow",
                     "Clear",
-                    "Cloudy",
-                    "Fog, Smog",
-                    "Rain",
-                    "Severe Crosswinds",
-                    "Sleet, Hail",
-                    "Snowing"
+                    "Cloudy"
                 ],
                 data: {
                     series: [{
@@ -164,11 +159,19 @@
                         data: [
                             [
                                 "Blowing Sand, Soil, Dirt",
-                                1
+                                10
                             ],
                             [
                                 "Blowing Snow",
                                 10
+                            ],
+                            [
+                                "Clear",
+                                10
+                            ],
+                            [
+                                "Cloudy",
+                                0
                             ]
                         ]},{
                             type: "pie",
@@ -176,20 +179,28 @@
                             data: [
                                 [
                                     "Blowing Sand, Soil, Dirt",
-                                    45
+                                    5
                                 ],
                                 [
                                     "Blowing Snow",
-                                    50
+                                    5
+                                ],
+                                [
+                                    "Clear",
+                                    0
+                                ],
+                                [
+                                    "Cloudy",
+                                    5
                                 ]
                             ]}],
                         selector: "weather"
             }
         }, 'node2');
 
-            widgetUnderTest.render();
+            // widgetUnderTest.render();
             widgetUnderTest2.render();
-            widgetUnderTest.startup();
+            // widgetUnderTest.startup();
             widgetUnderTest2.startup();
         });
 </script>
