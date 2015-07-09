@@ -14,23 +14,12 @@ namespace crash_statistics.Models
             Categories = new List<object>();
             Data = new List<Series>();
         }
+
         public Chart(IEnumerable<Row> row, string selector, string type)
         {
             Selector = selector;
 
-            Func<string, object> convertToNumber = str =>
-            {
-                int number;
-
-                if (int.TryParse(str, out number))
-                {
-                    return number;
-                }
-
-                return str;
-            };
-
-            Categories = row.Select(x => x.Label.Trim()).OrderBy(x => convertToNumber(x));
+            Categories = row.Select(x => x.Label.Trim()).OrderBy(ConvertToNumber);
 
             Data = new List<Series>
             {
@@ -42,8 +31,43 @@ namespace crash_statistics.Models
         {
             Selector = selector;
 
-            Func<string, object> convertToNumber = str =>
+            var combined = rows.SelectMany(x => x);
+
+            Categories = combined.Select(x => ConvertToNumber(x.Label.Trim()))
+                                 .OrderBy(x => x)
+                                 .Distinct();
+
+            var original = rows.First();
+            var comparison = rows.Last();
+
+            var itemsToAddToComparison = Categories.Except(rows.Last().Select(x => x.Label));
+            var itemsToAddToOriginal = Categories.Except(rows.First().Select(x => x.Label));
+
+            if (itemsToAddToOriginal.Any())
             {
+                var collection = original.ToList();
+                collection.AddRange(itemsToAddToOriginal.Select(item => new Row(0, item.ToString(), "")));
+
+                original = collection;
+            }
+
+            if (itemsToAddToComparison.Any())
+            {
+                var collection = comparison.ToList();
+                collection.AddRange(itemsToAddToComparison.Select(item => new Row(0, item.ToString(), "")));
+
+                comparison = collection;
+            }
+
+            Data = new List<Series>
+            {
+                new Series(original, type, "Original", new [] { "20%" }),
+                new Series(comparison, type, "Comparison", new [] { "80%" }),
+            };
+        }
+
+        private static object ConvertToNumber(string str)
+        {
                 int number;
 
                 if (int.TryParse(str, out number))
@@ -52,19 +76,6 @@ namespace crash_statistics.Models
                 }
 
                 return str;
-            };
-
-            var combined = rows.SelectMany(x => x);
-
-            Categories = combined.Select(x => convertToNumber(x.Label.Trim()))
-                                 .OrderBy(x => x)
-                                 .Distinct();
-
-            Data = new List<Series>
-            {
-                new Series(rows.First(), type, "Original", new [] { "20%" }),
-                new Series(rows.Last(), type, "Comparison", new [] { "80%" }),
-            };
         }
 
         [JsonProperty(PropertyName = "selector")]

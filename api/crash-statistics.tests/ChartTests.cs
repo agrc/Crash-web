@@ -255,5 +255,48 @@ namespace crash_statistics.tests
                 new ArrayList {"z", 12}
             }));
         }
+
+        [Test]
+        public void ChartDataIsInSameOrderAsCategories()
+        {
+            var original = new List<Row>
+            {
+                new Row(1, "a", "weather"),
+                new Row(3, "b", "weather"),
+                new Row(4, "c", "weather"),
+                new Row(5, "d", "weather"),
+                new Row(6, "z", "road"),
+                new Row(7, "x", "road"),
+                new Row(8, "y", "road"),
+            }; 
+
+            var chart = new Chart(original, "node", "pie");
+            Assert.That(chart.Categories, Is.EquivalentTo(chart.Data[0].Data.Select(x=>x[0])));
+        }
+
+        [Test]
+        public void ChartDataAddsMissingValuesForMultipleSeries()
+        {
+            var original = new List<Row>
+            {
+                new Row(1, "a1", "weather"),
+                new Row(2, "b1", "weather"),
+                new Row(3, "c1", "weather"),
+                new Row(11, "a2", "weather"),
+            };
+
+            var comparison = new List<Row>
+            {
+                new Row(11, "a2", "weather"),
+                new Row(12, "b2", "weather"),
+                new Row(2, "b1", "weather"),
+            };
+
+            var chart = new Chart(new [] { original, comparison }, "node", "pie");
+
+            Assert.That(chart.Categories, Is.EquivalentTo(new [] { "a1", "a2", "b1", "b2", "c1"}), "categorie is incorrect");
+            Assert.That(chart.Categories, Is.EquivalentTo(chart.Data[0].Data.Select(x => x[0])), "original series is incorrect");
+            Assert.That(chart.Categories, Is.EquivalentTo(chart.Data[1].Data.Select(x => x[0])), "comparison series is incorrect");
+        }
     }
 }
