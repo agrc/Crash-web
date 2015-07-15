@@ -32,7 +32,7 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
         apiKey: '', // acquire at developer.mapserv.utah.gov
 
         urls: {
-            service: '/arcgis/rest/services/Crash/Crashes/FeatureServer/0',
+            service: '/arcgis/rest/services/Crash/Crashes/MapServer/0',
             stats: location.pathname.replace(/\/(src|dist)/, '') + 'api/stats'
         },
 
