@@ -195,7 +195,8 @@ define([
             if (criteria.milepost) {
                 var milepost = criteria.milepost;
                 filters.push('route_number = ' + milepost.route +
-                             ' AND milepost BETWEEN ' + milepost.from + ' AND ' + milepost.to);
+                             ' AND milepost BETWEEN ' + milepost.from + ' AND ' + milepost.to +
+                             ' AND road_type = \'Mainline\'');
             }
 
             if (criteria.counties) {
