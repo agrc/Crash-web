@@ -100,5 +100,10 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
         window.AGRC.apiKey = 'AGRC-63E1FF17767822';
     }
 
+    require(['app/resources/dates'], function (dates) {
+        window.AGRC.minDate = dates.minDate;
+        window.AGRC.maxDate = dates.maxDate;
+    });
+
     return window.AGRC;
 });
