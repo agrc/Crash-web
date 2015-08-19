@@ -6,7 +6,7 @@
             
         }
         
-        public Row(int occurances, string label, string type)
+        public Row(int occurances, object label, string type)
         {
             Occurances = occurances;
             Label = label;
@@ -15,7 +15,7 @@
 
         public int Occurances { get; set; }
 
-        public string Label { get; set; } 
+        public object Label { get; set; } 
         
         public string Type { get; set; }
     }

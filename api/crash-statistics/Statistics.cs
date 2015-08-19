@@ -50,29 +50,36 @@ namespace crash_statistics
 
                 results = results.ToArray();
 
-                Func<string, string> convertToDay = pair =>
+                Func<object, object> convertToDay = pair =>
                 {
-                    var key = int.Parse(pair);
+                    var key = int.Parse(pair.ToString());
 
                     switch (key)
                     {
                         case 1:
-                            return "Sunday";
+                            return DayOfWeek.Sunday;
                         case 2:
-                            return "Monday";
+                            return DayOfWeek.Monday;
                         case 3:
-                            return "Tuesday";
+                            return DayOfWeek.Tuesday;
                         case 4:
-                            return "Wednesday";
+                            return DayOfWeek.Wednesday;
                         case 5:
-                            return "Thursday";
+                            return DayOfWeek.Thursday;
                         case 6:
-                            return "Friday";
+                            return DayOfWeek.Friday;
                         case 7:
-                            return "Saturday";
+                            return DayOfWeek.Saturday;
                     }
 
                     return "";
+                };
+
+                Func<object, object> convertToNumber = str =>
+                {
+                    int number;
+
+                    return int.TryParse(str.ToString(), out number) ? number : str;
                 };
 
                 var weather = new Chart();
@@ -114,8 +121,10 @@ namespace crash_statistics
 
                     time = new Chart(new[]
                     {
-                        results.Where(x => x.Type == "hour" && x.Label != null),
+                        results.Where(x => x.Type == "hour" && x.Label != null)
+                               .Select(x => new Row(x.Occurances, convertToNumber(x.Label), x.Type)),
                         comparison.Where(x => x.Type == "hour" && x.Label != null)
+                                  .Select(x => new Row(x.Occurances, convertToNumber(x.Label), x.Type))   
                     }, "time", "line");
 
                     road = new Chart(new[]
@@ -129,11 +138,12 @@ namespace crash_statistics
                     weather = new Chart(results.Where(x => x.Type == "weather" && x.Label != null).ToArray(),
                         "weather", "pie");
                     cause = new Chart(results.Where(x => x.Type == "cause" && x.Label != null), "factors", "pie");
-                    days =new Chart(results.Where(x => x.Type == "day" && x.Label != null)
+                    days = new Chart(results.Where(x => x.Type == "day" && x.Label != null)
                                 .Select(x => new Row(x.Occurances, convertToDay(x.Label), x.Type)), "days", "pie");
                     distractions = new Chart(results.Where(x => x.Type == "distraction" && x.Label != null),
                         "distractions", "bar");
-                    time = new Chart(results.Where(x => x.Type == "hour" && x.Label != null), "time", "line");
+                    time = new Chart(results.Where(x => x.Type == "hour" && x.Label != null)
+                                            .Select(x => new Row(x.Occurances, convertToNumber(x.Label), x.Type)), "time", "line");
                     road = new Chart(results.Where(x => x.Type == "road" && x.Label != null), "road", "pie");
                 }
 
