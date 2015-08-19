@@ -1,16 +1,15 @@
 define([
-    'app/config',
+    'app/ActiveFilters',
     'app/Chart',
+    'app/ComparisonControls',
+    'app/config',
+    'app/FilterDateTime',
     'app/FilterSelector',
     'app/FilterTitleNode',
-    'app/FilterDateTime',
-    'app/ComparisonControls',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
-    'dojo/_base/declare',
-    'dojo/_base/lang',
     'dojo/aspect',
     'dojo/dom-class',
     'dojo/keys',
@@ -19,21 +18,22 @@ define([
     'dojo/request',
     'dojo/text!app/templates/ResultsPanel.html',
     'dojo/topic',
+    'dojo/_base/declare',
+    'dojo/_base/lang',
 
     'xstyle/css!app/resources/ResultsPanel.css'
 ], function (
-    config,
+    ActiveFilters,
     Chart,
+    ComparisonControls,
+    config,
+    FilterDateTime,
     FilterSelector,
     FilterTitleNode,
-    FilterDateTime,
-    ComparisonControls,
 
     _TemplatedMixin,
     _WidgetBase,
 
-    declare,
-    lang,
     aspect,
     domClass,
     keys,
@@ -41,7 +41,9 @@ define([
     query,
     request,
     template,
-    topic
+    topic,
+    declare,
+    lang
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -64,6 +66,8 @@ define([
             console.log('app.ResultsPanel::postCreate', arguments);
 
             this.setupConnections();
+
+            this.activeFilters = new ActiveFilters({}, this.activeFiltersNode);
 
             this.inherited(arguments);
         },
@@ -151,6 +155,8 @@ define([
 
                 return null;
             };
+            this.activeFilters.set('source', criteria.source);
+            this.activeFilters.set('compare', criteria.compare);
 
             // return if there is no source. nothing to graph.
             if (!criteria.source || !criteria.source.date) {
