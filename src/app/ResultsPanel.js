@@ -327,6 +327,14 @@ define([
 
                 this.charts.push(chart);
             }, this);
+        },
+        errorHandler: function () {
+            // summary:
+            //      error handler
+            //
+            console.log('app.ResultsPanel::errorHandler', arguments);
+
+            alert('something went wrong.');
         }
     });
 });
