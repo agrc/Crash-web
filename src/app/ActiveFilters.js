@@ -59,7 +59,7 @@ define([
 
             var obj = this.get(name);
             var node = this.sourceRow;
-            obj.filterType = 'Active Fitlers';
+            obj.filterType = 'Active Filters';
 
             if (name === 'compare') {
                 node = this.compareRow;
@@ -86,7 +86,9 @@ define([
                 domClass.add(div, classes);
             }
 
-            domConstruct.place(fragment, name, 'only');
+            if (count > 0) {
+                domConstruct.place(fragment, name, 'only');
+            }
         },
         _setSourceAttr: function (criteria) {
             criteria = this._invokeProperties(lang.clone(criteria));

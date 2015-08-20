@@ -15,7 +15,7 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
 
         // version.: String
         //      The version number.
-        version: '0.18.1',
+        version: '0.18.2',
 
         // minDate: String
         // summary:
