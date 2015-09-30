@@ -100,7 +100,7 @@ define([
                     var today = criteria.date.today || Date.now();
                     var predefined = date.add(today, 'day', criteria.date.predefined);
 
-                    filters.push('DDACTS.DDACTSadmin.CRASHLOCATION.crash_date >= \'' +
+                    filters.push('crash_date >= \'' +
                                  this._formatDateForArcGis(predefined) + '\'');
                 }
 
@@ -108,7 +108,7 @@ define([
                     var from = criteria.date.fromDate;
                     var to = criteria.date.toDate;
 
-                    filters.push('DDACTS.DDACTSadmin.CRASHLOCATION.crash_date BETWEEN \'' +
+                    filters.push('crash_date BETWEEN \'' +
                         this._formatDateForArcGis(from) +
                         '\' AND \'' + this._formatDateForArcGis(to) + '\'');
                 }
@@ -116,14 +116,14 @@ define([
                 if (criteria.date.specificDays) {
                     var days = criteria.date.specificDays;
 
-                    filters.push('DDACTS.DDACTSadmin.CRASHLOCATION.crash_day IN (' + days.join(',') + ')');
+                    filters.push('crash_day IN (' + days.join(',') + ')');
                 }
 
                 if (criteria.date.fromTime && criteria.date.toTime) {
                     var fromTime = criteria.date.fromTime;
                     var toTime = criteria.date.toTime;
 
-                    filters.push('CAST(DDACTS.DDACTSadmin.CRASHLOCATION.crash_date as TIME) BETWEEN \'' + fromTime +
+                    filters.push('CAST(crash_date as TIME) BETWEEN \'' + fromTime +
                                  '\' AND \'' + toTime + '\'');
                 }
             }
