@@ -90,8 +90,8 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
     };
 
     if (has('agrc-build') === 'prod') {
-        // mapserv.utah.gov
-        window.AGRC.apiKey = 'AGRC-A94B063C533889';
+        // crashmapping.utah.gov
+        window.AGRC.apiKey = 'AGRC-74CDA9DA213937';
     } else if (has('agrc-build') === 'stage') {
         // test.mapserv.utah.gov
         window.AGRC.apiKey = 'AGRC-AC122FA9671436';
