@@ -80,7 +80,9 @@
     <Content Include="Content\search.png" />
     <Content Include="Content\site.css" />
     <Content Include="Views\Home.html" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HomeModule.cs" />
@@ -94,12 +96,15 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\172.16.17.58.pubxml" />
+    <None Include="Properties\PublishProfiles\production.pubxml" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <PropertyGroup>

@@ -31,14 +31,14 @@ namespace crash_statistics
 
                 try
                 {
-                    using (
-                        var connection =
-                            new SqlConnection(ConfigurationManager.ConnectionStrings["dev"].ConnectionString))
+                    using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["dev"].ConnectionString))
                     {
+                        criteria.Sql = criteria.Sql.Replace("crash_date", "CRASHLOCATION.crash_date");
                         results = await connection.QueryAsync<Row>(string.Format(sql, criteria.Sql));
 
                         if (!string.IsNullOrEmpty(criteria.Comparison))
                         {
+                            criteria.Comparison = criteria.Comparison.Replace("crash_date", "CRASHLOCATION.crash_date");
                             comparison = await connection.QueryAsync<Row>(string.Format(sql, criteria.Comparison));
                         }
                     }
