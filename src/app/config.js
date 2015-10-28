@@ -1,5 +1,15 @@
 /* jshint maxlen:false */
-define(['dojo/has', 'esri/config'], function (has, esriConfig) {
+define([
+    'dojo/has',
+    'dojo/request/xhr',
+
+    'esri/config'
+], function (
+    has,
+    xhr,
+
+    esriConfig
+) {
     // force api to use CORS on mapserv thus removing the test request on app load
     // e.g. http://mapserv.utah.gov/ArcGIS/rest/info?f=json
     esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
@@ -100,14 +110,15 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
         window.AGRC.apiKey = 'AGRC-63E1FF17767822';
     }
 
-    try {
-        require(['app/resources/dates'], function (dates) {
-            window.AGRC.minDate = dates.minDate;
-            window.AGRC.maxDate = dates.maxDate;
-        });
-    } catch (e) {
-        console.debug('dates not found', e);
-    }
+    xhr(require.baseUrl + 'app/resources/dates.json', {
+        handleAs: 'json',
+        sync: true
+    }).then(function (dates) {
+        window.AGRC.minDate = dates.minDate;
+        window.AGRC.maxDate = dates.maxDate;
+    }, function () {
+        throw 'Error getting dates!';
+    });
 
     return window.AGRC;
 });
