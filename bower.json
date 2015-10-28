@@ -1,6 +1,6 @@
 {
   "name": "crash.web",
-  "version": "0.18.2",
+  "version": "1.0.0",
   "dependencies": {
     "agrc": "agrc-widgets#2.11.1",
     "bootstrap": "~3.3.4",
