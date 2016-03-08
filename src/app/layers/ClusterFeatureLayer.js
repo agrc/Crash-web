@@ -1,13 +1,13 @@
 /* jshint maxcomplexity:false */
 define([
+    'dojo/aspect',
+    'dojo/on',
+    'dojo/request/xhr',
     'dojo/_base/array',
     'dojo/_base/Color',
     'dojo/_base/declare',
     'dojo/_base/event',
     'dojo/_base/lang',
-    'dojo/aspect',
-    'dojo/on',
-    'dojo/request/xhr',
 
     'dojox/lang/functional/object',
 
@@ -30,14 +30,14 @@ define([
 
     'mustache/mustache'
 ], function (
+    aspect,
+    on,
+    xhr,
     arrayUtils,
     Color,
     declare,
     evt,
     lang,
-    aspect,
-    on,
-    xhr,
 
     object,
 
@@ -621,7 +621,7 @@ define([
             this.queryTask.execute(this._identifyQuery, lang.hitch(this, function (featureSet) {
                 arrayUtils.forEach(featureSet.features, function (feature) {
                     /* jshint -W106 */
-                    feature.attributes.date = new Date(feature.attributes.date_date).toLocaleString();
+                    feature.attributes.crash_date = new Date(feature.attributes.crash_date).toLocaleString();
 
                     if (!feature.attributes.collision_type) {
                         /* jshint +W106 */
