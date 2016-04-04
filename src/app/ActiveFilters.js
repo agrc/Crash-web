@@ -6,6 +6,7 @@ define([
     'dojo/dom-construct',
     'dojo/text!app/templates/ActiveFilters.html',
     'dojo/text!app/templates/activeFilterTemplate.html',
+    'dojo/_base/array',
     'dojo/_base/declare',
     'dojo/_base/lang',
 
@@ -20,6 +21,7 @@ define([
     domConstruct,
     template,
     activeFilterTemplate,
+    array,
     declare,
     lang,
 
@@ -67,14 +69,20 @@ define([
             }
 
             var fragment = domConstruct.toDom(mustache.render(activeFilterTemplate, obj));
+            var children = array.filter(fragment.childNodes, function nodeType(child) {
+                return child.nodeType === 1;
+            });
 
-            var columns = fragment.children[1].children;
+            var columns = array.filter(children[1].childNodes, function nodeType(child) {
+                return child.nodeType === 1;
+            });
+
             var count = columns.length;
             var classes = 'col-xs-6 col-sm-2 col-md-2';
 
             if (count < 5) {
                 var template = {
-                    span: 12/count
+                    span: 12 / count
                 };
 
                 classes = lang.replace('col-xs-6 col-sm-{span} col-md-{span}', template);
