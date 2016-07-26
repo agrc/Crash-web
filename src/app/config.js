@@ -1,4 +1,3 @@
-/* jshint maxlen:false */
 define([
     'dojo/has',
     'dojo/request/xhr',
@@ -14,6 +13,7 @@ define([
     // e.g. http://mapserv.utah.gov/ArcGIS/rest/info?f=json
     esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('basemaps.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('discover.agrc.utah.gov');
 
     window.AGRC = {
         // errorLogger: ijit.modules.ErrorLogger
@@ -102,9 +102,12 @@ define([
     if (has('agrc-build') === 'prod') {
         // crashmapping.utah.gov
         window.AGRC.apiKey = 'AGRC-74CDA9DA213937';
+        window.AGRC.quadWord = 'nixon-flex-modest-stamp';
     } else if (has('agrc-build') === 'stage') {
         // test.mapserv.utah.gov
         window.AGRC.apiKey = 'AGRC-AC122FA9671436';
+        window.AGRC.quadWord = 'opera-event-little-pinball';
+        esriConfig.defaults.io.corsEnabledServers.push('test.mapserv.utah.gov');
     } else {
         // localhost
         window.AGRC.apiKey = 'AGRC-63E1FF17767822';
@@ -118,6 +121,16 @@ define([
         window.AGRC.maxDate = dates.maxDate;
     }, function () {
         throw 'Error getting dates!';
+    });
+
+    xhr(require.baseUrl + 'secrets.json', {
+        handleAs: 'json',
+        sync: true
+    }).then(function (secrets) {
+        window.AGRC.quadWord = secrets.quadWord;
+        window.AGRC.apiKey = secrets.apiKey;
+    }, function () {
+        throw 'Error getting quad word!';
     });
 
     return window.AGRC;

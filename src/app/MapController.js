@@ -1,45 +1,47 @@
 define([
     'agrc/widgets/map/BaseMap',
-    'agrc/widgets/map/BaseMapSelector',
 
     'app/config',
     'app/layers/ClusterFeatureLayer',
 
-    'dojo/_base/array',
-    'dojo/_base/Color',
-    'dojo/_base/lang',
     'dojo/dom-construct',
     'dojo/on',
     'dojo/query',
     'dojo/topic',
+    'dojo/_base/array',
+    'dojo/_base/Color',
+    'dojo/_base/lang',
 
     'esri/geometry/Extent',
     'esri/graphic',
     'esri/graphicsUtils',
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/ArcGISTiledMapServiceLayer',
-    'esri/symbols/SimpleLineSymbol'
+    'esri/symbols/SimpleLineSymbol',
+
+    'layer-selector'
 ], function (
     BaseMap,
-    BaseMapSelector,
 
     config,
     ClusterFeatureLayer,
 
-    array,
-    Color,
-    lang,
     domConstruct,
     on,
     query,
     topic,
+    array,
+    Color,
+    lang,
 
     Extent,
     Graphic,
     graphicsUtils,
     DynamicLayer,
     TiledLayer,
-    LineSymbol
+    LineSymbol,
+
+    BaseMapSelector
 ) {
     return {
         // description:
@@ -81,8 +83,8 @@ define([
             new BaseMapSelector({
                 map: this.map,
                 id: 'tundra',
-                position: 'TL',
-                defaultThemeLabel: 'Lite'
+                quadWord: config.quadWord,
+                baseLayers: ['Lite', 'Hybrid', 'Terrain', 'Topo', 'Color IR']
             });
 
             this.appendLogo('logo-alt');
@@ -242,14 +244,14 @@ define([
             console.log('app.MapController::fullExtent', arguments);
 
             var defaultExtent = new Extent({
-                    xmax: 696328,
-                    xmin: 207131,
-                    ymax: 4785283,
-                    ymin: 3962431,
-                    spatialReference: {
-                        wkid: 26912
-                    }
-                });
+                xmax: 696328,
+                xmin: 207131,
+                ymax: 4785283,
+                ymin: 3962431,
+                spatialReference: {
+                    wkid: 26912
+                }
+            });
 
             if (defaultExtent.center) {
                 this.map.setScale(defaultExtent.scale);
