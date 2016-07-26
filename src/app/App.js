@@ -122,29 +122,36 @@ define([
             //
             console.log('app.App::subscriptions', arguments);
 
+            var initMapLayers = function () {
+                MapController.addLayerAndMakeVisible({
+                    id: 'CrashPoints',
+                    url: config.urls.service,
+                    points: 'points.json',
+                    serviceType: 'clustered',
+                    distance: 75,
+                    displayFieldName: 'objectid',
+                    labelColor: '#fff',
+                    maxSingles: 1000,
+                    outFields: [
+                        'objectid',
+                        'severity',
+                        'crash_date',
+                        'weather_condition',
+                        'event',
+                        'collision_type',
+                        'road_name',
+                        'road_condition'
+                    ]
+                });
+            };
+
+            if (MapController.map.loaded) {
+                initMapLayers();
+
+                return;
+            }
             this.own(
-                MapController.map.on('load', function () {
-                    MapController.addLayerAndMakeVisible({
-                        id: 'CrashPoints',
-                        url: config.urls.service,
-                        points: 'points.json',
-                        serviceType: 'clustered',
-                        distance: 75,
-                        displayFieldName: 'objectid',
-                        labelColor: '#fff',
-                        maxSingles: 1000,
-                        outFields: [
-                            'objectid',
-                            'severity',
-                            'crash_date',
-                            'weather_condition',
-                            'event',
-                            'collision_type',
-                            'road_name',
-                            'road_condition'
-                        ]
-                    });
-                })
+                MapController.map.on('load', initMapLayers)
             );
         },
         toggle: function () {
