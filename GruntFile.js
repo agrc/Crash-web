@@ -1,4 +1,3 @@
-/* jshint camelcase:false */
 var osx = 'OS X 10.10';
 var windows = 'Windows 8.1';
 var browsers = [{
@@ -25,57 +24,55 @@ var browsers = [{
 }];
 
 module.exports = function (grunt) {
-    var jsFiles = 'src/app/**/*.js',
-        otherFiles = [
-            'src/app/**/*.html',
-            'src/app/**/*.css',
-            'src/index.html',
-            'src/ChangeLog.html'
-        ],
-        gruntFile = 'GruntFile.js',
-        internFile = 'tests/intern.js',
-        jshintFiles = [
-            jsFiles,
-            gruntFile,
-            internFile
-        ],
-        bumpFiles = [
-            'package.json',
-            'bower.json',
-            'src/app/package.json',
-            'src/app/config.js'
-        ],
-        deployFiles = [
-            '**',
-            '!**/*.uncompressed.js',
-            '!**/*consoleStripped.js',
-            '!**/bootstrap/less/**',
-            '!**/bootstrap/test-infra/**',
-            '!**/tests/**',
-            '!build-report.txt',
-            '!components-jasmine/**',
-            '!favico.js/**',
-            '!jasmine-favicon-reporter/**',
-            '!jasmine-jsreporter/**',
-            '!stubmodule/**',
-            '!util/**'
-        ],
-        deployDir = 'wwwroot/crash',
-        secrets,
-        sauceConfig = {
-            urls: ['http://127.0.0.1:8000/_SpecRunner.html'],
-            tunnelTimeout: 20,
-            build: process.env.TRAVIS_JOB_ID,
-            browsers: browsers,
-            testname: 'crash.web',
-            maxRetries: 10,
-            maxPollRetries: 10,
-            'public': 'public',
-            throttled: 3,
-            sauceConfig: {
-                'max-duration': 10800
-            }
-        };
+    var otherFiles = [
+        'src/app/**/*.html',
+        'src/app/**/*.css',
+        'src/index.html',
+        'src/ChangeLog.html',
+        'tests/**/*.js'
+    ];
+    var jsFiles = [
+        'src/app/**/*.js',
+        'profiles/*.js',
+        'GruntFile.js'
+    ];
+    var bumpFiles = [
+        'package.json',
+        'bower.json',
+        'src/app/package.json',
+        'src/app/config.js'
+    ];
+    var deployFiles = [
+        '**',
+        '!**/*.uncompressed.js',
+        '!**/*consoleStripped.js',
+        '!**/bootstrap/less/**',
+        '!**/bootstrap/test-infra/**',
+        '!**/tests/**',
+        '!build-report.txt',
+        '!components-jasmine/**',
+        '!favico.js/**',
+        '!jasmine-favicon-reporter/**',
+        '!jasmine-jsreporter/**',
+        '!stubmodule/**',
+        '!util/**'
+    ];
+    var deployDir = 'wwwroot/crash';
+    var secrets;
+    var sauceConfig = {
+        urls: ['http://127.0.0.1:8000/_SpecRunner.html'],
+        tunnelTimeout: 20,
+        build: process.env.TRAVIS_JOB_ID,
+        browsers: browsers,
+        testname: 'crash.web',
+        maxRetries: 10,
+        maxPollRetries: 10,
+        'public': 'public',
+        throttled: 3,
+        sauceConfig: {
+            'max-duration': 10800
+        }
+    };
     try {
         secrets = grunt.file.readJSON('secrets.json');
         sauceConfig.username = secrets.sauce_name;
@@ -142,14 +139,6 @@ module.exports = function (grunt) {
                 }]
             }
         },
-        csslint: {
-            main: {
-                options: {
-                    csslintrc: '.csslintrc'
-                },
-                src: ['src/app/**/*.css']
-            }
-        },
         dojo: {
             prod: {
                 options: {
@@ -172,18 +161,12 @@ module.exports = function (grunt) {
                 basePath: './src'
             }
         },
-        esri_slurp: {
+        eslint: {
             options: {
-                version: '3.13'
+                configFile: '.eslintrc'
             },
-            dev: {
-                options: {
-                    beautify: true
-                },
-                dest: 'src/esri'
-            },
-            travis: {
-                dest: 'src/esri'
+            main: {
+                src: jsFiles
             }
         },
         imagemin: {
@@ -218,14 +201,15 @@ module.exports = function (grunt) {
                 }
             }
         },
-        jshint: {
-            main: {
-                // must use src for newer to work
-                src: jshintFiles
-            },
+        parallel: {
             options: {
-                reporter: require('jshint-stylish'),
-                jshintrc: '.jshintrc'
+                grunt: true
+            },
+            assets: {
+                tasks: ['eslint:main', 'stylus', 'jasmine:main:build']
+            },
+            buildAssets: {
+                tasks: ['eslint:main', 'clean:build', 'newer:imagemin:main', 'stylus']
             }
         },
         processhtml: {
@@ -272,7 +256,8 @@ module.exports = function (grunt) {
         stylus: {
             main: {
                 options: {
-                    compress: false
+                    compress: false,
+                    'resolve url': true
                 },
                 files: [{
                     expand: true,
@@ -323,15 +308,13 @@ module.exports = function (grunt) {
             }
         },
         watch: {
-            jshint: {
-                files: jshintFiles,
-                tasks: ['jshint:main', 'jasmine:main:build']
+            eslint: {
+                files: jsFiles,
+                tasks: ['newer:eslint:main', 'jasmine:main:build']
             },
             src: {
-                files: jshintFiles.concat(otherFiles),
-                options: {
-                    livereload: true
-                }
+                files: jsFiles.concat(otherFiles),
+                options: { livereload: true }
             },
             stylus: {
                 files: 'src/app/**/*.styl',
@@ -347,44 +330,30 @@ module.exports = function (grunt) {
         }
     }
 
-    // Default task.
     grunt.registerTask('default', [
-        //'shell:bootstrapMapServices',
+        'parallel:assets',
         'shell:dev',
-        'jasmine:main:build',
-        'jshint:main',
-        'amdcheck:main',
-        'if-missing:esri_slurp:dev',
         'connect',
-        'stylus',
-        'csslint',
         'watch'
     ]);
     grunt.registerTask('build-prod', [
-        'clean:build',
+        'parallel:buildAssets',
         'shell:prod',
-        'if-missing:esri_slurp:dev',
-        'newer:imagemin:main',
-        'stylus',
         'dojo:prod',
-        'copy:main',
-        'processhtml:main'
-    ]);
-    grunt.registerTask('build-stage', [
-        'clean:build',
-        'shell:stage',
-        'if-missing:esri_slurp:dev',
-        'newer:imagemin:main',
-        'stylus',
-        'dojo:stage',
         'copy:main',
         'processhtml:main'
     ]);
     grunt.registerTask('deploy-prod', [
         'clean:deploy',
         'compress:main',
-        'sftp:prod',
-        'sshexec:prod'
+        'sftp:prod'
+    ]);
+    grunt.registerTask('build-stage', [
+        'parallel:buildAssets',
+        'shell:stage',
+        'dojo:stage',
+        'copy:main',
+        'processhtml:main'
     ]);
     grunt.registerTask('deploy-stage', [
         'clean:deploy',
@@ -398,8 +367,8 @@ module.exports = function (grunt) {
         'saucelabs-jasmine'
     ]);
     grunt.registerTask('travis', [
-        'if-missing:esri_slurp:travis',
-        'jshint',
+        'verbosity:main',
+        'eslint:main',
         'sauce',
         'build-prod'
     ]);
