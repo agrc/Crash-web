@@ -26,7 +26,7 @@ define([
         // currentCriteria: string
         // summary:
         //      the sql string of the current chart filter
-        currentCriteria:  null,
+        currentCriteria: null,
 
         postCreate: function () {
             // summary:

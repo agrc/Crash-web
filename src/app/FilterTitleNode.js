@@ -10,7 +10,7 @@ define([
     'dojo/text!app/templates/FilterTitleNode.html',
     'dojo/topic',
     'xstyle/css!app/resources/FilterTitleNode.css'
-], function(
+], function (
     config,
 
     _TemplatedMixin,
@@ -48,7 +48,7 @@ define([
         //      the string displayed when the title node is activated
         description: '',
 
-        postCreate: function() {
+        postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
             // tags:
@@ -61,7 +61,7 @@ define([
 
             this.inherited(arguments);
         },
-        setupConnections: function() {
+        setupConnections: function () {
             // summary:
             //      wire events, and such
             //
@@ -71,14 +71,14 @@ define([
                 topic.subscribe(this.selectedTopic, lang.hitch(this, 'updateDomState'))
             );
         },
-        notify: function() {
+        notify: function () {
             // summary:
             //      handles the click event
             console.log('app.FilterTitleNode::notify', arguments);
 
             topic.publish(this.selectedTopic, { who: this.domNode, type: this.type, description: this.description });
         },
-        updateDomState: function(t) {
+        updateDomState: function (t) {
             // summary:
             //      sets the selected status based on others state
             // t the {who:, type:, description:} topic

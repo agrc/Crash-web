@@ -60,11 +60,9 @@ define([
             }
 
             var obj = this.get(name);
-            var node = this.sourceRow;
             obj.filterType = 'Active Filters';
 
             if (name === 'compare') {
-                node = this.compareRow;
                 obj.filterType = 'Comparison Filters';
             }
 

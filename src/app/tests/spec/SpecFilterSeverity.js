@@ -2,30 +2,30 @@ require([
     'app/FilterSeverity',
 
     'dojo/dom-construct'
-], function(
+], function (
     WidgetUnderTest,
 
     domConstruct
 ) {
-    describe('app/FilterSeverity', function() {
+    describe('app/FilterSeverity', function () {
         var widget;
         var destroy = function (widget) {
             widget.destroyRecursive();
             widget = null;
         };
 
-        beforeEach(function() {
+        beforeEach(function () {
             widget = new WidgetUnderTest(null, domConstruct.create('div', null, document.body));
         });
 
-        afterEach(function() {
+        afterEach(function () {
             if (widget) {
                 destroy(widget);
             }
         });
 
-        describe('Sanity', function() {
-            it('should create a FilterSeverity', function() {
+        describe('Sanity', function () {
+            it('should create a FilterSeverity', function () {
                 expect(widget).toEqual(jasmine.any(WidgetUnderTest));
             });
         });

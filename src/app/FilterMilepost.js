@@ -65,8 +65,7 @@ define([
             // evt
             console.log('app.FilterMilepost::_gatherData', arguments);
 
-            this.set('data',
-            {
+            this.set('data', {
                 milepost: {
                     route: this.routeNode.value || 0,
                     from: +this.startNode.value || 0,

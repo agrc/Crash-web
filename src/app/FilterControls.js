@@ -27,7 +27,7 @@ define([
         // criteria: {}
         // summary:
         //      description
-        criteria:  null,
+        criteria: null,
 
         // Properties to be sent into constructor
 

@@ -136,7 +136,7 @@ define([
             // criteria
             console.log('app.ControlCommon::_buildFactors', arguments);
 
-            /* jshint -W121 */
+            /* eslint-disable no-extend-native */
             // polyfill startsWith
             if (!String.prototype.startsWith) {
                 String.prototype.startsWith = function (searchString, position) {
@@ -144,7 +144,7 @@ define([
                     return this.indexOf(searchString, position) === position;
                 };
             }
-            /* jshint +W121 */
+            /* eslint-enable no-extend-native */
 
             var filters = [];
             if (criteria.factors && criteria.factors.length) {

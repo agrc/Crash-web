@@ -1,3 +1,4 @@
+/* global Highcharts */
 define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -28,19 +29,19 @@ define([
         // charts: highcharts
         // summary:
         //      connection to the chart objects
-        chart:  null,
+        chart: null,
 
         // Properties to be sent into constructor
 
         // data: object
         // summary:
         //      { weather: { categories: [], series: [{ type, data: []}] } }
-        data:  null,
+        data: null,
 
         // category: []
         // summary:
         //      the label categories
-        category:  null,
+        category: null,
 
         postCreate: function () {
             // summary:

@@ -1,5 +1,5 @@
 /* global JasmineFaviconReporter, jasmineRequire */
-/*jshint unused:false*/
+/* eslint-disable no-unused-vars */
 var dojoConfig = {
     // isDebug: false,
     isJasmineTestRunner: true,

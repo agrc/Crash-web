@@ -26,6 +26,11 @@ src/esri/
 src/favico.js/
 src/highcharts-release/
 src/ijit/
+src/agrc-jasmine-matchers/
+src/dojo-themes/
+src/dstore/
+src/moment/
+src/layer-selector/
 src/jasmine-favicon-reporter/
 src/jasmine-jsreporter/
 src/jquery/

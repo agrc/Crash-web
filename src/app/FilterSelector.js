@@ -36,7 +36,7 @@ define([
         // FilterControls: app/FilterControls
         // summary:
         //      the controls to place in the control node
-        FilterControls:  null,
+        FilterControls: null,
 
         postCreate: function () {
             // summary:

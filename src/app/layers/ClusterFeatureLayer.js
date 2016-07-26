@@ -1084,18 +1084,6 @@ define([
                         c.attributes)
                 );
             }
-        },
-        // debug only...never called by the layer
-        _clusterMeta: function () {
-            // print total number of features
-
-
-            // add up counts and print it
-            var count = 0;
-            arrayUtils.forEach(this._clusters, function (c) {
-                count += c.attributes.clusterCount;
-            });
-
         }
     });
 });

@@ -120,7 +120,7 @@ define([
             var formatTime = function (criteria) {
                 return {
                     to: convertTo12(criteria.toTime),
-                    from:  convertTo12(criteria.fromTime)
+                    from: convertTo12(criteria.fromTime)
                 };
             };
 
