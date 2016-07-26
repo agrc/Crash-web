@@ -30,12 +30,12 @@ define([
         // minDate: String
         // summary:
         //      the oldest date of crashes in the system
-        minDate: '01/01/2011',
+        minDate: '',
 
         // maxDate: String
         // summary:
         //      the most current crash data in the system
-        maxDate: '12/01/2014',
+        maxDate: '',
 
         // apiKey: String
         //      The api key used for services on api.mapserv.utah.gov
