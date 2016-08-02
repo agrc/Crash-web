@@ -307,6 +307,34 @@ module.exports = function (grunt) {
                 command: 'python scripts/create_points_json.py prod'
             }
         },
+        uglify: {
+            options: {
+                preserveComments: false,
+                sourceMap: true,
+                compress: {
+                    drop_console: true,
+                    passes: 2,
+                    dead_code: true
+                }
+            },
+            stage: {
+                options: {
+                    compress: {
+                        drop_console: false
+                    }
+                },
+                src: ['dist/dojo/dojo.js'],
+                dest: 'dist/dojo/dojo.js'
+            },
+            prod: {
+                files: [{
+                    expand: true,
+                    cwd: 'dist',
+                    src: '**/*.js',
+                    dest: 'dist'
+                }]
+            }
+        },
         watch: {
             eslint: {
                 files: jsFiles,
@@ -338,8 +366,9 @@ module.exports = function (grunt) {
     ]);
     grunt.registerTask('build-prod', [
         'parallel:buildAssets',
-        'shell:prod',
+        // 'shell:prod',
         'dojo:prod',
+        'uglify:prod',
         'copy:main',
         'processhtml:main'
     ]);
@@ -352,6 +381,7 @@ module.exports = function (grunt) {
         'parallel:buildAssets',
         'shell:stage',
         'dojo:stage',
+        'uglify:stage',
         'copy:main',
         'processhtml:main'
     ]);

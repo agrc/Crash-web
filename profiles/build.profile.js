@@ -5,9 +5,8 @@ var profile = {
     action: 'release',
     cssOptimize: 'comments',
     mini: true,
-    optimize: 'uglify',
-    layerOptimize: 'uglify',
-    stripConsole: 'all',
+    optimize: false,
+    layerOptimize: false,
     selectorEngine: 'acme',
     layers: {
         'dojo/dojo': {
@@ -16,8 +15,10 @@ var profile = {
                 'dojo/domReady',
                 'app/run',
                 'app/App',
+                'dojox/gfx/filters',
                 'dojox/gfx/path',
                 'dojox/gfx/svg',
+                'dojox/gfx/svgext',
                 'dojox/gfx/shape'
             ],
             targetStylesheet: 'app/resources/App.css',
@@ -29,6 +30,20 @@ var profile = {
             exclude: ['dojo/dojo']
         }
     },
+    packages: [{
+        name: 'moment',
+        location: 'moment',
+        main: 'moment',
+        trees: [
+           // don't bother with .hidden, tests, min, src, and templates
+           ['.', '.', /(\/\.)|(~$)|(test|txt|src|min|templates)/]
+        ],
+        resourceTags: {
+            amd: function (filename, mid) {
+                return /\.js$/.test(filename);
+            }
+        }
+    }],
     staticHasFeatures: {
         // The trace & log APIs are used for debugging the loader, so we don’t need them in the build
         'dojo-trace-api': 0,
@@ -51,5 +66,10 @@ var profile = {
     },
     userConfig: {
         packages: ['app', 'dijit', 'dojox', 'agrc', 'ijit', 'esri', 'layer-selector']
+    },
+    map: {
+        '*': {
+            'dojox/dgauges': 'dgauges'
+        }
     }
 };
