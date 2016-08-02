@@ -105,12 +105,21 @@ define([
         window.AGRC.quadWord = 'nixon-flex-modest-stamp';
     } else if (has('agrc-build') === 'stage') {
         // test.mapserv.utah.gov
-        window.AGRC.apiKey = 'AGRC-AC122FA9671436';
+        window.AGRC.apiKey = 'AGRC-FFCDAD6B933051';
         window.AGRC.quadWord = 'opera-event-little-pinball';
         esriConfig.defaults.io.corsEnabledServers.push('test.mapserv.utah.gov');
     } else {
         // localhost
         window.AGRC.apiKey = 'AGRC-63E1FF17767822';
+        xhr(require.baseUrl + 'secrets.json', {
+            handleAs: 'json',
+            sync: true
+        }).then(function (secrets) {
+            window.AGRC.quadWord = secrets.quadWord;
+            window.AGRC.apiKey = secrets.apiKey;
+        }, function () {
+            throw 'Error getting quad word!';
+        });
     }
 
     xhr(require.baseUrl + 'app/resources/dates.json', {
@@ -121,16 +130,6 @@ define([
         window.AGRC.maxDate = dates.maxDate;
     }, function () {
         throw 'Error getting dates!';
-    });
-
-    xhr(require.baseUrl + 'secrets.json', {
-        handleAs: 'json',
-        sync: true
-    }).then(function (secrets) {
-        window.AGRC.quadWord = secrets.quadWord;
-        window.AGRC.apiKey = secrets.apiKey;
-    }, function () {
-        throw 'Error getting quad word!';
     });
 
     return window.AGRC;
