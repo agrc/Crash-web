@@ -12,6 +12,7 @@
         packages: [
             'agrc',
             'app',
+            'dgauges',
             'dgrid',
             'dijit',
             'dojo',
@@ -19,6 +20,7 @@
             'esri',
             'ijit',
             'layer-selector',
+            'moment',
             'put-selector',
             'xstyle',
             {

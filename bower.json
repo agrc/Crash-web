@@ -3,7 +3,7 @@
   "version": "1.0.3",
   "dependencies": {
     "agrc": "agrc-widgets#5.0.0",
-    "bootstrap": "~3.3.7",
+    "bootstrap": "3.3.6",
     "dijit": "~1.11",
     "dojo": "~1.11",
     "dojox": "~1.11",
@@ -14,11 +14,13 @@
     "esri": "arcgis-js-api#^3.17.0",
     "stubmodule": "0.6.1",
     "util": "dojo-util#~1.11",
-    "xstyle": "09b4d603f63df3e7aa5acc04784e36710a75671d",
-    "highcharts-release": "~4.1.10"
+    "xstyle": "~0.3.2",
+    "highcharts-release": "~4.2.6",
+    "dgauges": "*",
+    "moment": "^2.14.1"
   },
   "resolutions": {
-    "xstyle": "09b4d603f63df3e7aa5acc04784e36710a75671d",
+    "xstyle": "v0.3.2",
     "dgrid": "0.3.17/esri-3.14.0",
     "esri": "^3.17.0",
     "dijit": "1.11.2",
@@ -26,6 +28,7 @@
     "dojox": "1.11.2",
     "util": "~1.11",
     "dstore": "v1.1.1",
-    "dojo-themes": "1.11.2"
+    "dojo-themes": "1.11.2",
+    "moment": "^2.14.1"
   }
 }
