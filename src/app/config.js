@@ -25,7 +25,7 @@ define([
 
         // version.: String
         //      The version number.
-        version: '1.0.3',
+        version: '2.0.0',
 
         // minDate: String
         // summary:
