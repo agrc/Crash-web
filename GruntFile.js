@@ -366,7 +366,7 @@ module.exports = function (grunt) {
     ]);
     grunt.registerTask('build-prod', [
         'parallel:buildAssets',
-        // 'shell:prod',
+        'shell:prod',
         'dojo:prod',
         'uglify:prod',
         'copy:main',
@@ -375,7 +375,8 @@ module.exports = function (grunt) {
     grunt.registerTask('deploy-prod', [
         'clean:deploy',
         'compress:main',
-        'sftp:prod'
+        'sftp:prod',
+        'sshexec:prod'
     ]);
     grunt.registerTask('build-stage', [
         'parallel:buildAssets',
