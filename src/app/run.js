@@ -14,6 +14,8 @@
             'app',
             'dgauges',
             'dgrid',
+            'dgrid1',
+            'dstore',
             'dijit',
             'dojo',
             'dojox',
