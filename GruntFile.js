@@ -39,10 +39,16 @@ module.exports = function (grunt) {
     } catch (e) {
         // swallow for build server
         secrets = {
-            stageHost: '',
-            prodHost: '',
-            username: '',
-            password: ''
+            stage: {
+                host: '',
+                username: '',
+                password: ''
+            },
+            prod: {
+                host: '',
+                username: '',
+                password: ''
+            }
         };
     }
 
@@ -187,7 +193,9 @@ module.exports = function (grunt) {
                     './': 'deploy/deploy.zip'
                 },
                 options: {
-                    host: '<%= secrets.stageHost %>'
+                    host: '<%= secrets.stage.host %>',
+                    username: '<%= secrets.stage.username %>',
+                    password: '<%= secrets.stage.password %>'
                 }
             },
             prod: {
@@ -203,8 +211,6 @@ module.exports = function (grunt) {
             options: {
                 path: './' + deployDir + '/',
                 srcBasePath: 'deploy/',
-                username: '<%= secrets.username %>',
-                password: '<%= secrets.password %>',
                 showProgress: true,
                 readyTimeout: 30000
             }
@@ -226,20 +232,22 @@ module.exports = function (grunt) {
         },
         sshexec: {
             options: {
-                username: '<%= secrets.username %>',
-                password: '<%= secrets.password %>',
                 readyTimeout: 30000
             },
             stage: {
                 command: ['cd ' + deployDir, 'unzip -oq deploy.zip', 'rm deploy.zip'].join(';'),
                 options: {
-                    host: '<%= secrets.stageHost %>'
+                    host: '<%= secrets.stage.host %>',
+                    username: '<%= secrets.stage.username %>',
+                    password: '<%= secrets.stage.password %>'
                 }
             },
             prod: {
                 command: ['cd ' + deployDir, 'unzip -oq deploy.zip', 'rm deploy.zip'].join(';'),
                 options: {
-                    host: '<%= secrets.prodHost %>'
+                    host: '<%= secrets.prod.host %>',
+                    username: '<%= secrets.prod.username %>',
+                    password: '<%= secrets.prod.password %>'
                 }
             }
         },
