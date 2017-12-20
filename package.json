@@ -27,7 +27,6 @@
     "grunt-newer": "^1",
     "grunt-parallel": "^0.5.1",
     "grunt-processhtml": "^0",
-    "grunt-saucelabs": "^9",
     "grunt-shell": "^1",
     "grunt-ssh": "^0",
     "jshint-stylish": "^2",

@@ -1,28 +1,3 @@
-var osx = 'OS X 10.10';
-var windows = 'Windows 8.1';
-var browsers = [{
-    browserName: 'safari',
-    platform: osx
-}, {
-    browserName: 'firefox',
-    platform: windows
-}, {
-    browserName: 'chrome',
-    platform: windows
-}, {
-    browserName: 'internet explorer',
-    platform: windows,
-    version: '11'
-}, {
-    browserName: 'internet explorer',
-    platform: 'Windows 8',
-    version: '10'
-}, {
-    browserName: 'internet explorer',
-    platform: 'Windows 7',
-    version: '9'
-}];
-
 module.exports = function (grunt) {
     var otherFiles = [
         'src/app/**/*.html',
@@ -59,24 +34,8 @@ module.exports = function (grunt) {
     ];
     var deployDir = 'wwwroot/crash';
     var secrets;
-    var sauceConfig = {
-        urls: ['http://127.0.0.1:8000/_SpecRunner.html'],
-        tunnelTimeout: 20,
-        build: process.env.TRAVIS_JOB_ID,
-        browsers: browsers,
-        testname: 'crash.web',
-        maxRetries: 10,
-        maxPollRetries: 10,
-        'public': 'public',
-        throttled: 3,
-        sauceConfig: {
-            'max-duration': 10800
-        }
-    };
     try {
         secrets = grunt.file.readJSON('secrets.json');
-        sauceConfig.username = secrets.sauce_name;
-        sauceConfig.key = secrets.sauce_key;
     } catch (e) {
         // swallow for build server
         secrets = {
@@ -221,11 +180,6 @@ module.exports = function (grunt) {
                 }
             }
         },
-        'saucelabs-jasmine': {
-            all: {
-                options: sauceConfig
-            }
-        },
         secrets: secrets,
         sftp: {
             stage: {
@@ -241,7 +195,9 @@ module.exports = function (grunt) {
                     './': 'deploy/deploy.zip'
                 },
                 options: {
-                    host: '<%= secrets.prodHost %>'
+                    host: '<%= secrets.prod.host %>',
+                    username: '<%= secrets.prod.username %>',
+                    password: '<%= secrets.prod.password %>'
                 }
             },
             options: {
