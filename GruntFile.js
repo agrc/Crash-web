@@ -356,10 +356,9 @@ module.exports = function (grunt) {
         'sftp:stage',
         'sshexec:stage'
     ]);
-    grunt.registerTask('sauce', [
-        'jasmine:main:build',
+    grunt.registerTask('serve', [
         'connect',
-        'saucelabs-jasmine'
+        'watch'
     ]);
     grunt.registerTask('travis', [
         'verbosity:main',
