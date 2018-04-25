@@ -21,7 +21,7 @@
   },
   "resolutions": {
     "xstyle": "v0.3.2",
-    "dgrid": "0.3.17/esri-3.14.0",
+    "dgrid": "0.3.17/esri-3.20.0",
     "esri": "^3.17.0",
     "dijit": "1.11.2",
     "dojo": "1.11.2",
