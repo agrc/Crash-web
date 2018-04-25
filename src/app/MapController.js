@@ -83,6 +83,7 @@ define([
             new BaseMapSelector({
                 map: this.map,
                 id: 'tundra',
+                right: false,
                 quadWord: config.quadWord,
                 baseLayers: ['Lite', 'Hybrid', 'Terrain', 'Topo', 'Color IR']
             });
