@@ -1036,8 +1036,8 @@ define([
             arrayUtils.forEach(singles, function (g) {
                 g.attributes.clusterCount = 1;
                 g = new Graphic(new Point(g.x, g.y, this._sr),
-                                this._singleSym,
-                                g.attributes);
+                    this._singleSym,
+                    g.attributes);
                 if (!aGraphic) {
                     aGraphic = g;
                 }
