@@ -35,8 +35,8 @@ var profile = {
         location: 'moment',
         main: 'moment',
         trees: [
-           // don't bother with .hidden, tests, min, src, and templates
-           ['.', '.', /(\/\.)|(~$)|(test|txt|src|min|templates)/]
+            // don't bother with .hidden, tests, min, src, and templates
+            ['.', '.', /(\/\.)|(~$)|(test|txt|src|min|templates)/]
         ],
         resourceTags: {
             amd: function (filename, mid) {
@@ -66,10 +66,5 @@ var profile = {
     },
     userConfig: {
         packages: ['app', 'dijit', 'dojox', 'agrc', 'ijit', 'esri', 'layer-selector']
-    },
-    map: {
-        '*': {
-            'dojox/dgauges': 'dgauges'
-        }
     }
 };
