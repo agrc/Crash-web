@@ -12,7 +12,6 @@
         packages: [
             'agrc',
             'app',
-            'dgauges',
             'dgrid',
             'dgrid1',
             'dstore',
