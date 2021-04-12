@@ -18,10 +18,10 @@ src/agrc/
 src/app/**/*.css
 src/bootstrap/
 src/components-jasmine/
-src/dgauges/
 src/dgrid/
 src/dgrid1/
 src/dijit/
+src/dijit-themes/
 src/dojo/
 src/dojox/
 src/esri/
