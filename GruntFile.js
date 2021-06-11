@@ -6,51 +6,13 @@ module.exports = function (grunt) {
         'src/ChangeLog.html',
         'tests/**/*.js'
     ];
-    var jsFiles = [
-        'src/app/**/*.js',
-        'profiles/*.js',
-        'GruntFile.js'
-    ];
+    var jsFiles = ['src/app/**/*.js', 'profiles/*.js', 'GruntFile.js'];
     var bumpFiles = [
         'package.json',
         'bower.json',
         'src/app/package.json',
         'src/app/config.js'
     ];
-    var deployFiles = [
-        '**',
-        '!**/*.uncompressed.js',
-        '!**/*consoleStripped.js',
-        '!**/bootstrap/less/**',
-        '!**/bootstrap/test-infra/**',
-        '!**/tests/**',
-        '!build-report.txt',
-        '!components-jasmine/**',
-        '!favico.js/**',
-        '!jasmine-favicon-reporter/**',
-        '!jasmine-jsreporter/**',
-        '!stubmodule/**',
-        '!util/**'
-    ];
-    var deployDir = 'wwwroot/crash';
-    var secrets;
-    try {
-        secrets = grunt.file.readJSON('secrets.json');
-    } catch (e) {
-        // swallow for build server
-        secrets = {
-            stage: {
-                host: '',
-                username: '',
-                password: ''
-            },
-            prod: {
-                host: '',
-                username: '',
-                password: ''
-            }
-        };
-    }
 
     // Project configuration.
     grunt.initConfig({
@@ -60,11 +22,11 @@ module.exports = function (grunt) {
                 options: {
                     removeUnusedDependencies: false
                 },
-                files: [{
-                    src: [
-                        'src/app/**/*.js'
-                    ]
-                }]
+                files: [
+                    {
+                        src: ['src/app/**/*.js']
+                    }
+                ]
             }
         },
         bump: {
@@ -77,19 +39,6 @@ module.exports = function (grunt) {
         clean: {
             build: ['dist'],
             deploy: ['deploy']
-        },
-        compress: {
-            main: {
-                options: {
-                    archive: 'deploy/deploy.zip'
-                },
-                files: [{
-                    src: deployFiles,
-                    dest: './',
-                    cwd: 'dist/',
-                    expand: true
-                }]
-            }
         },
         connect: {
             uses_defaults: {}
@@ -108,13 +57,19 @@ module.exports = function (grunt) {
             prod: {
                 options: {
                     // You can also specify options to be used in all your tasks
-                    profiles: ['profiles/prod.build.profile.js', 'profiles/build.profile.js'] // Profile for build
+                    profiles: [
+                        'profiles/prod.build.profile.js',
+                        'profiles/build.profile.js'
+                    ] // Profile for build
                 }
             },
             stage: {
                 options: {
                     // You can also specify options to be used in all your tasks
-                    profiles: ['profiles/stage.build.profile.js', 'profiles/build.profile.js'] // Profile for build
+                    profiles: [
+                        'profiles/stage.build.profile.js',
+                        'profiles/build.profile.js'
+                    ] // Profile for build
                 }
             },
             options: {
@@ -128,7 +83,8 @@ module.exports = function (grunt) {
         },
         eslint: {
             options: {
-                configFile: '.eslintrc'
+                configFile: '.eslintrc',
+                fix: true
             },
             main: {
                 src: jsFiles
@@ -139,13 +95,15 @@ module.exports = function (grunt) {
                 options: {
                     optimizationLevel: 3
                 },
-                files: [{
-                    expand: true,
-                    cwd: 'src/',
-                    // exclude tests because some images in dojox throw errors
-                    src: ['**/*.{png,jpg,gif}', '!**/tests/**/*.*'],
-                    dest: 'src/'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'src/',
+                        // exclude tests because some images in dojox throw errors
+                        src: ['**/*.{png,jpg,gif}', '!**/tests/**/*.*'],
+                        dest: 'src/'
+                    }
+                ]
             }
         },
         jasmine: {
@@ -186,33 +144,21 @@ module.exports = function (grunt) {
                 }
             }
         },
-        secrets: secrets,
-        sftp: {
-            stage: {
-                files: {
-                    './': 'deploy/deploy.zip'
-                },
+        stylus: {
+            main: {
                 options: {
-                    host: '<%= secrets.stage.host %>',
-                    username: '<%= secrets.stage.username %>',
-                    password: '<%= secrets.stage.password %>'
-                }
-            },
-            prod: {
-                files: {
-                    './': 'deploy/deploy.zip'
+                    compress: false,
+                    'resolve url': true
                 },
-                options: {
-                    host: '<%= secrets.prod.host %>',
-                    username: '<%= secrets.prod.username %>',
-                    password: '<%= secrets.prod.password %>'
-                }
-            },
-            options: {
-                path: './' + deployDir + '/',
-                srcBasePath: 'deploy/',
-                showProgress: true,
-                readyTimeout: 30000
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'src/',
+                        src: ['app/**/*.styl'],
+                        dest: 'src/',
+                        ext: '.css'
+                    }
+                ]
             }
         },
         shell: {
@@ -222,45 +168,14 @@ module.exports = function (grunt) {
             bootstrapMapServices: {
                 command: 'python scripts/publish_mxd.py'
             },
-            dev:
-            {
+            dev: {
                 command: 'python scripts/create_points_json.py dev'
-            }
-        },
-        stylus: {
-            main: {
-                options: {
-                    compress: false,
-                    'resolve url': true
-                },
-                files: [{
-                    expand: true,
-                    cwd: 'src/',
-                    src: ['app/**/*.styl'],
-                    dest: 'src/',
-                    ext: '.css'
-                }]
-            }
-        },
-        sshexec: {
-            options: {
-                readyTimeout: 30000
             },
             stage: {
-                command: ['cd ' + deployDir, 'unzip -oq deploy.zip', 'rm deploy.zip'].join(';'),
-                options: {
-                    host: '<%= secrets.stage.host %>',
-                    username: '<%= secrets.stage.username %>',
-                    password: '<%= secrets.stage.password %>'
-                }
+                command: 'python scripts/create_points_json.py stage'
             },
             prod: {
-                command: ['cd ' + deployDir, 'unzip -oq deploy.zip', 'rm deploy.zip'].join(';'),
-                options: {
-                    host: '<%= secrets.prod.host %>',
-                    username: '<%= secrets.prod.username %>',
-                    password: '<%= secrets.prod.password %>'
-                }
+                command: 'python scripts/create_points_json.py prod'
             }
         },
         uglify: {
@@ -283,12 +198,14 @@ module.exports = function (grunt) {
                 dest: 'dist/dojo/dojo.js'
             },
             prod: {
-                files: [{
-                    expand: true,
-                    cwd: 'dist',
-                    src: '**/*.js',
-                    dest: 'dist'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'dist',
+                        src: '**/*.js',
+                        dest: 'dist'
+                    }
+                ]
             }
         },
         watch: {
@@ -327,12 +244,6 @@ module.exports = function (grunt) {
         'copy:main',
         'processhtml:main'
     ]);
-    grunt.registerTask('deploy-prod', [
-        'clean:deploy',
-        'compress:main',
-        'sftp:prod',
-        'sshexec:prod'
-    ]);
     grunt.registerTask('build-stage', [
         'parallel:buildAssets',
         'dojo:stage',
@@ -340,20 +251,6 @@ module.exports = function (grunt) {
         'copy:main',
         'processhtml:main'
     ]);
-    grunt.registerTask('deploy-stage', [
-        'clean:deploy',
-        'compress:main',
-        'sftp:stage',
-        'sshexec:stage'
-    ]);
-    grunt.registerTask('serve', [
-        'connect',
-        'watch'
-    ]);
-    grunt.registerTask('travis', [
-        'verbosity:main',
-        'eslint:main',
-        'sauce',
-        'build-prod'
-    ]);
+    grunt.registerTask('serve', ['connect', 'watch']);
+    grunt.registerTask('travis', ['verbosity:main', 'eslint:main', 'build-prod']);
 };
