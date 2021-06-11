@@ -15,7 +15,6 @@
     "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-compress": "^2.0.0",
     "grunt-contrib-connect": "^3.0.0",
-    "grunt-contrib-copy": "^1",
     "grunt-contrib-imagemin": "^4.0.0",
     "grunt-contrib-jasmine": "^2.2.0",
     "grunt-contrib-stylus": "^1",
@@ -27,7 +26,6 @@
     "grunt-newer": "^1",
     "grunt-parallel": "^0.5.1",
     "grunt-processhtml": "^0.4.2",
-    "grunt-shell": "^3.0.1",
     "grunt-ssh": "^0",
     "jshint-stylish": "^2",
     "uglify-js": "^3.13.4"
