@@ -94,16 +94,6 @@ module.exports = function (grunt) {
         connect: {
             uses_defaults: {}
         },
-        copy: {
-            main: {
-                files: [{
-                    expand: true,
-                    cwd: 'src/',
-                    src: ['*.html', 'points.json'],
-                    dest: 'dist/'
-                }]
-            }
-        },
         dojo: {
             prod: {
                 options: {
@@ -251,26 +241,6 @@ module.exports = function (grunt) {
                 }
             }
         },
-        shell: {
-            options: {
-                stdout: true
-            },
-            bootstrapMapServices: {
-                command: 'python scripts/publish_mxd.py'
-            },
-            dev:
-            {
-                command: 'python scripts/create_points_json.py dev'
-            },
-            stage:
-            {
-                command: 'python scripts/create_points_json.py stage'
-            },
-            prod:
-            {
-                command: 'python scripts/create_points_json.py prod'
-            }
-        },
         uglify: {
             options: {
                 preserveComments: false,
@@ -324,16 +294,13 @@ module.exports = function (grunt) {
 
     grunt.registerTask('default', [
         'parallel:assets',
-        'shell:dev',
         'connect',
         'watch'
     ]);
     grunt.registerTask('build-prod', [
         'parallel:buildAssets',
-        'shell:prod',
         'dojo:prod',
         'uglify:prod',
-        'copy:main',
         'processhtml:main'
     ]);
     grunt.registerTask('deploy-prod', [
@@ -344,10 +311,8 @@ module.exports = function (grunt) {
     ]);
     grunt.registerTask('build-stage', [
         'parallel:buildAssets',
-        'shell:stage',
         'dojo:stage',
         'uglify:stage',
-        'copy:main',
         'processhtml:main'
     ]);
     grunt.registerTask('deploy-stage', [

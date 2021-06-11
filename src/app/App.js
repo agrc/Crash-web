@@ -126,7 +126,7 @@ define([
                 MapController.addLayerAndMakeVisible({
                     id: 'CrashPoints',
                     url: config.urls.service,
-                    points: 'points.json',
+                    points: config.urls.points,
                     serviceType: 'clustered',
                     distance: 75,
                     displayFieldName: 'objectid',

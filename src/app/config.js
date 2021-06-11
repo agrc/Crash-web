@@ -15,7 +15,39 @@ define([
     esriConfig.defaults.io.corsEnabledServers.push('basemaps.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('discover.agrc.utah.gov');
 
+    var apiKey;
+    var quadWord;
+    var bucketName = 'ut-dts-agrc-crash-dev-data';
+
+    if (has('agrc-build') === 'prod') {
+        // crashmapping.utah.gov
+        apiKey = 'AGRC-74CDA9DA213937';
+        quadWord = 'nixon-flex-modest-stamp';
+        bucketName = 'ut-dts-agrc-crash-prod-data';
+    } else if (has('agrc-build') === 'stage') {
+        // test.mapserv.utah.gov
+        apiKey = 'AGRC-FFCDAD6B933051';
+        quadWord = 'opera-event-little-pinball';
+        esriConfig.defaults.io.corsEnabledServers.push('test.mapserv.utah.gov');
+    } else {
+        // localhost
+        apiKey = 'AGRC-63E1FF17767822';
+        xhr(require.baseUrl + 'secrets.json', {
+            handleAs: 'json',
+            sync: true
+        }).then(function (secrets) {
+            quadWord = secrets.quadWord;
+            apiKey = secrets.apiKey;
+        }, function () {
+            throw 'Error getting quad word!';
+        });
+    }
+
+
     window.AGRC = {
+        apiKey: apiKey,
+        quadWord: quadWord,
+
         // errorLogger: ijit.modules.ErrorLogger
         errorLogger: null,
 
@@ -43,7 +75,9 @@ define([
 
         urls: {
             service: '/arcgis/rest/services/Crash/Crashes/MapServer/0',
-            stats: location.pathname.replace(/\/(src|dist)/, '') + 'api/stats'
+            stats: location.pathname.replace(/\/(src|dist)/, '') + 'api/stats',
+            points: 'https://storage.googleapis.com/' + bucketName + '/points.json',
+            dates: 'https://storage.googleapis.com/' + bucketName + '/dates.json'
         },
 
         topics: {
@@ -99,32 +133,12 @@ define([
         ]
     };
 
-    if (has('agrc-build') === 'prod') {
-        // crashmapping.utah.gov
-        window.AGRC.apiKey = 'AGRC-74CDA9DA213937';
-        window.AGRC.quadWord = 'nixon-flex-modest-stamp';
-    } else if (has('agrc-build') === 'stage') {
-        // test.mapserv.utah.gov
-        window.AGRC.apiKey = 'AGRC-FFCDAD6B933051';
-        window.AGRC.quadWord = 'opera-event-little-pinball';
-        esriConfig.defaults.io.corsEnabledServers.push('test.mapserv.utah.gov');
-    } else {
-        // localhost
-        window.AGRC.apiKey = 'AGRC-63E1FF17767822';
-        xhr(require.baseUrl + 'secrets.json', {
-            handleAs: 'json',
-            sync: true
-        }).then(function (secrets) {
-            window.AGRC.quadWord = secrets.quadWord;
-            window.AGRC.apiKey = secrets.apiKey;
-        }, function () {
-            throw 'Error getting quad word!';
-        });
-    }
-
-    xhr(require.baseUrl + 'app/resources/dates.json', {
+    xhr(window.AGRC.urls.dates, {
         handleAs: 'json',
-        sync: true
+        sync: true,
+        headers: {
+            'X-Requested-With': null
+        }
     }).then(function (dates) {
         window.AGRC.minDate = dates.minDate;
         window.AGRC.maxDate = dates.maxDate;
