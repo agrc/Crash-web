@@ -94,6 +94,16 @@ module.exports = function (grunt) {
         connect: {
             uses_defaults: {}
         },
+        copy: {
+            main: {
+                files: [{
+                    expand: true,
+                    cwd: 'src/',
+                    src: ['ChangeLog.html'],
+                    dest: 'dist/'
+                }]
+            }
+        },
         dojo: {
             prod: {
                 options: {
@@ -301,6 +311,7 @@ module.exports = function (grunt) {
         'parallel:buildAssets',
         'dojo:prod',
         'uglify:prod',
+        'copy:main',
         'processhtml:main'
     ]);
     grunt.registerTask('deploy-prod', [
@@ -313,6 +324,7 @@ module.exports = function (grunt) {
         'parallel:buildAssets',
         'dojo:stage',
         'uglify:stage',
+        'copy:main',
         'processhtml:main'
     ]);
     grunt.registerTask('deploy-stage', [
