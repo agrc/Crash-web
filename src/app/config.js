@@ -25,9 +25,9 @@ define([
         quadWord = 'nixon-flex-modest-stamp';
         bucketName = 'ut-dts-agrc-crash-prod-data';
     } else if (has('agrc-build') === 'stage') {
-        // test.mapserv.utah.gov
-        apiKey = 'AGRC-FFCDAD6B933051';
-        quadWord = 'opera-event-little-pinball';
+        // crashmapping.dev.utah.gov
+        apiKey = 'AGRC-FE1B257E901672';
+        quadWord = 'wedding-tactic-enrico-yes';
         esriConfig.defaults.io.corsEnabledServers.push('test.mapserv.utah.gov');
     } else {
         // localhost
