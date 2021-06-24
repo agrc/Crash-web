@@ -215,6 +215,18 @@ module.exports = function (grunt) {
                 readyTimeout: 30000
             }
         },
+        shell: {
+            options: {
+                stdout: true
+            },
+            bootstrapMapServices: {
+                command: 'python scripts/publish_mxd.py'
+            },
+            dev:
+            {
+                command: 'python scripts/create_points_json.py dev'
+            }
+        },
         stylus: {
             main: {
                 options: {
@@ -304,6 +316,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('default', [
         'parallel:assets',
+        'shell:dev',
         'connect',
         'watch'
     ]);

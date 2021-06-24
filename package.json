@@ -27,6 +27,7 @@
     "grunt-newer": "^1",
     "grunt-parallel": "^0.5.1",
     "grunt-processhtml": "^0.4.2",
+    "grunt-shell": "^3.0.1",
     "grunt-ssh": "^0",
     "jshint-stylish": "^2",
     "uglify-js": "^3.13.4"
