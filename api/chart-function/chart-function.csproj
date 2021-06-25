@@ -10,5 +10,14 @@
     <PackageReference Include="Google.Cloud.Functions.Hosting" Version="1.0.0-beta05" />
     <None Include="appsettings*.json" CopyToOutputDirectory="PreserveNewest" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="3.0.0" />
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.90" />
+    <PackageReference Include="Google.Cloud.Functions.Hosting" Version="1.0.0" />
+    <None Include="appsettings*.json" CopyToOutputDirectory="PreserveNewest" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="3.0.0" />
+    <PackageReference Include="System.Text.Json" Version="5.0.2" />
   </ItemGroup>
 </Project>
