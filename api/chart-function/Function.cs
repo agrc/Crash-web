@@ -40,6 +40,18 @@ namespace chart_function
         /// <returns>A task representing the asynchronous operation.</returns>
         public async Task HandleAsync(HttpContext context)
         {
+            context.Response.Headers.Append("Access-Control-Allow-Origin", "*");
+
+            if (HttpMethods.IsOptions(context.Request.Method))
+            {
+                context.Response.Headers.Append("Access-Control-Allow-Methods", "GET");
+                context.Response.Headers.Append("Access-Control-Allow-Headers", "Content-Type");
+                context.Response.Headers.Append("Access-Control-Max-Age", "3600");
+                context.Response.StatusCode = 204;
+
+                return;
+            }
+
             if (context.Request.Method != "POST")
             {
                 context.Response.StatusCode = 404;
