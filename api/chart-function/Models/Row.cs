@@ -1,4 +1,4 @@
-﻿namespace crash_statistics.Models
+﻿namespace chart_function.Models
 {
 
     public class Row
