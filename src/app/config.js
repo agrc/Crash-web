@@ -12,7 +12,6 @@ define([
     // force api to use CORS on mapserv thus removing the test request on app load
     // e.g. http://mapserv.utah.gov/ArcGIS/rest/info?f=json
     esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
-    esriConfig.defaults.io.corsEnabledServers.push('basemaps.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('discover.agrc.utah.gov');
 
     var apiKey;
@@ -28,7 +27,6 @@ define([
         // crashmapping.dev.utah.gov
         apiKey = 'AGRC-FE1B257E901672';
         quadWord = 'wedding-tactic-enrico-yes';
-        esriConfig.defaults.io.corsEnabledServers.push('test.mapserv.utah.gov');
     } else {
         // localhost
         apiKey = 'AGRC-63E1FF17767822';
@@ -74,8 +72,8 @@ define([
         apiKey: '', // acquire at developer.mapserv.utah.gov
 
         urls: {
-            service: '/arcgis/rest/services/Crash/Crashes/MapServer/0',
-            stats: location.pathname.replace(/\/(src|dist)/, '') + 'api/stats',
+            service: 'https://mapserv.utah.gov/arcgis/rest/services/Crash/Crashes/MapServer/0',
+            stats: 'https://us-central1-ut-dts-agrc-crash-dev.cloudfunctions.net/crash-stats-api/',
             points: 'https://storage.googleapis.com/' + bucketName + '/points.json',
             dates: 'https://storage.googleapis.com/' + bucketName + '/dates.json'
         },
