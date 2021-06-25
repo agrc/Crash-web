@@ -299,7 +299,10 @@ define([
             return request(config.urls.stats, {
                 handleAs: 'json',
                 method: 'POST',
-                data: data
+                data: data,
+                headers: {
+                    'X-Requested-With': null
+                }
             });
         },
         buildChart: function (response) {
