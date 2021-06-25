@@ -13,6 +13,8 @@ define([
     // e.g. http://mapserv.utah.gov/ArcGIS/rest/info?f=json
     esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('discover.agrc.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('storage.googleapis.com');
+    esriConfig.defaults.io.corsEnabledServers.push('us-central1-ut-dts-agrc-crash-dev.cloudfunctions.net');
 
     var apiKey;
     var quadWord;
