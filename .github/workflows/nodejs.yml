@@ -38,6 +38,15 @@ jobs:
             ${{ runner.OS }}-node-
             ${{ runner.OS }}-
 
+      - name: Cache bower modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache
+          key: ${{ runner.OS }}-bower-${{ hashFiles('**/bower.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-bower-
+            ${{ runner.OS }}-
+
       - name: Install project dependencies
         run: npm ci
 
