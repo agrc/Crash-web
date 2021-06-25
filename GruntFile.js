@@ -233,7 +233,6 @@ module.exports = function (grunt) {
 
     grunt.registerTask('default', [
         'parallel:assets',
-        'shell:dev',
         'connect',
         'watch'
     ]);
