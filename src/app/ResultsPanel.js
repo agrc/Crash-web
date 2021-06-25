@@ -301,7 +301,8 @@ define([
                 method: 'POST',
                 data: data,
                 headers: {
-                    'X-Requested-With': null
+                    'X-Requested-With': null,
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 }
             });
         },
