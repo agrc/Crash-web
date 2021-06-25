@@ -17,9 +17,9 @@
 
         public int Occurrences { get; set; }
 
-        public object Label { get; set; }
+        public object Label { get; set; } = string.Empty;
 
-        public string Type { get; set; }
+        public string Type { get; set; } = string.Empty;
     }
 
 }
