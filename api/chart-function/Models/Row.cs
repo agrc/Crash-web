@@ -1,4 +1,4 @@
-﻿namespace chart_function.Models
+namespace chart_function.Models
 {
 
     public class Row
