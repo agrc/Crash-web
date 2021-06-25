@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace chart_function.Models
 {
@@ -10,7 +11,8 @@ namespace chart_function.Models
         public Chart()
         {
             Categories = new List<object>();
-            Data = new List<Series>();
+            Series = new List<Series>();
+            Selector = string.Empty;
         }
 
         public Chart(IEnumerable<Row> row, string selector, string type)
@@ -20,9 +22,9 @@ namespace chart_function.Models
             Categories = row.Select(x => x.Label)
                             .OrderBy(x => x)
                             .Distinct()
-                            .Select(x => x.ToString());
+                            .Select(x => x?.ToString() ?? "");
 
-            Data = new List<Series>
+            Series = new List<Series>
             {
                 new Series(row, type, "Original"),
             };
@@ -60,60 +62,49 @@ namespace chart_function.Models
                 comparison = collection;
             }
 
-            Data = new List<Series>
+            Series = new List<Series>
             {
                 new Series(original, type, "Original", new [] { "20%" }),
                 new Series(comparison, type, "Comparison", new [] { "80%" }),
             };
 
-            Categories = Categories.Select(x => x.ToString());
+            Categories = Categories.Select(x => x?.ToString() ?? "");
         }
 
-        // [JsonProperty(PropertyName = "selector")]
         public string Selector { get; set; }
 
-        // [JsonProperty(PropertyName = "categories")]
         public IEnumerable<object> Categories { get; set; }
 
-        // [JsonProperty(PropertyName = "series")]
-        public List<Series> Data { get; set; }
-    }
-}
-
-public class Series
-{
-    private readonly IEnumerable<Row> _rows;
-
-    public Series(IEnumerable<Row> rows, string defaultType, string name, string[] center=null)
-    {
-        _rows = rows;
-        Type = defaultType;
-        Name = name;
-        Center = center;
+        public List<Series> Series { get; set; }
     }
 
-    // [JsonProperty(PropertyName = "type")]
-    public string Type { get; set; }
-
-    // [JsonProperty(PropertyName = "center")]
-    public string[] Center { get; set; }
-
-    // [JsonProperty(PropertyName = "name")]
-    public string Name { get; set; }
-
-    // [JsonProperty(PropertyName = "data")]
-    public IEnumerable<ArrayList> Data
+    public class Series
     {
-        get
+        private readonly IEnumerable<Row> _rows;
+
+        public Series(IEnumerable<Row> rows, string defaultType, string name, string[] center = default!)
         {
-            var rows = _rows.Select(x => new ArrayList {x.Label, x.Occurrences }).OrderBy(x => x[0]);
-
-            return rows.Select(x => new ArrayList {x[0].ToString(), x[1]});
+            _rows = rows;
+            Type = defaultType;
+            Name = name;
+            Center = center;
         }
-    }
 
-    public bool ShouldSerializeCenter()
-    {
-        return Center != null && Center.Any();
+        public string Type { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string[] Center { get; set; }
+
+        public string Name { get; set; }
+
+        public IEnumerable<ArrayList> Data
+        {
+            get
+            {
+                var rows = _rows.Select(x => new ArrayList { x.Label, x.Occurrences }).OrderBy(x => x[0]);
+
+                return rows.Select(x => new ArrayList { x[0]?.ToString() ?? "", x[1] });
+            }
+        }
     }
 }
