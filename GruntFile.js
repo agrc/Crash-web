@@ -252,5 +252,5 @@ module.exports = function (grunt) {
         'processhtml:main'
     ]);
     grunt.registerTask('serve', ['connect', 'watch']);
-    grunt.registerTask('travis', ['verbosity:main', 'eslint:main', 'build-prod']);
+    grunt.registerTask('travis', ['eslint:main', 'build-prod']);
 };
