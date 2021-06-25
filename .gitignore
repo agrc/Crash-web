@@ -47,3 +47,4 @@ src/stubmodule/
 src/util/
 src/xstyle/
 *.pubxml
+appsettings.*.json
