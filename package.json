@@ -29,7 +29,7 @@
     "grunt-processhtml": "^0.4.2",
     "grunt-shell": "^3.0.1",
     "jshint-stylish": "^2",
-    "uglify-js": "^3.13.9"
+    "uglify-js": "^3.13.10"
   },
   "scripts": {
     "start": "grunt",
