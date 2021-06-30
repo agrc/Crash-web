@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "src/**"
+      - "api/**"
       - "profiles/*.*"
       - ".github/workflows/nodejs.yml"
       - "package-lock.json"
