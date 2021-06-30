@@ -1,7 +1,7 @@
 # Crash-web
 
-[![prod firebase deploy](https://github.com/agrc/Crash-web/actions/workflows/nodejs.yml/badge.svg?branch=main)](https://github.com/agrc/Crash-web/actions/workflows/nodejs.yml)
-[![dev firebase deploy](https://github.com/agrc/Crash-web/actions/workflows/nodejs.yml/badge.svg?branch=dev)](https://github.com/agrc/Crash-web/actions/workflows/nodejs.yml)
+main [![prod firebase deploy](https://github.com/agrc/Crash-web/actions/workflows/nodejs.yml/badge.svg?branch=main)](https://github.com/agrc/Crash-web/actions/workflows/nodejs.yml)
+dev [![dev firebase deploy](https://github.com/agrc/Crash-web/actions/workflows/nodejs.yml/badge.svg?branch=dev)](https://github.com/agrc/Crash-web/actions/workflows/nodejs.yml)
 
 View vehicle crashes for Utah with all of the metadata to view problem areas, identify trends, and perform analysis.
 
