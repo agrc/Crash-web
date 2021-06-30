@@ -1,8 +1,10 @@
 {
   "prettier.enable": false,
   "cSpell.words": [
+    "agrc",
+    "cloudfunctions",
+    "crashmapping",
     "ddact",
-    "ddacts",
-    "sadmin"
+    "mapserv"
   ]
 }
