@@ -15,16 +15,17 @@ define([
     esriConfig.defaults.io.corsEnabledServers.push('discover.agrc.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('storage.googleapis.com');
     esriConfig.defaults.io.corsEnabledServers.push('us-central1-ut-dts-agrc-crash-dev.cloudfunctions.net');
+    esriConfig.defaults.io.corsEnabledServers.push('us-central1-ut-dts-agrc-crash-prod.cloudfunctions.net');
 
     var apiKey;
     var quadWord;
-    var bucketName = 'ut-dts-agrc-crash-dev-data';
+    var projectName = 'ut-dts-agrc-crash-dev';
 
     if (has('agrc-build') === 'prod') {
         // crashmapping.utah.gov
         apiKey = 'AGRC-74CDA9DA213937';
         quadWord = 'nixon-flex-modest-stamp';
-        bucketName = 'ut-dts-agrc-crash-prod-data';
+        projectName = 'ut-dts-agrc-crash-prod';
     } else if (has('agrc-build') === 'stage') {
         // crashmapping.dev.utah.gov
         apiKey = 'AGRC-FE1B257E901672';
@@ -42,6 +43,9 @@ define([
             throw 'Error getting quad word!';
         });
     }
+
+    var bucketName = projectName + '-data';
+    var api = 'https://us-central1-' + projectName + '.cloudfunctions.net/crash-stats-api/';
 
 
     window.AGRC = {
@@ -75,7 +79,7 @@ define([
 
         urls: {
             service: 'https://mapserv.utah.gov/arcgis/rest/services/Crash/Crashes/MapServer/0',
-            stats: 'https://us-central1-ut-dts-agrc-crash-dev.cloudfunctions.net/crash-stats-api/',
+            stats: api,
             points: 'https://storage.googleapis.com/' + bucketName + '/points.json',
             dates: 'https://storage.googleapis.com/' + bucketName + '/dates.json'
         },
